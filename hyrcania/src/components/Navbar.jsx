@@ -37,6 +37,8 @@ const Navbar = () => {
         className="mx-7 opacity-20"
       />
 
+
+       
       {/* Avatar positioned at the right end */}
       <div className="ml-auto bg-neutral-700  p-2 space-x-2 my-2 rounded-full flex items-center">
         {token ? (

@@ -2,18 +2,14 @@ import EventCard from "@/components/EventCard/EventCard";
 import DiscoveryIcon from "@/assets/DiscoveryIcon";
 import Runner from "@/components/images/headerBg.jpg";
 import persianText from "@/farsiHardCodeText";
-import useEventDetail from "@/hooks/useEventDetail";
 import { useState, useEffect } from "react";
- // Updated hook name
+import useEvent from "@/hooks/useEvent";
+// Updated hook name
 
 const Home = () => {
-  const { eventData, loading, error, getEventDetail } = useEventDetail();
-
+  const { loading, error, events } = useEvent();
   // Fetch event details on component mount
-  useEffect(() => {
-    getEventDetail();
-    
-  }, [getEventDetail]);
+
 
   return (
     <div
@@ -53,12 +49,13 @@ const Home = () => {
           {/* Handle Error State */}
           {error && <p>Error fetching events: {error.message}</p>}
 
+
           {/* Render Event Cards Dynamically */}
-          {eventData.length > 0 ? (
-            eventData.map((event, index) => (
-              <a key={index} href={`/event/${event.id}`}>
-                <EventCard title={event.title} location={event.location} />
-              </a>
+          {events?.length > 0 ? (
+            events.map((event, index) => (
+
+              <EventCard event={event} />
+
             ))
           ) : (
             <p>No events available.</p>

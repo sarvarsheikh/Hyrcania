@@ -14,6 +14,7 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const MarathonCategory = () => {
+  
   return (
     <div className="flex flex-col w-full space-y-6 p-6" data-oid="qutpysu">
       {/* Header Section */}

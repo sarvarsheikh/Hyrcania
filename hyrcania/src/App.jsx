@@ -4,12 +4,14 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import EndSection from "./components/EndSection";
 import MarathonDetail from "./pages/MarathonDetail";
-import Dashboard from "./Pages/Dashboard";
+import Dashboard from "./pages/Dashboard";
 import "./App.css";
-import AuthPage from "./Pages/AuthPage";
+import AuthPage from "./pages/AuthPage";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import { Toaster } from "sonner";
+
+
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -17,7 +19,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>  
       <div className="flex flex-col">
-        { // Conditionally render Navbar
+        { 
           location.pathname !== '/auth' && <Navbar />
         }
         <Routes>

@@ -2,9 +2,22 @@ import { Card } from "@/components/ui/card";
 import { LocateFixed } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import Arrow from "@/assets/Arrow";
-const EventCard = ({title, location} ) => {
+import { useNavigate } from "react-router-dom";
+import formateDate from "@/helper/formateDate";
+const EventCard = (props ) => {
+  const navigate = useNavigate();
+ 
+  
   return (
     <Card
+      onClick={() => {
+        navigate("/blog", {
+          state: {
+            event: props.event,
+          },
+        })
+        
+      }}
       className="  bg-clip-border p-6  rounded-2xl w-[402px] h-[250px] relative bg-violet-500 overflow-hidden mx-8 my-6"
       data-oid="413tdt_"
     >
@@ -37,7 +50,7 @@ const EventCard = ({title, location} ) => {
       ></div>
      
       <img
-        src="/images/event.jpg"
+        src={props.event.banner_image}
         className="absolute top-0 left-0 w-full h-full object-cover"
         data-oid="-4e1ll3"
       ></img>
@@ -48,11 +61,11 @@ const EventCard = ({title, location} ) => {
             style={{
               fontStyle: "normal",
               fontWeight: "700",
-              fontFamily: "'Noto Sans', sans-serif",
+
             }}
             data-oid="k1v-pmn"
           >
-           {title} 
+           {props.event.title} 
           </h1>
           <div
             className="flex flex-row items-center space-x-2 "
@@ -66,24 +79,23 @@ const EventCard = ({title, location} ) => {
               style={{
                 fontStyle: "normal",
                 fontWeight: "400",
-                fontFamily: "'Noto Sans', sans-serif",
               }}
               className=" text-sm text-white"
               data-oid="8hzr6e4"
             >
-              {location}
+              {props.event.location}
             </h6>
           </div>
           <h6
             style={{
               fontStyle: "normal",
               fontWeight: "400",
-              fontFamily: "'Noto Sans', sans-serif",
+
             }}
             className=" text-sm text-white"
             data-oid="9cqi:cn"
           >
-            March 15-18 , 2024
+            {formateDate(props.event.datetime_created)}
           </h6>
         </div>
       </div>

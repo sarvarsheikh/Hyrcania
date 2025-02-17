@@ -2,7 +2,9 @@
 export default {
     darkMode: ["class"],
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
+	
   theme: {
+	
   	extend: {
   		fontFamily: {
   			reenie: [
@@ -16,6 +18,7 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {},
+		
   		keyframes: {
   			'accordion-down': {
   				from: {
@@ -38,6 +41,7 @@ export default {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
   		}
+		
   	}
   },
   plugins: [
