@@ -10,16 +10,16 @@ import LoginPage from './Pages/LoginPage';
 
 const App = () => {
   return (
-    // <div className="flex flex-col">
-    //   <Navbar />
-    //   <Routes>
-    //     <Route path="/" element={<Home />} />
-    //     <Route path="/blog" element={<MarathonDetail />} /> 
-    //     <Route path="/dashboard" element={<Dashboard/>} /> 
-    //   </Routes>
-    //   <EndSection />
-    // </div>
-    <LoginPage/>
+    <div className="flex flex-col">
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/blog" element={<MarathonDetail />} /> 
+        <Route path="/dashboard" element={<Dashboard/>} /> 
+      </Routes>
+      <EndSection />
+  </div>
+    // <LoginPage/>
   );
 };
 
