@@ -12,8 +12,8 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 const App = () => {
   const queryClient = new QueryClient();
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="flex flex-col">
+    <QueryClientProvider client={queryClient}>  
+      {/* <div className="flex flex-col">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -21,7 +21,8 @@ const App = () => {
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
         <EndSection />
-      </div>
+      </div> */}
+      <LoginPage/>
     </QueryClientProvider>
     // <LoginPage/>
   );
