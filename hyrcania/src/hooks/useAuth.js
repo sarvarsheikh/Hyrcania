@@ -27,5 +27,23 @@ export default function useAuth() {
     
   }
 
-  return { handleSignUp };
+  function handleLogin({  phone_number, password }) {
+    setLoading(true);
+    try {
+        const res = axios.post("http://127.0.0.1:8000/api/token/?", {
+            phone_number,
+            password,
+          });
+          setLoading(false);
+          return res;
+        
+    } catch (error) {
+        setError(error);
+        setLoading(false)
+        
+    }
+    
+  }
+
+  return { handleSignUp, handleLogin };
 }

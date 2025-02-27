@@ -5,24 +5,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import useAuth from "@/hooks/useAuth";
-
-// If using Next.js. For React Router, use "react-router-dom"
+import { useState } from "react";
 
 const LoginPage = () => {
-  const { handleSignUp } = useAuth();
-  const demoUser = {
-    full_name: "John Doe",
-    phone_number: "1234567890",
-    password: "securePassword123",
+  const { handleSignUp, handleLogin } = useAuth();
+  const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    full_name: "",
+    phone_number: "",
+    password: "",
+  });
+
+  const toggleForm = () => setIsLogin(!isLogin);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  handleSignUp(demoUser)
-    .then((response) => {
-      console.log("User signed up successfully:", response.data);
-    })
-    .catch((error) => {
-      console.error("Error signing up:", error.response?.data || error.message);
-    });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isLogin) {
+      handleLogin(formData)
+        .then((res) => console.log("Login Success", res))
+        .catch((err) => console.error("Login Error", err));
+    } else {
+      handleSignUp(formData)
+        .then((res) => console.log("Signup Success", res))
+        .catch((err) => console.error("Signup Error", err));
+    }
+  };
+
   return (
     <div className="relative w-screen h-screen flex items-center justify-center">
       {/* Background Image */}
@@ -32,70 +44,71 @@ const LoginPage = () => {
         alt="Background Image"
       />
 
-      {/* Login Form */}
+      {/* Form Card */}
       <Card className="relative z-10 p-6 w-96 bg-white shadow-lg rounded-lg">
         <h2 className="header text-2xl font-semibold text-center mb-4">
-          Login
+          {isLogin ? "Login" : "Signup"}
         </h2>
 
-        <form className="space-y-4">
-          {/* Phone Number */}
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          {!isLogin && (
+            <div>
+              <Label htmlFor="full_name">Full Name</Label>
+              <Input
+                id="full_name"
+                type="text"
+                placeholder="Enter your full name"
+                value={formData.full_name}
+                onChange={handleChange}
+                required={!isLogin}
+              />
+            </div>
+          )}
+
           <div>
-            <Label className="description" htmlFor="phone">
-              Phone Number
-            </Label>
+            <Label htmlFor="phone_number">Phone Number</Label>
             <Input
-              id="phone"
+              id="phone_number"
               type="tel"
               placeholder="Enter your phone number"
+              value={formData.phone_number}
+              onChange={handleChange}
               required
             />
           </div>
 
-          {/* Username */}
           <div>
-            <Label className="description" htmlFor="username">
-              Username
-            </Label>
-            <Input
-              id="username"
-              type="text"
-              placeholder="Enter your username"
-              required
-            />
-          </div>
-
-          {/* Password */}
-          <div>
-            <Label className="description" htmlFor="password">
-              Password
-            </Label>
+            <Label htmlFor="password">Password</Label>
             <Input
               id="password"
               type="password"
               placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
               required
             />
           </div>
 
-          {/* Remember Me Checkbox */}
-          <div className="flex items-center space-x-2">
-            <Checkbox id="remember" />
-            <Label className="description" htmlFor="remember">
-              Remember me
-            </Label>
-          </div>
+          {isLogin && (
+            <div className="flex items-center space-x-2">
+              <Checkbox id="remember" />
+              <Label htmlFor="remember">Remember me</Label>
+            </div>
+          )}
 
-          {/* Submit Button */}
           <Button className="w-full bg-[#41FF8D] text-black hover:bg-[#36D074]">
-            Login
+            {isLogin ? "Login" : "Signup"}
           </Button>
         </form>
 
-        {/* Already Have an Account */}
         <p className="text-center mt-4 text-gray-600 text-sm">
-          Don't have an account?{" "}
-          <span className="text-[#299C57] hover:underline">Sign up</span>
+          {isLogin ? "Don't have an account?" : "Already have an account?"} {" "}
+          <span
+            className="text-[#299C57] hover:underline cursor-pointer"
+            onClick={toggleForm}
+          >
+            {isLogin ? "Sign up" : "Login"}
+          </span>
         </p>
       </Card>
     </div>
