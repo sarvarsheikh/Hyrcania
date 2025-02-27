@@ -6,7 +6,7 @@ import EndSection from "./components/EndSection";
 import MarathonDetail from "./pages/MarathonDetail";
 import Dashboard from "./Pages/Dashboard";
 import "./App.css";
-import LoginPage from "./Pages/LoginPage";
+import AuthPage from "./Pages/AuthPage";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 const App = () => {
@@ -22,7 +22,7 @@ const App = () => {
         </Routes>
         <EndSection />
       </div> */}
-      <LoginPage/>
+      <AuthPage/>
     </QueryClientProvider>
     // <LoginPage/>
   );
