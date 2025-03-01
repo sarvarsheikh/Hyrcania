@@ -5,8 +5,14 @@ import {
   } from "@/components/ui/avatar";
   import { Separator } from "./ui/separator";
   import persianText from "@/farsiHardCodeText"
+import { useState,useEffect } from "react";
   
   const Navbar = () => {
+    const [token, setToken] = useState(null);
+    useEffect(()=>{
+      
+      setToken(localStorage.getItem("token"));
+     },[])
     return (
       <div className="nav-bar flex flex-row h-[50px] w-screen opacity-86 items-center px-7">
         <h1 className="nav-header font-bold">{persianText.name}</h1>
@@ -32,8 +38,11 @@ import {
         />
   
         {/* Avatar positioned at the right end */}
-        <div className="ml-auto bg-neutral-700  p-1 rounded-full flex items-center">
-          <Avatar className="w-[30px] h-[30px]">
+        <div className="ml-auto bg-neutral-700  p-2 space-x-2 my-2 rounded-full flex items-center">
+          {
+            token?<h1 className="text-sm font-medium px-2 hover:text-[#C2F66E]">Hi, User</h1>:<h1 className="text-sm font-medium px-2 hover:text-[#C2F66E]">Login and Sign up</h1>
+          }
+          <Avatar  className="w-[25px] h-[25px]">
             <AvatarImage src="https://github.com/sarvarsheikh.png" />
             <AvatarFallback>SS</AvatarFallback>
           </Avatar>
