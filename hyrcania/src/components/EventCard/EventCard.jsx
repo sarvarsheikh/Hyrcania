@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { LocateFixed } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import Arrow from "@/assets/Arrow";
-const EventCard = () => {
+const EventCard = ({title, location} ) => {
   return (
     <Card
       className="  bg-clip-border p-6  rounded-2xl w-[402px] h-[250px] relative bg-violet-500 overflow-hidden mx-8 my-6"
@@ -56,7 +56,7 @@ const EventCard = () => {
             }}
             data-oid="k1v-pmn"
           >
-            Mt. Bachelor
+           {title} 
           </h1>
           <div
             className="flex flex-row items-center space-x-2 "
@@ -75,7 +75,7 @@ const EventCard = () => {
               className=" text-sm text-white"
               data-oid="8hzr6e4"
             >
-              Central Park, New York City
+              {location}
             </h6>
           </div>
           <h6
