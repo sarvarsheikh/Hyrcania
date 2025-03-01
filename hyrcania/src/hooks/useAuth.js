@@ -9,31 +9,36 @@ export default function useAuth() {
   async function handleSignUp({ full_name, phone_number, password }) {
     try {
       // Register the user
-      const registerResponse = await axios.post("http://127.0.0.1:8000/auth/users/", {
+      const registerResponse = await axios.post("http://127.0.0.1:8000/auth/users/",{
           full_name,
           phone_number,
           password,
-      });
-
+        }
+      );
       console.log("User registered:", registerResponse.data);
 
       // Log in the user
-      const loginResponse = await handleLogin({phone_number,password});
-
+      const loginResponse = await handleLogin({ phone_number, password });
+      
       return loginResponse;
-  } catch (error) {
+    } catch (error) {
       console.error("Error:", error.response?.data || error.message);
-  }
+    }
   }
 
-  function handleLogin({ phone_number, password }) {
+  async function handleLogin({ phone_number, password }) {
     setLoading(true);
     try {
-      const res = axios.post("http://127.0.0.1:8000/api/token/?", {
+      const res = await axios.post("http://127.0.0.1:8000/api/token/?", {
         phone_number,
         password,
       });
       setLoading(false);
+      if (res.status==200) {
+        localStorage.setItem("token",JSON.stringify(res.data))
+        const token  = localStorage.getItem("token")
+        console.log(token)
+      }
       return res;
     } catch (error) {
       setError(error);

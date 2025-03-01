@@ -44,7 +44,9 @@ const LoginPage = () => {
         await handleLogin(data);
         console.log("Login Success");
       } else {
-        await handleSignUp(data);
+        const res =  await handleSignUp(data);
+        
+
         console.log("Signup Success");
       }
     } catch (error) {
@@ -72,21 +74,45 @@ const LoginPage = () => {
           {!isLogin && (
             <div>
               <Label htmlFor="full_name">Full Name</Label>
-              <Input id="full_name" {...register("full_name")} placeholder="Enter your full name" />
-              {errors.full_name && <p className="text-red-500 text-sm">{errors.full_name.message}</p>}
+              <Input
+                id="full_name"
+                {...register("full_name")}
+                placeholder="Enter your full name"
+              />
+              {errors.full_name && (
+                <p className="text-red-500 text-sm">
+                  {errors.full_name.message}
+                </p>
+              )}
             </div>
           )}
 
           <div>
             <Label htmlFor="phone_number">Phone Number</Label>
-            <Input id="phone_number" type="tel" {...register("phone_number")} placeholder="Enter your phone number" />
-            {errors.phone_number && <p className="text-red-500 text-sm">{errors.phone_number.message}</p>}
+            <Input
+              id="phone_number"
+              type="tel"
+              {...register("phone_number")}
+              placeholder="Enter your phone number"
+            />
+            {errors.phone_number && (
+              <p className="text-red-500 text-sm">
+                {errors.phone_number.message}
+              </p>
+            )}
           </div>
 
           <div>
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" {...register("password")} placeholder="Enter your password" />
-            {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+            <Input
+              id="password"
+              type="password"
+              {...register("password")}
+              placeholder="Enter your password"
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password.message}</p>
+            )}
           </div>
 
           {isLogin && (
@@ -96,7 +122,11 @@ const LoginPage = () => {
             </div>
           )}
 
-          {errors.root && <p className="text-red-500 text-sm text-center">{errors.root.message}</p>}
+          {errors.root && (
+            <p className="text-red-500 text-sm text-center">
+              {errors.root.message}
+            </p>
+          )}
 
           <Button className="w-full bg-[#41FF8D] text-black hover:bg-[#36D074]">
             {isLogin ? "Login" : "Signup"}
@@ -105,7 +135,10 @@ const LoginPage = () => {
 
         <p className="text-center mt-4 text-gray-600 text-sm">
           {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-          <span className="text-[#299C57] hover:underline cursor-pointer" onClick={toggleForm}>
+          <span
+            className="text-[#299C57] hover:underline cursor-pointer"
+            onClick={toggleForm}
+          >
             {isLogin ? "Sign up" : "Login"}
           </span>
         </p>
