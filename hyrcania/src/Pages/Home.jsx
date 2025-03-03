@@ -12,6 +12,7 @@ const Home = () => {
   // Fetch event details on component mount
   useEffect(() => {
     getEventDetail();
+    
   }, [getEventDetail]);
 
   return (

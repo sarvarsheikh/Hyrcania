@@ -35,11 +35,7 @@ const EventCard = ({title, location} ) => {
         className="absolute top-0 left-0 w-[402px] h-[250px] z-10 bg-gray-950 opacity-50 "
         data-oid="fxx3pcy"
       ></div>
-      <img
-        src="/gradients/Gradient1.png"
-        className="absolute top-0 left-0 w-full h-full object-cover opacity-80 hover:opacity-20 z-10 transition-all duration-300 ease-in-out"
-        data-oid="i0__a-d"
-      ></img>
+     
       <img
         src="/images/event.jpg"
         className="absolute top-0 left-0 w-full h-full object-cover"

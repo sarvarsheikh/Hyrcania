@@ -9,7 +9,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 // Define Zod validation schema
 const loginSchema = z.object({
   phone_number: z
@@ -24,6 +25,8 @@ const signupSchema = loginSchema.extend({
 });
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
   const { handleSignUp, handleLogin } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
 
@@ -42,12 +45,22 @@ const LoginPage = () => {
     try {
       if (isLogin) {
         await handleLogin(data);
+        toast.success("Welcome to Hyrcania!")
+
         console.log("Login Success");
+
+        // Delay before navigation
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        navigate("/");
       } else {
-        const res =  await handleSignUp(data);
-        
+        await handleSignUp(data);
+        toast.success("Welcome back to Hyrcania!")
 
         console.log("Signup Success");
+
+        // Delay before navigation
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        navigate("/");
       }
     } catch (error) {
       console.error("Error:", error);
