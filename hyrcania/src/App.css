@@ -16,30 +16,30 @@
 .footer-text{
   color:#828282;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   font-size:medium;
-  font-family: 'Noto Sans', sans-serif;
+
 }
 .footer-text:hover{
   color:#ffffff;
   font-style: normal;
   font-weight: 400;
   font-size:medium;
-  font-family: 'Noto Sans', sans-serif;
+ 
 }
 .footer-header {
-  color: #373737;
+  color: #ffffff;
+  font-weight: 500;
+ 
   
-  font-style: normal;
-  font-weight: 800;
   font-size:x-large;
-  font-family: 'Noto Sans', sans-serif;
+ 
 }
 .nav-bar{
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #373737;
+  background-color: #373737;  
   z-index: 1000;
 }
 .header {
@@ -47,21 +47,23 @@
   font-style: normal;
   font-weight: 800;
   
-  font-family: 'Noto Sans', sans-serif;
+  
 }
 .nav-header {
   color: #ffffff;
-  font-style: normal;
-  font-weight: 800;
-  font-size:x-large;
-  font-family: 'Noto Sans', sans-serif;
+ 
+  
+  font-size:larger;
+
+ 
 }
 .nav-bar-text {
   color: #AAAAAA;
-  font-style: normal;
+ 
+  
+  font-size:large;
   font-weight: 600;
-  font-size:small;
-  font-family: 'Noto Sans', sans-serif;
+ 
   transition: color 0.3s ease; /* Smooth transition effect */
 }
 
@@ -71,9 +73,9 @@
 .event-description{
   color:#797979;
   font-size:medium;
-  font-style: normal;
+  
   font-weight: 500;
-  font-family:'Noto Sans', sans-serif;
+ 
 
 }
 .marathon-detail-card{
@@ -81,7 +83,7 @@
   font-size:smaller;
   font-style: normal;
   font-weight: 600;
-  font-family:'Noto Sans', sans-serif;
+  
 
 }
 .marathon-detail-fac{
@@ -89,14 +91,14 @@
   font-size:smaller;
   font-style: normal;
   font-weight: 600;
-  font-family:'Noto Sans', sans-serif;
+  
 
 }
 .event-title{
   color: #333533;;
   font-style: normal;
   font-weight: 800;
-  font-family: 'Noto Sans', sans-serif;
+
   font-size:xx-large;
 
 }
@@ -104,7 +106,7 @@
   color: #333533;;
   font-style: normal;
   font-weight: 700;
-  font-family: 'Noto Sans', sans-serif;
+  
 }
 
 .description{
@@ -112,13 +114,13 @@
   font-size:smaller;
   font-style: normal;
   font-weight: 500;
-  font-family:'Noto Sans', sans-serif;
+
 }
 .toggle-option{
   color: #333533;;
   font-style: normal;
   font-weight: 400;
-  font-family: 'Noto Sans', sans-serif;
+
   
 }
 
