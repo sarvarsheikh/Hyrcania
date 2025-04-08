@@ -8,6 +8,11 @@ import Dashboard from "./Pages/Dashboard";
 import "./App.css";
 import AuthPage from "./Pages/AuthPage";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
+import { Toaster } from "sonner";
+import MarathonSignUpForm from "./pages/MarathonSignUpForm";
+
+
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -16,7 +21,7 @@ const App = () => {
        <div className="flex flex-col">
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<MarathonSignUpForm/>} />
           <Route path="/blog" element={<MarathonDetail />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
