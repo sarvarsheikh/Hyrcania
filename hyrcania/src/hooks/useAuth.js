@@ -3,48 +3,68 @@ import { useState } from "react";
 
 export default function useAuth() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function handleSignUp({ full_name, phone_number, password }) {
-    try {
-      // Register the user
-      const registerResponse = await axios.post("http://127.0.0.1:8000/auth/users/",{
-          full_name,
-          phone_number,
-          password,
-        }
-      );
-      console.log("User registered:", registerResponse.data);
-
-      // Log in the user
-      const loginResponse = await handleLogin({ phone_number, password });
-      
-      return loginResponse;
-    } catch (error) {
-      console.error("Error:", error.response?.data || error.message);
-    }
-  }
-
-  async function handleLogin({ phone_number, password }) {
+  async function handleSignUp({ phone_number }) {
     setLoading(true);
     try {
-      const res = await axios.post("http://127.0.0.1:8000/api/token/?", {
-        phone_number,
-        password,
+      const testPhoneNumber = "09919510956"; // Use the number from your screenshot
+      
+      const response = await axios.post("http://127.0.0.1:8000/api/generate-otp/", {
+        phone_number: phone_number
       });
-      setLoading(false);
-      if (res.status==200) {
-        localStorage.setItem("token",JSON.stringify(res.data))
-        const token  = localStorage.getItem("token")
-        console.log(token)
-      }
-      return res;
+      
+      console.log("API Test Response:", response.data);
+      
+      
+      // You can add this to automatically fill the phone number field for testing
+      ;
+      
     } catch (error) {
-      setError(error);
-      setLoading(false);
+      console.error("API Test Error:", error.response?.data || error.message);
+      toast.error("API test failed: " + (error.response?.data?.message || error.message));
     }
   }
 
-  return { handleSignUp, handleLogin };
+  async function verifyOtp({ phone_number, otp }) {
+    setLoading(true);
+    try {
+      // Make sure otp is being sent as a string, not an object or array
+      const response = await axios.post("http://127.0.0.1:8000/api/verify-otp/", {
+        phone_number: phone_number,
+        otp: otp
+      });
+      
+      if (response.status === 200) {
+        // Store token in localStorage
+        localStorage.setItem("token", JSON.stringify(response.data));
+        
+        // Set user state
+        setUser(response.data.user || { phone_number });
+      }
+      
+      setLoading(false);
+      return response;
+    } catch (error) {
+      console.error("Verification Error:", error.response?.data || error.message);
+      setError(error.response?.data || error.message);
+      setLoading(false);
+      throw error;
+    }
+  }
+  
+  function logout() {
+    localStorage.removeItem("token");
+    setUser(null);
+  }
+
+  return { 
+    user,
+    loading,
+    error,
+    handleSignUp, 
+    verifyOtp,
+    logout
+  };
 }
