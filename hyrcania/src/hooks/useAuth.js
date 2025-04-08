@@ -3,68 +3,48 @@ import { useState } from "react";
 
 export default function useAuth() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  async function handleSignUp({ phone_number }) {
-    setLoading(true);
+  async function handleSignUp({ full_name, phone_number, password }) {
     try {
-      const testPhoneNumber = "09919510956"; // Use the number from your screenshot
+      // Register the user
+      const registerResponse = await axios.post("http://127.0.0.1:8000/auth/users/",{
+          full_name,
+          phone_number,
+          password,
+        }
+      );
+      console.log("User registered:", registerResponse.data);
+
+      // Log in the user
+      const loginResponse = await handleLogin({ phone_number, password });
       
-      const response = await axios.post("http://127.0.0.1:8000/api/generate-otp/", {
-        phone_number: phone_number
-      });
-      
-      console.log("API Test Response:", response.data);
-      
-      
-      // You can add this to automatically fill the phone number field for testing
-      ;
-      
+      return loginResponse;
     } catch (error) {
-      console.error("API Test Error:", error.response?.data || error.message);
-      toast.error("API test failed: " + (error.response?.data?.message || error.message));
+      console.error("Error:", error.response?.data || error.message);
     }
   }
 
-  async function verifyOtp({ phone_number, otp }) {
+  async function handleLogin({ phone_number, password }) {
     setLoading(true);
     try {
-      // Make sure otp is being sent as a string, not an object or array
-      const response = await axios.post("http://127.0.0.1:8000/api/verify-otp/", {
-        phone_number: phone_number,
-        otp: otp
+      const res = await axios.post("http://127.0.0.1:8000/api/token/?", {
+        phone_number,
+        password,
       });
-      
-      if (response.status === 200) {
-        // Store token in localStorage
-        localStorage.setItem("token", JSON.stringify(response.data));
-        
-        // Set user state
-        setUser(response.data.user || { phone_number });
+      setLoading(false);
+      if (res.status==200) {
+        localStorage.setItem("token",JSON.stringify(res.data))
+        const token  = localStorage.getItem("token")
+        console.log(token)
       }
-      
-      setLoading(false);
-      return response;
+      return res;
     } catch (error) {
-      console.error("Verification Error:", error.response?.data || error.message);
-      setError(error.response?.data || error.message);
+      setError(error);
       setLoading(false);
-      throw error;
     }
   }
-  
-  function logout() {
-    localStorage.removeItem("token");
-    setUser(null);
-  }
 
-  return { 
-    user,
-    loading,
-    error,
-    handleSignUp, 
-    verifyOtp,
-    logout
-  };
+  return { handleSignUp, handleLogin };
 }

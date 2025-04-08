@@ -1,77 +1,34 @@
-import Runner from "@/components/images/headerBg.png";
+import Runner from "@/components/images/headerBg.jpg";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import useAuth from "@/hooks/useAuth";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-
 // Define Zod validation schema
 const loginSchema = z.object({
   phone_number: z
     .string()
     .min(10, "Phone number must be at least 10 digits")
     .max(15, "Phone number cannot exceed 15 digits"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-const signupSchema = loginSchema;
+const signupSchema = loginSchema.extend({
+  full_name: z.string().min(3, "Full name must be at least 3 characters"),
+});
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { handleSignUp, verifyOtp, loading } = useAuth();
+
+  const { handleSignUp, handleLogin } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [otpValue, setOtpValue] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [countdown, setCountdown] = useState(30);
-  const [canResend, setCanResend] = useState(false);
-  const dialogTriggerRef = useRef(null);
-  const timerRef = useRef(null);
-
-  // Function to start countdown timer
-  const startCountdown = () => {
-    setCountdown(30);
-    setCanResend(false);
-    clearInterval(timerRef.current);
-    
-    timerRef.current = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          clearInterval(timerRef.current);
-          setCanResend(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
-  // Clear timer on unmount
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, []);
 
   const {
     register,
@@ -86,58 +43,28 @@ const LoginPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      setPhoneNumber(data.phone_number);
-      // Generate OTP
-      await handleSignUp({ phone_number: data.phone_number });
-     
-      console.log("OTP sent successfully");
-      
-      // Start countdown
-      startCountdown();
-      
-      // Open the dialog
-      if (dialogTriggerRef.current) {
-        dialogTriggerRef.current.click();
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setError("root", { message: "Failed to send OTP!" });
-    }
-  };
+      if (isLogin) {
+        await handleLogin(data);
+        toast.success("Welcome to Hyrcania!")
 
-  const handleResendOtp = async () => {
-    if (!canResend) return;
-    
-    try {
-      await handleSignUp({ phone_number: phoneNumber });
-      console.log("OTP resent successfully");
-      startCountdown();
-    } catch (error) {
-      console.error("Failed to resend OTP:", error);
-    }
-  };
+        console.log("Login Success");
 
-  const handleVerifyOtp = async () => {
-    console.log(otpValue);
-    try {
-      const response = await verifyOtp({ 
-        phone_number: phoneNumber, 
-        otp: otpValue 
-      });
-      
-      if (response && response.status === 200) {
-        console.log("Welcome to Hyrcania!");
-        setIsDialogOpen(false);
-        
         // Delay before navigation
         await new Promise((resolve) => setTimeout(resolve, 1000));
         navigate("/");
       } else {
-        console.error("Invalid OTP. Please try again.");
+        await handleSignUp(data);
+        toast.success("Welcome back to Hyrcania!")
+
+        console.log("Signup Success");
+
+        // Delay before navigation
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        navigate("/");
       }
     } catch (error) {
       console.error("Error:", error);
-      console.error("Verification failed. Please try again.");
+      setError("root", { message: "Authentication failed!" });
     }
   };
 
@@ -157,13 +84,29 @@ const LoginPage = () => {
         </h2>
 
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          {!isLogin && (
+            <div>
+              <Label htmlFor="full_name">Full Name</Label>
+              <Input
+                id="full_name"
+                {...register("full_name")}
+                placeholder="Enter your full name"
+              />
+              {errors.full_name && (
+                <p className="text-red-500 text-sm">
+                  {errors.full_name.message}
+                </p>
+              )}
+            </div>
+          )}
+
           <div>
+            <Label htmlFor="phone_number">Phone Number</Label>
             <Input
               id="phone_number"
               type="tel"
               {...register("phone_number")}
               placeholder="Enter your phone number"
-              onChange={(e) => setPhoneNumber(e.target.value)}
             />
             {errors.phone_number && (
               <p className="text-red-500 text-sm">
@@ -172,79 +115,35 @@ const LoginPage = () => {
             )}
           </div>
 
+          <div>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              {...register("password")}
+              placeholder="Enter your password"
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password.message}</p>
+            )}
+          </div>
+
+          {isLogin && (
+            <div className="flex items-center space-x-2">
+              <Checkbox id="remember" />
+              <Label htmlFor="remember">Remember me</Label>
+            </div>
+          )}
+
           {errors.root && (
             <p className="text-red-500 text-sm text-center">
               {errors.root.message}
             </p>
           )}
-          
-          <Button 
-            type="submit" 
-            className="w-full bg-[#41FF8D] text-black hover:bg-[#36D074] rounded-md py-2 font-medium"
-          >
+
+          <Button className="w-full bg-[#41FF8D] text-black hover:bg-[#36D074]">
             {isLogin ? "Login" : "Signup"}
           </Button>
-          
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger className="hidden" ref={dialogTriggerRef}></DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="text-center text-gray-900">Enter the OTP</DialogTitle>
-                <DialogDescription>
-                  <div className="flex flex-col items-center justify-center mt-4 space-y-5">
-                    <p className="text-sm text-center text-gray-900">
-                      We've sent a verification code to <span className="font-medium">{phoneNumber}</span>
-                    </p>
-                    
-                    <InputOTP 
-                      maxLength={6} 
-                      className="flex justify-center text-black"
-                      value={otpValue}
-                      onChange={setOtpValue}
-                    >
-                      <InputOTPGroup className="mx-auto">
-                        <InputOTPSlot index={0} className="text-black" />
-                        <InputOTPSlot index={1} className="text-black" />
-                        <InputOTPSlot index={2} className="text-black" />
-                        <InputOTPSlot index={3} className="text-black" />
-                        <InputOTPSlot index={4} className="text-black" />
-                        <InputOTPSlot index={5} className="text-black" />
-                      </InputOTPGroup>
-                    </InputOTP>
-                    
-                    <div className="text-sm text-center">
-                      <span className="text-gray-500">Didn't receive code? </span>
-                      <button 
-                        type="button"
-                        className={`${canResend ? 'text-[#41FF8D] hover:underline' : 'text-gray-400 cursor-not-allowed'}`}
-                        onClick={handleResendOtp}
-                        disabled={!canResend}
-                      >
-                        Resend OTP
-                      </button>
-                    </div>
-                    
-                    <div className="flex items-center justify-center w-full">
-                      <div className="h-[1px] bg-gray-200 w-full"></div>
-                      <span className="px-2 text-xs text-gray-400">
-                        {countdown > 0 ? `00:${countdown.toString().padStart(2, '0')}` : "00:00"}
-                      </span>
-                      <div className="h-[1px] bg-gray-200 w-full"></div>
-                    </div>
-                    
-                    <Button
-                      className="w-[200px] bg-[#41FF8D] text-black hover:bg-[#36D074] rounded-md py-2 font-medium"
-                      type="button"
-                      onClick={handleVerifyOtp}
-                      
-                    >
-                      {"Verify"}
-                    </Button>
-                  </div>
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
         </form>
 
         <p className="text-center mt-4 text-gray-600 text-sm">
