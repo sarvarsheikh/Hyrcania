@@ -2,31 +2,56 @@ import Discord from "@/assets/Discord";
 import Instagram from "@/assets/Instagram";
 import Linkdin from "@/assets/Linkdin";
 import Telegram from "@/assets/Telegram";
-import persianText from "@/farsiHardCodeText"
+import persianText from "@/farsiHardCodeText";
 
 const EndSection = () => {
   return (
-    <div className="footer flex flex-row justify-end p-5">
-      <div className="flex flex-col mr-auto ml-20 ">
-        <div className="space-y-4 justify-items-end">
-          <h1 className="footer-header">{persianText.name}</h1>
-          <div className="flex flex-row items-center gap-x-3">
-            <Telegram className="" />
-            <Discord className="" />
-            <Instagram className="" />
-            <Linkdin className="" />
+    <div className="footer text-white  w-full h-full">
+      {/* Top section with logo and social icons */}
+      <div className="px-4 py-6 flex flex-col sm:flex-row items-center sm:items-start justify-between">
+        <div className="mb-4 sm:mb-0">
+          <h1 className="text-xl font-bold">{persianText.name}</h1>
+        </div>
+        <div className="flex items-center space-x-4">
+          <Telegram className="w-6 h-6 text-gray-300 hover:text-white cursor-pointer" />
+          <Discord className="w-6 h-6 text-gray-300 hover:text-white cursor-pointer" />
+          <Instagram className="w-6 h-6 text-gray-300 hover:text-white cursor-pointer" />
+          <Linkdin className="w-6 h-6 text-gray-300 hover:text-white cursor-pointer" />
+        </div>
+      </div>
+      
+      {/* Footer links - match the 2x2 grid in the image */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 w-full text-sm text-gray-300">
+        <div className="px-4">
+          <div className="p-4">
+            <a href="#" className="block py-1 hover:text-white">{persianText.footer.aboutUs}</a>
+          </div>
+          <div className="p-4">
+            <a href="#" className="block py-1 hover:text-white">{persianText.footer.termsOfUse}</a>
+          </div>
+          <div className="p-4">
+            <a href="#" className="block py-1 hover:text-white">{persianText.footer.charityAndDonations}</a>
+          </div>
+        </div>
+        <div className="px-4">
+          <div className="p-4">
+            <a href="#" className="block py-1 hover:text-white">{persianText.footer.contactUs}</a>
+          </div>
+          <div className="p-4">
+            <a href="#" className="block py-1 hover:text-white">{persianText.footer.becomeASponsor}</a>
+          </div>
+          <div className="p-4">
+            <a href="#" className="block py-1 hover:text-white">{persianText.footer.helpCenterFaqs}</a>
           </div>
         </div>
       </div>
-      <div className="grid  grid-cols-4 gap-x-10 justify-items-end">
-          <h1 className="footer-text">{persianText.footer.aboutUs}</h1>
-          <h1 className="footer-text">{persianText.footer.termsOfUse}</h1>
-          <h1 className="footer-text">{persianText.footer.contactUs}</h1>
-          <h1 className="footer-text">{persianText.footer.becomeASponsor}</h1>
-          <h1 className="footer-text">{persianText.footer.charityAndDonations}</h1>
-          <h1 className="footer-text">{persianText.footer.helpCenterFaqs}</h1>
-        </div>
+      
+      {/* Copyright section - optional */}
+      <div className="text-center text-xs text-gray-400 py-4">
+        © {new Date().getFullYear()} {persianText.name}. {persianText.footer.allRightsReserved}
+      </div>
     </div>
   );
 };
+
 export default EndSection;

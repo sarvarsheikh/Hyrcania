@@ -9,7 +9,7 @@
 .footer {
   position: relative; /* Ensures it stays at the bottom when content is short */
   width: 100%;
-  height:100px;
+
   z-index: 200;
   background-color: #222; /* Dark background */
 }

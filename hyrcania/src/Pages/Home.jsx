@@ -29,7 +29,7 @@ const Home = () => {
       <div className="flex flex-col items-center">
         <div className="flex flex-row self-end space-x-4 mr-20 pr-6 mt-10 items-center">
           <h1
-            className="text-left text-3xl text-black-800"
+            className="text-2xl md:text-3xl text-black-800"
             style={{
               color: "#212121",
               fontStyle: "normal",

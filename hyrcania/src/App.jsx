@@ -23,7 +23,7 @@ const App = () => {
           location.pathname !== '/auth' && <Navbar />
         }
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<MarathonSignUpForm/>} />
           <Route path="/blog" element={<MarathonDetail />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<AuthPage />} />
