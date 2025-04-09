@@ -12,7 +12,7 @@ const Navbar = () => {
    
   }, []);
   return (
-    <div className="nav-bar flex flex-row h-[50px] w-screen opacity-86 items-center px-7">
+    <div className="nav-bar flex flex-row h-[50px] w-screen opacity-86 items-center px-7 z-0">
       <Link to="/" className="nav-header font-bold">{persianText.name}</Link>
 
       {/* <Separator

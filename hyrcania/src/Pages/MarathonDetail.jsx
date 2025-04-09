@@ -3,16 +3,20 @@ import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import TicketCard from "@/assets/TicketCard";
 import { useLocation } from "react-router-dom";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  LocateFixed,
-  CalendarClock,
-  PersonStanding,
-} from "lucide-react";
+import { LocateFixed, CalendarClock, PersonStanding } from "lucide-react";
 import MarathonSignUpForm from "./MarathonSignUpForm";
 import { Link } from "react-router-dom";
 
@@ -60,23 +64,39 @@ const MarathonDetail = () => {
           </div>
 
           {/* Marathon Details */}
-          <div className="flex flex-col sm:flex-row w-full md:w-[450px] rounded-xl overflow-hidden shadow-lg self-center md:self-end">
-            <div className="sm:basis-1/3 grid grid-cols-2 h-full bg-white place-content-center gap-y-3 px-4 sm:pl-10 sm:pr-2 py-2">
-              <LocateFixed className="text-black" />
-              <h1 className="marathon-detail-card text-right">VENUE</h1>
+          <div className="w-full max-w-sm rounded-lg overflow-hidden shadow-md bg-white">
+            <div className="p-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <LocateFixed size={16} className="text-gray-500" />
+                    <span className="text-sm font-medium">Venue</span>
+                  </div>
+                  <span className="text-sm text-gray-700">
+                    {event.location}
+                  </span>
+                </div>
 
-              <CalendarClock className="text-black" />
-              <h1 className="marathon-detail-card text-right">TIME</h1>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <CalendarClock size={16} className="text-gray-500" />
+                    <span className="text-sm font-medium">Time</span>
+                  </div>
+                  <span className="text-sm text-gray-700">
+                    {event.event_date}
+                  </span>
+                </div>
 
-              <PersonStanding className="text-black" />
-              <h1 className="marathon-detail-card text-right">category</h1>
-            </div>
-
-            <div className="sm:basis-1/3 flex text-neutral-700 flex-col place-content-center gap-y-4 rounded-r-lg h-full bg-gray-100 px-4 sm:pl-10 sm:pr-2 py-2">
-              <h1 className="marathon-detail-card">{event.location}</h1>
-              <h1 className="marathon-detail-card">{event.event_date}</h1>
-
-              <h1 className="marathon-detail-card">{event.category.title}</h1>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <PersonStanding size={16} className="text-gray-500" />
+                    <span className="text-sm font-medium">Category</span>
+                  </div>
+                  <span className="text-sm text-gray-700">
+                    {event.category.title}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -84,7 +104,9 @@ const MarathonDetail = () => {
           <div className="h-[0.5px] bg-gray-400 my-2 w-full"></div>
 
           {/* Route Details */}
-          <h1 className="event-title text-center md:text-right md:ml-auto">Route Details</h1>
+          <h1 className="event-title text-center md:text-right md:ml-auto">
+            Route Details
+          </h1>
           <img
             className="h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] rounded-sm object-cover w-full"
             style={{ objectPosition: "60% 35%" }}
@@ -94,11 +116,12 @@ const MarathonDetail = () => {
           <div className="flex flex-col self-center md:self-end">
             <div>
               <span className="form-label"> START ADDRESS: </span>
-              <span className="toggle-option">{ }</span>
+              {console.log(event.start_address)}
+              <span className="toggle-option">{event.start_address}</span>
             </div>
             <div>
               <span className="form-label"> FINISH ADDRESS: </span>
-              <span className="toggle-option">Leuven, Belgium</span>
+              <span className="toggle-option">{event.finish_address}</span>
             </div>
           </div>
 
@@ -114,7 +137,6 @@ const MarathonDetail = () => {
           </div> */}
 
           {/* Divider */}
-
 
           {/* FAQs Section */}
           {/* <h1 className="event-title text-center md:text-right md:ml-auto">Frequently Asked Questions</h1>
@@ -145,7 +167,7 @@ const MarathonDetail = () => {
           </div> */}
 
           {/* Add padding at bottom for mobile */}
-          <div className="flex flex-col items-center  w-full ">
+          <div className="flex flex-col items-center  w-full  my-20">
             <p className="text-lg font-semibold text-center  text-neutral-700 ">
               Do you want to sign up for this event?
             </p>
@@ -154,11 +176,11 @@ const MarathonDetail = () => {
               state={{ event }} // Pass the event details if required
               className=" transition duration-300 ease-in-out  mt-8 mb-10"
             >
-              <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full">sign up </button>
+              <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full">
+                sign up{" "}
+              </button>
             </Link>
           </div>
-
-
         </div>
       </div>
     </div>

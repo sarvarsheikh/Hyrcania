@@ -50,10 +50,12 @@ const EventCard = (props) => {
       <div className="absolute bottom-0 left-0 z-30 w-full">
         <div className="flex flex-col m-3 sm:m-5 space-y-1">
           <h1
-            className="text-xl sm:text-2xl md:text-3xl text-white line-clamp-2"
+            className="text-base text-white sm:text-2xl md:text-3xl text-white line-clamp-2"
             style={{
               fontStyle: "normal",
+              fontSize:28,
               fontWeight: "700",
+              color:"#ffffff"
             }}
           >
             {props.event.title}
