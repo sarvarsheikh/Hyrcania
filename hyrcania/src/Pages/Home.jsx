@@ -4,13 +4,13 @@ import Runner from "@/components/images/headerBg.png";
 import persianText from "@/farsiHardCodeText";
 import useEventDetail from "@/hooks/useEventDetail";
 import { useState, useEffect } from "react";
-
+import Link from "antd/es/typography/Link";
 const Home = () => {
   const { eventData, loading, error, getEventDetail } = useEventDetail();
 
   // Fetch event details on component mount
   useEffect(() => {
-    
+
     getEventDetail();
   }, [getEventDetail]);
 
@@ -26,7 +26,7 @@ const Home = () => {
           alt="a man running"
           className="w-full h-full object-cover absolute inset-0 "
         />
-         <div className="absolute inset-0 bg-gradient-to-l from-[#333333] via-[#1a1a1a] via-50% to-[#000000] opacity-75"></div>
+        <div className="absolute inset-0 bg-gradient-to-l from-[#333333] via-[#1a1a1a] via-50% to-[#000000] opacity-75"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4 text-white text-center z-10">
           <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold w-full max-w-4xl mx-auto">
             {persianText.home.title}
@@ -69,13 +69,14 @@ const Home = () => {
           {/* Render Event Cards Dynamically */}
           {!loading && !error && eventData.length > 0 ? (
             eventData.map((event, index) => (
-              <a
+              <Link
                 key={index}
-                href="/blog"
+                to="/blog"
+                state={{ event }}
                 className="transition-transform hover:scale-105 duration-300"
               >
                 <EventCard event={event} />
-              </a>
+              </Link>
             ))
           ) : (
             !loading && !error && (

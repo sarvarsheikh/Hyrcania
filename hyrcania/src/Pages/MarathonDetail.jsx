@@ -13,12 +13,14 @@ import {
   CalendarClock,
   PersonStanding,
 } from "lucide-react";
+import MarathonSignUpForm from "./MarathonSignUpForm";
+import { Link } from "react-router-dom";
 
 const MarathonDetail = () => {
   const location = useLocation();
   const obj = location.state;
   const event = obj.event;
-
+  console.log(event);
   return (
     <div
       data-oid="vj90wec"
@@ -67,13 +69,14 @@ const MarathonDetail = () => {
               <h1 className="marathon-detail-card text-right">TIME</h1>
 
               <PersonStanding className="text-black" />
-              <h1 className="marathon-detail-card text-right">MARATHON</h1>
+              <h1 className="marathon-detail-card text-right">category</h1>
             </div>
 
-            <div className="sm:basis-2/3 flex text-neutral-700 flex-col place-content-center gap-y-4 rounded-r-lg h-full bg-gray-100 px-4 sm:pl-10 sm:pr-2 py-2">
-              <h1 className="marathon-detail-card">Lueven, Belgium</h1>
-              <h1 className="marathon-detail-card">APR.12-15.2025 10:10.AM</h1>
-              <h1 className="marathon-detail-card">Trail running - 5k , 10k</h1>
+            <div className="sm:basis-1/3 flex text-neutral-700 flex-col place-content-center gap-y-4 rounded-r-lg h-full bg-gray-100 px-4 sm:pl-10 sm:pr-2 py-2">
+              <h1 className="marathon-detail-card">{event.location}</h1>
+              <h1 className="marathon-detail-card">{event.event_date}</h1>
+
+              <h1 className="marathon-detail-card">{event.category.title}</h1>
             </div>
           </div>
 
@@ -91,7 +94,7 @@ const MarathonDetail = () => {
           <div className="flex flex-col self-center md:self-end">
             <div>
               <span className="form-label"> START ADDRESS: </span>
-              <span className="toggle-option">Royal Palace of Brussels</span>
+              <span className="toggle-option">{ }</span>
             </div>
             <div>
               <span className="form-label"> FINISH ADDRESS: </span>
@@ -103,18 +106,18 @@ const MarathonDetail = () => {
           <div className="h-[0.5px] bg-gray-400 my-2 w-full"></div>
 
           {/* Tickets Section */}
-          <h1 className="event-title text-center md:text-right md:ml-auto">Tickets</h1>
+          {/* <h1 className="event-title text-center md:text-right md:ml-auto">Tickets</h1>
           <div className="self-center md:self-end w-full md:w-auto">
             <TicketCard />
             <TicketCard />
             <TicketCard />
-          </div>
+          </div> */}
 
           {/* Divider */}
-          <div className="h-[0.5px] bg-gray-400 my-2 w-full"></div>
+
 
           {/* FAQs Section */}
-          <h1 className="event-title text-center md:text-right md:ml-auto">Frequently Asked Questions</h1>
+          {/* <h1 className="event-title text-center md:text-right md:ml-auto">Frequently Asked Questions</h1>
           <div className="marathon-detail-fac text-black self-center md:self-end w-full">
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
@@ -139,10 +142,22 @@ const MarathonDetail = () => {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-          </div>
-          
+          </div> */}
+
           {/* Add padding at bottom for mobile */}
-          <div className="h-8 md:h-16"></div>
+          <div className="flex flex-col items-center  w-full ">
+            <p className="text-lg font-semibold text-center  text-neutral-700 ">
+              Do you want to sign up for this event?
+            </p>
+            <Link
+              to="/marathon" // Adjust the route as needed
+              state={{ event }} // Pass the event details if required
+              className=" transition duration-300 ease-in-out  mt-8 mb-10"
+            >
+              <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full">sign up </button>
+            </Link>
+          </div>
+
 
         </div>
       </div>

@@ -58,7 +58,7 @@ const EventCard = (props) => {
           >
             {props.event.title}
           </h1>
-          
+
           <div className="flex flex-row items-center space-x-2">
             <LocateFixed className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
             <h6
@@ -71,7 +71,7 @@ const EventCard = (props) => {
               {props.event.location}
             </h6>
           </div>
-          
+
           <h6
             style={{
               fontStyle: "normal",

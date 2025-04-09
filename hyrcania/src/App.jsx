@@ -16,24 +16,25 @@ import MarathonSignUpForm from "./pages/MarathonSignUpForm";
 
 const App = () => {
   const queryClient = new QueryClient();
-  const location = useLocation(); 
+  const location = useLocation();
   return (
-    <QueryClientProvider client={queryClient}>  
+    <QueryClientProvider client={queryClient}>
       <div className="flex flex-col">
-        { 
+        {
           location.pathname !== '/auth' && <Navbar />
         }
         <Routes>
           {/* <Route path="/" element={<MarathonSignUpForm/>} /> */}
-          <Route path="/" element={<Home/>} />
+          <Route path="/" element={<Home />} />
           <Route path="/blog" element={<MarathonDetail />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/marathon" element={<MarathonSignUpForm />} />
         </Routes>
         { // Conditionally render EndSection
           location.pathname !== '/auth' && <EndSection />
         }
-      </div> 
+      </div>
       <Toaster richColors closeButton />
     </QueryClientProvider>
     // <LoginPage/>
