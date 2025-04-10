@@ -21,6 +21,10 @@ import {
 import { CheckCircle } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Title } from "@radix-ui/react-alert-dialog";
+import useEventSignUp from "@/hooks/useEventSignUp";
+
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+
 
 // Define fallback tickets in case event prop is missing
 const fallbackTickets = [
@@ -37,6 +41,8 @@ export default function MinimalistRegistrationForm() {
   console.log(event.link);
   console.log(event.tickets);
   const tickets = [...event.tickets];
+  const { eventSignUp } = useEventSignUp();
+
   // Initialize state with all required fields including tickets array
   const [formData, setFormData] = useState({
     firstName: "",
@@ -50,8 +56,10 @@ export default function MinimalistRegistrationForm() {
     relativeName: "",
     relativeLastName: "",
     relativePhoneNumber: "",
-    // Initialize tickets as an empty array
+    is_paid: false
+
   });
+
 
   const [errors, setErrors] = useState({});
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
@@ -116,7 +124,10 @@ export default function MinimalistRegistrationForm() {
     e.preventDefault();
 
     if (validateForm()) {
-      console.log("Form submitted:", formData);
+      eventSignUp()
+
+
+
       setShowSuccessDialog(true);
     }
   };
@@ -384,21 +395,25 @@ export default function MinimalistRegistrationForm() {
             </div>
 
             {/* Event Tickets Section */}
-            <div>
+
+            <RadioGroup defaultValue="option-one">
               {tickets.map((ticket) => (
-                <div>
-                  <Checkbox id={ticket.id} />
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value={ticket.title} id={ticket.id} />
+
                   <lable>{ticket.title}</lable>
                 </div>
               ))}
-            </div>
+            </RadioGroup>
           </CardContent>
 
           <CardFooter className="flex justify-end p-6 pt-0">
             <Button
+              onClick={handleSubmit}
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
+
               Sign Up
             </Button>
           </CardFooter>
