@@ -24,7 +24,7 @@ const MarathonDetail = () => {
   const location = useLocation();
   const obj = location.state;
   const event = obj.event;
-  console.log(event);
+  console.log(event.link);
   return (
     <div
       data-oid="vj90wec"

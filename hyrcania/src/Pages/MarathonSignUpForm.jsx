@@ -2,12 +2,42 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLocation } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { CheckCircle } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Title } from "@radix-ui/react-alert-dialog";
+
+// Define fallback tickets in case event prop is missing
+const fallbackTickets = [
+  { id: "5k", label: "5K Race - $30" },
+  { id: "10k", label: "10K Race - $45" },
+  { id: "half", label: "Half Marathon - $60" },
+  { id: "full", label: "Full Marathon - $75" },
+];
 
 export default function MinimalistRegistrationForm() {
+  const location = useLocation();
+  const obj = location.state;
+  const event = obj.event;
+  console.log(event.link);
+  console.log(event.tickets);
+  const tickets = [...event.tickets];
+  // Initialize state with all required fields including tickets array
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -19,11 +49,14 @@ export default function MinimalistRegistrationForm() {
     tShirtSize: "",
     relativeName: "",
     relativeLastName: "",
-    relativePhoneNumber: ""
+    relativePhoneNumber: "",
+    // Initialize tickets as an empty array
   });
-  
+
   const [errors, setErrors] = useState({});
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+
+  // Use event tickets if available, otherwise use fallback
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -42,17 +75,38 @@ export default function MinimalistRegistrationForm() {
     }
   };
 
+  const handleTicketChange = (ticketId) => {
+    setFormData((prev) => {
+      const updatedTickets = prev.tickets.includes(ticketId)
+        ? prev.tickets.filter((id) => id !== ticketId)
+        : [...prev.tickets, ticketId];
+
+      return { ...prev, tickets: updatedTickets };
+    });
+
+    // Clear ticket error if any
+    if (errors.tickets) {
+      setErrors((prev) => ({ ...prev, tickets: "" }));
+    }
+  };
+
   const validateForm = () => {
     const newErrors = {};
     let isValid = true;
 
-    // Check all fields
-    Object.keys(formData).forEach(key => {
-      if (!formData[key]) {
+    // Check all required fields
+    Object.keys(formData).forEach((key) => {
+      if (key !== "tickets" && !formData[key]) {
         newErrors[key] = "This field is required";
         isValid = false;
       }
     });
+
+    // Check if at least one ticket is selected
+    if (formData.tickets.length === 0) {
+      newErrors.tickets = "Please select at least one ticket type";
+      isValid = false;
+    }
 
     setErrors(newErrors);
     return isValid;
@@ -60,7 +114,7 @@ export default function MinimalistRegistrationForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       console.log("Form submitted:", formData);
       setShowSuccessDialog(true);
@@ -78,11 +132,13 @@ export default function MinimalistRegistrationForm() {
       <Card className="w-full max-w-lg mx-auto mt-8 bg-white">
         <form onSubmit={handleSubmit}>
           <CardContent className="p-6 space-y-6">
-            <h1 className="text-2xl font-bold text-center mb-6">Registration Form</h1>
-            
+            <h1 className="text-2xl font-bold text-center mb-6">
+              Registration Form
+            </h1>
+
             <div className="space-y-4">
               <h2 className="text-lg font-medium">Personal Information</h2>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label htmlFor="firstName" className="flex">
@@ -97,7 +153,9 @@ export default function MinimalistRegistrationForm() {
                     required
                   />
                   {errors.firstName && (
-                    <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.firstName}
+                    </p>
                   )}
                 </div>
 
@@ -114,7 +172,9 @@ export default function MinimalistRegistrationForm() {
                     required
                   />
                   {errors.lastName && (
-                    <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.lastName}
+                    </p>
                   )}
                 </div>
               </div>
@@ -150,7 +210,9 @@ export default function MinimalistRegistrationForm() {
                     required
                   />
                   {errors.phoneNumber && (
-                    <p className="text-red-500 text-xs mt-1">{errors.phoneNumber}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.phoneNumber}
+                    </p>
                   )}
                 </div>
               </div>
@@ -162,10 +224,12 @@ export default function MinimalistRegistrationForm() {
                   </Label>
                   <Select
                     value={formData.gender}
-                    onValueChange={(value) => handleSelectChange("gender", value)}
+                    onValueChange={(value) =>
+                      handleSelectChange("gender", value)
+                    }
                     required
                   >
-                    <SelectTrigger 
+                    <SelectTrigger
                       id="gender"
                       className={errors.gender ? "border-red-500" : ""}
                     >
@@ -195,7 +259,9 @@ export default function MinimalistRegistrationForm() {
                     required
                   />
                   {errors.idNumber && (
-                    <p className="text-red-500 text-xs mt-1">{errors.idNumber}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.idNumber}
+                    </p>
                   )}
                 </div>
               </div>
@@ -224,10 +290,12 @@ export default function MinimalistRegistrationForm() {
                   </Label>
                   <Select
                     value={formData.tShirtSize}
-                    onValueChange={(value) => handleSelectChange("tShirtSize", value)}
+                    onValueChange={(value) =>
+                      handleSelectChange("tShirtSize", value)
+                    }
                     required
                   >
-                    <SelectTrigger 
+                    <SelectTrigger
                       id="tShirtSize"
                       className={errors.tShirtSize ? "border-red-500" : ""}
                     >
@@ -242,7 +310,9 @@ export default function MinimalistRegistrationForm() {
                     </SelectContent>
                   </Select>
                   {errors.tShirtSize && (
-                    <p className="text-red-500 text-xs mt-1">{errors.tShirtSize}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.tShirtSize}
+                    </p>
                   )}
                 </div>
               </div>
@@ -250,7 +320,7 @@ export default function MinimalistRegistrationForm() {
 
             <div className="space-y-4 pt-4">
               <h2 className="text-lg font-medium">Emergency Contact</h2>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label htmlFor="relativeName" className="flex">
@@ -265,13 +335,16 @@ export default function MinimalistRegistrationForm() {
                     required
                   />
                   {errors.relativeName && (
-                    <p className="text-red-500 text-xs mt-1">{errors.relativeName}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.relativeName}
+                    </p>
                   )}
                 </div>
 
                 <div className="space-y-1">
                   <Label htmlFor="relativeLastName" className="flex">
-                    Relative's Last Name <span className="text-red-500 ml-1">*</span>
+                    Relative's Last Name{" "}
+                    <span className="text-red-500 ml-1">*</span>
                   </Label>
                   <Input
                     id="relativeLastName"
@@ -282,14 +355,17 @@ export default function MinimalistRegistrationForm() {
                     required
                   />
                   {errors.relativeLastName && (
-                    <p className="text-red-500 text-xs mt-1">{errors.relativeLastName}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.relativeLastName}
+                    </p>
                   )}
                 </div>
               </div>
 
               <div className="space-y-1">
                 <Label htmlFor="relativePhoneNumber" className="flex">
-                  Relative's Phone Number <span className="text-red-500 ml-1">*</span>
+                  Relative's Phone Number{" "}
+                  <span className="text-red-500 ml-1">*</span>
                 </Label>
                 <Input
                   id="relativePhoneNumber"
@@ -300,14 +376,29 @@ export default function MinimalistRegistrationForm() {
                   required
                 />
                 {errors.relativePhoneNumber && (
-                  <p className="text-red-500 text-xs mt-1">{errors.relativePhoneNumber}</p>
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.relativePhoneNumber}
+                  </p>
                 )}
               </div>
             </div>
+
+            {/* Event Tickets Section */}
+            <div>
+              {tickets.map((ticket) => (
+                <div>
+                  <Checkbox id={ticket.id} />
+                  <lable>{ticket.title}</lable>
+                </div>
+              ))}
+            </div>
           </CardContent>
-          
+
           <CardFooter className="flex justify-end p-6 pt-0">
-            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
               Sign Up
             </Button>
           </CardFooter>
@@ -318,16 +409,19 @@ export default function MinimalistRegistrationForm() {
       <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">Registration Successful!</DialogTitle>
+            <DialogTitle className="text-center text-xl">
+              Registration Successful!
+            </DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center justify-center py-4">
             <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
             <p className="text-center">
-              Thank you for signing up! Your registration has been successfully submitted.
+              Thank you for signing up! Your registration has been successfully
+              submitted.
             </p>
           </div>
           <DialogFooter className="sm:justify-center">
-            <Button 
+            <Button
               onClick={closeSuccessDialog}
               className="bg-green-600 hover:bg-green-700 text-white"
             >

@@ -4,7 +4,7 @@ import axios from "axios";
 
 function useEvent() {
     const fetchEvents = async () => {
-        const response = await axios.get("http://127.0.0.1:8000/events/");
+        const response = await axios.get("http://192.168.1.10:8000/events/");
         return response.data;
     };
 

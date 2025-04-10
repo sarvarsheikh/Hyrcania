@@ -28,7 +28,7 @@ const Home = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-l from-[#333333] via-[#1a1a1a] via-50% to-[#000000] opacity-75"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4 text-white text-center z-10">
-          <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold w-full max-w-4xl mx-auto">
+          <h1 className="text-4xl md:text-8xl lg:text-8xl font-bold w-full max-w-4xl mx-auto">
             {persianText.home.title}
           </h1>
         </div>
