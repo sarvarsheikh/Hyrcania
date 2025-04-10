@@ -10,6 +10,10 @@ const Home = () => {
 
   // Fetch event details on component mount
   useEffect(() => {
+    console.log(localStorage.getItem("token"));
+    
+    
+    // localStorage.clear();
 
     getEventDetail();
   }, [getEventDetail]);

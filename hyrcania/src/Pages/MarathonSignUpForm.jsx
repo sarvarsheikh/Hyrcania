@@ -19,57 +19,64 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { CheckCircle } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Title } from "@radix-ui/react-alert-dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import useEventSignUp from "@/hooks/useEventSignUp";
+import { z } from "zod";
 
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-
-
-// Define fallback tickets in case event prop is missing
+// Define fallback tickets
 const fallbackTickets = [
-  { id: "5k", label: "5K Race - $30" },
-  { id: "10k", label: "10K Race - $45" },
-  { id: "half", label: "Half Marathon - $60" },
-  { id: "full", label: "Full Marathon - $75" },
+  { id: "5k", title: "5K Race - $30" },
+  { id: "10k", title: "10K Race - $45" },
+  { id: "half", title: "Half Marathon - $60" },
+  { id: "full", title: "Full Marathon - $75" },
 ];
+
+// Define the validation schema with Zod
+const registrationSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  age: z.string(),
+  phoneNumber: z.string().min(1, "Phone number is required"),
+  gender: z.enum(["m", "f"], { message: "Gender is required" }),
+  idNumber: z.string().min(1, "ID number is required"),
+  state: z.string().min(1, "State is required"),
+  tShirtSize: z.string().min(1, "T-shirt size is required"),
+  relativeName: z.string().min(1, "Relative's name is required"),
+  relativeLastName: z.string().min(1, "Relative's last name is required"),
+  relativePhoneNumber: z.string().min(1, "Relative's phone number is required"),
+  is_paid: z.boolean(),
+});
 
 export default function MinimalistRegistrationForm() {
   const location = useLocation();
-  const obj = location.state;
+  const obj = location.state || { event: { tickets: fallbackTickets } };
   const event = obj.event;
-  console.log(event.link);
-  console.log(event.tickets);
-  const tickets = [...event.tickets];
+  const tickets = [...(event?.tickets || fallbackTickets)];
   const { eventSignUp } = useEventSignUp();
 
-  // Initialize state with all required fields including tickets array
+  // Initialize form state
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     age: "",
     phoneNumber: "",
-    gender: "",
+    gender: "m", // Set default gender
     idNumber: "",
     state: "",
     tShirtSize: "",
     relativeName: "",
     relativeLastName: "",
     relativePhoneNumber: "",
-    is_paid: false
-
+    is_paid: false,
   });
 
-
+  const [selectedTicket, setSelectedTicket] = useState(null);
   const [errors, setErrors] = useState({});
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-
-  // Use event tickets if available, otherwise use fallback
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -77,57 +84,37 @@ export default function MinimalistRegistrationForm() {
 
   const handleSelectChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user selects an option
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
-  const handleTicketChange = (ticketId) => {
-    setFormData((prev) => {
-      const updatedTickets = prev.tickets.includes(ticketId)
-        ? prev.tickets.filter((id) => id !== ticketId)
-        : [...prev.tickets, ticketId];
-
-      return { ...prev, tickets: updatedTickets };
-    });
-
-    // Clear ticket error if any
-    if (errors.tickets) {
-      setErrors((prev) => ({ ...prev, tickets: "" }));
-    }
-  };
-
   const validateForm = () => {
-    const newErrors = {};
-    let isValid = true;
-
-    // Check all required fields
-    Object.keys(formData).forEach((key) => {
-      if (key !== "tickets" && !formData[key]) {
-        newErrors[key] = "This field is required";
-        isValid = false;
+    try {
+      registrationSchema.parse(formData);
+      if (!selectedTicket) {
+        setErrors((prev) => ({ ...prev, ticket: "Please select a ticket" }));
+        return false;
       }
-    });
-
-    // Check if at least one ticket is selected
-    if (formData.tickets.length === 0) {
-      newErrors.tickets = "Please select at least one ticket type";
-      isValid = false;
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors = {};
+        error.errors.forEach((err) => {
+          const path = err.path[0];
+          newErrors[path] = err.message;
+        });
+        setErrors(newErrors);
+      }
+      return false;
     }
-
-    setErrors(newErrors);
-    return isValid;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (validateForm()) {
-      eventSignUp()
-
-
-
+      const backendPayload = mapToBackendFormat(formData);
+      eventSignUp(selectedTicket, backendPayload);
       setShowSuccessDialog(true);
     }
   };
@@ -138,18 +125,40 @@ export default function MinimalistRegistrationForm() {
     // setFormData({...initial state});
   };
 
+  // Helper function to convert age to Jalali date
+  const convertAgeToJalaliDate = (age) => {
+    const currentYear = new Date().getFullYear();
+    const birthYear = currentYear - parseInt(age, 10);
+    return `${birthYear}-01-01`;
+  };
+
+  // Map frontend fields to backend fields
+  const mapToBackendFormat = (userDetail) => {
+    return {
+      first_name: userDetail.firstName,
+      last_name: userDetail.lastName,
+      age: convertAgeToJalaliDate(userDetail.age),
+      phone_number: userDetail.phoneNumber,
+      gender: userDetail.gender,
+      id_number: userDetail.idNumber,
+      state: userDetail.state,
+      T_Shirt_size: userDetail.tShirtSize,
+      relativ_name: userDetail.relativeName,
+      relativ_last_name: userDetail.relativeLastName,
+      relativ_phone_number: userDetail.relativePhoneNumber,
+      is_paid: userDetail.is_paid,
+    };
+  };
+
   return (
     <>
       <Card className="w-full max-w-lg mx-auto mt-8 bg-white">
         <form onSubmit={handleSubmit}>
           <CardContent className="p-6 space-y-6">
-            <h1 className="text-2xl font-bold text-center mb-6">
-              Registration Form
-            </h1>
-
+            <h1 className="text-2xl font-bold text-center mb-6">Registration Form</h1>
+            {/* Personal Information */}
             <div className="space-y-4">
               <h2 className="text-lg font-medium">Personal Information</h2>
-
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label htmlFor="firstName" className="flex">
@@ -161,15 +170,11 @@ export default function MinimalistRegistrationForm() {
                     value={formData.firstName}
                     onChange={handleInputChange}
                     className={errors.firstName ? "border-red-500" : ""}
-                    required
                   />
                   {errors.firstName && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.firstName}
-                    </p>
+                    <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
                   )}
                 </div>
-
                 <div className="space-y-1">
                   <Label htmlFor="lastName" className="flex">
                     Last Name <span className="text-red-500 ml-1">*</span>
@@ -180,16 +185,12 @@ export default function MinimalistRegistrationForm() {
                     value={formData.lastName}
                     onChange={handleInputChange}
                     className={errors.lastName ? "border-red-500" : ""}
-                    required
                   />
                   {errors.lastName && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.lastName}
-                    </p>
+                    <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
                   )}
                 </div>
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label htmlFor="age" className="flex">
@@ -201,13 +202,11 @@ export default function MinimalistRegistrationForm() {
                     value={formData.age}
                     onChange={handleInputChange}
                     className={errors.age ? "border-red-500" : ""}
-                    required
                   />
                   {errors.age && (
                     <p className="text-red-500 text-xs mt-1">{errors.age}</p>
                   )}
                 </div>
-
                 <div className="space-y-1">
                   <Label htmlFor="phoneNumber" className="flex">
                     Phone Number <span className="text-red-500 ml-1">*</span>
@@ -218,16 +217,12 @@ export default function MinimalistRegistrationForm() {
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
                     className={errors.phoneNumber ? "border-red-500" : ""}
-                    required
                   />
                   {errors.phoneNumber && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.phoneNumber}
-                    </p>
+                    <p className="text-red-500 text-xs mt-1">{errors.phoneNumber}</p>
                   )}
                 </div>
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label htmlFor="gender" className="flex">
@@ -235,10 +230,7 @@ export default function MinimalistRegistrationForm() {
                   </Label>
                   <Select
                     value={formData.gender}
-                    onValueChange={(value) =>
-                      handleSelectChange("gender", value)
-                    }
-                    required
+                    onValueChange={(value) => handleSelectChange("gender", value)}
                   >
                     <SelectTrigger
                       id="gender"
@@ -247,16 +239,14 @@ export default function MinimalistRegistrationForm() {
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="m">Male</SelectItem>
+                      <SelectItem value="f">Female</SelectItem>
                     </SelectContent>
                   </Select>
                   {errors.gender && (
                     <p className="text-red-500 text-xs mt-1">{errors.gender}</p>
                   )}
                 </div>
-
                 <div className="space-y-1">
                   <Label htmlFor="idNumber" className="flex">
                     ID Number <span className="text-red-500 ml-1">*</span>
@@ -267,16 +257,12 @@ export default function MinimalistRegistrationForm() {
                     value={formData.idNumber}
                     onChange={handleInputChange}
                     className={errors.idNumber ? "border-red-500" : ""}
-                    required
                   />
                   {errors.idNumber && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.idNumber}
-                    </p>
+                    <p className="text-red-500 text-xs mt-1">{errors.idNumber}</p>
                   )}
                 </div>
               </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label htmlFor="state" className="flex">
@@ -288,23 +274,18 @@ export default function MinimalistRegistrationForm() {
                     value={formData.state}
                     onChange={handleInputChange}
                     className={errors.state ? "border-red-500" : ""}
-                    required
                   />
                   {errors.state && (
                     <p className="text-red-500 text-xs mt-1">{errors.state}</p>
                   )}
                 </div>
-
                 <div className="space-y-1">
                   <Label htmlFor="tShirtSize" className="flex">
                     T-Shirt Size <span className="text-red-500 ml-1">*</span>
                   </Label>
                   <Select
                     value={formData.tShirtSize}
-                    onValueChange={(value) =>
-                      handleSelectChange("tShirtSize", value)
-                    }
-                    required
+                    onValueChange={(value) => handleSelectChange("tShirtSize", value)}
                   >
                     <SelectTrigger
                       id="tShirtSize"
@@ -321,17 +302,14 @@ export default function MinimalistRegistrationForm() {
                     </SelectContent>
                   </Select>
                   {errors.tShirtSize && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.tShirtSize}
-                    </p>
+                    <p className="text-red-500 text-xs mt-1">{errors.tShirtSize}</p>
                   )}
                 </div>
               </div>
             </div>
-
+            {/* Emergency Contact */}
             <div className="space-y-4 pt-4">
               <h2 className="text-lg font-medium">Emergency Contact</h2>
-
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label htmlFor="relativeName" className="flex">
@@ -343,19 +321,14 @@ export default function MinimalistRegistrationForm() {
                     value={formData.relativeName}
                     onChange={handleInputChange}
                     className={errors.relativeName ? "border-red-500" : ""}
-                    required
                   />
                   {errors.relativeName && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.relativeName}
-                    </p>
+                    <p className="text-red-500 text-xs mt-1">{errors.relativeName}</p>
                   )}
                 </div>
-
                 <div className="space-y-1">
                   <Label htmlFor="relativeLastName" className="flex">
-                    Relative's Last Name{" "}
-                    <span className="text-red-500 ml-1">*</span>
+                    Relative's Last Name <span className="text-red-500 ml-1">*</span>
                   </Label>
                   <Input
                     id="relativeLastName"
@@ -363,20 +336,15 @@ export default function MinimalistRegistrationForm() {
                     value={formData.relativeLastName}
                     onChange={handleInputChange}
                     className={errors.relativeLastName ? "border-red-500" : ""}
-                    required
                   />
                   {errors.relativeLastName && (
-                    <p className="text-red-500 text-xs mt-1">
-                      {errors.relativeLastName}
-                    </p>
+                    <p className="text-red-500 text-xs mt-1">{errors.relativeLastName}</p>
                   )}
                 </div>
               </div>
-
               <div className="space-y-1">
                 <Label htmlFor="relativePhoneNumber" className="flex">
-                  Relative's Phone Number{" "}
-                  <span className="text-red-500 ml-1">*</span>
+                  Relative's Phone Number <span className="text-red-500 ml-1">*</span>
                 </Label>
                 <Input
                   id="relativePhoneNumber"
@@ -384,42 +352,43 @@ export default function MinimalistRegistrationForm() {
                   value={formData.relativePhoneNumber}
                   onChange={handleInputChange}
                   className={errors.relativePhoneNumber ? "border-red-500" : ""}
-                  required
                 />
                 {errors.relativePhoneNumber && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.relativePhoneNumber}
-                  </p>
+                  <p className="text-red-500 text-xs mt-1">{errors.relativePhoneNumber}</p>
                 )}
               </div>
             </div>
-
             {/* Event Tickets Section */}
-
-            <RadioGroup defaultValue="option-one">
-              {tickets.map((ticket) => (
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value={ticket.title} id={ticket.id} />
-
-                  <lable>{ticket.title}</lable>
-                </div>
-              ))}
-            </RadioGroup>
+            <div className="space-y-4 pt-4">
+              <h2 className="text-lg font-medium">
+                Select Ticket <span className="text-red-500 ml-1">*</span>
+              </h2>
+              <RadioGroup
+                value={selectedTicket}
+                onValueChange={setSelectedTicket}
+              >
+                {tickets.map((ticket) => (
+                  <div key={ticket.id} className="flex items-center space-x-2">
+                    <RadioGroupItem value={ticket.id} id={ticket.id} />
+                    <Label htmlFor={ticket.id}>{ticket.title}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+              {errors.ticket && (
+                <p className="text-red-500 text-xs">{errors.ticket}</p>
+              )}
+            </div>
           </CardContent>
-
           <CardFooter className="flex justify-end p-6 pt-0">
             <Button
-              onClick={handleSubmit}
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
-
               Sign Up
             </Button>
           </CardFooter>
         </form>
       </Card>
-
       {/* Success Dialog */}
       <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
         <DialogContent className="sm:max-w-md">
