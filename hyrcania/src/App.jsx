@@ -11,17 +11,17 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import { Toaster } from "sonner";
 import MarathonSignUpForm from "./pages/MarathonSignUpForm";
-
+import PaymentResultPage from "./Pages/Payment";
 
 
 const App = () => {
   const queryClient = new QueryClient();
   const location = useLocation();
 
-  const hideEndSection = 
-  location.pathname === '/auth' || 
- 
-  location.pathname === '/marathon';
+  const hideEndSection =
+    location.pathname === '/auth' ||
+
+    location.pathname === '/marathon';
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex flex-col">
@@ -35,6 +35,7 @@ const App = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/marathon" element={<MarathonSignUpForm />} />
+          <Route path="/payment" element={<PaymentResultPage />} />
         </Routes>
         {!hideEndSection && <EndSection />}
       </div>
