@@ -1,7 +1,6 @@
 import React from "react";
 
 
-import ticketImage from "@/components/images/ticket.jpeg";
 import star from "@/components/images/star.png";
 import QR from "@/components/images//QR.png";
 

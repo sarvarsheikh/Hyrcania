@@ -87,7 +87,7 @@ const EventCreation = () => {
           <Button
             variant="outline"
             className="rounded-full px-6 py-2"
-            data-oid="p2x._f6"
+
           >
             Tickets
           </Button>

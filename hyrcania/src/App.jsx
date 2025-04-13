@@ -4,25 +4,50 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import EndSection from "./components/EndSection";
 import MarathonDetail from "./pages/MarathonDetail";
-import Dashboard from "./Pages/Dashboard";
+import Dashboard from "./pages/Dashboard";
 import "./App.css";
-import AuthPage from "./Pages/AuthPage";
+import AuthPage from "./pages/AuthPage";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
+import { Toaster } from "sonner";
+import MarathonSignUpForm from "./pages/MarathonSignUpForm";
+import PaymentResultPage from "./Pages/Payment";
+import ProfilePage from "./pages/ProfilePage";
+import AboutPage from "./pages/AboutusPage";
+import ContactPage from "./pages/ContactusPage";
+import TermsOfUse from "./pages/TermofUsePage";
+
 
 const App = () => {
   const queryClient = new QueryClient();
+  const location = useLocation();
+
+  const hideEndSection =
+    location.pathname === '/auth' ||
+
+    location.pathname === '/marathon';
   return (
-    <QueryClientProvider client={queryClient}>  
-       <div className="flex flex-col">
-        <Navbar />
+    <QueryClientProvider client={queryClient}>
+      <div className="flex flex-col">
+        {
+          location.pathname !== '/auth' && <Navbar />
+        }
         <Routes>
+          {/* <Route path="/" element={<MarathonSignUpForm/>} /> */}
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<MarathonDetail />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/term" element={<TermsOfUse />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/marathon" element={<MarathonSignUpForm />} />
+          <Route path="/payment" element={<PaymentResultPage />} />
         </Routes>
-        <EndSection />
-      </div> 
-      {/* <AuthPage/> */}
+        {!hideEndSection && <EndSection />}
+      </div>
+      <Toaster richColors closeButton />
     </QueryClientProvider>
     // <LoginPage/>
   );

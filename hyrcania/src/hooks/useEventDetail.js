@@ -6,7 +6,7 @@ export default function useEvent() {
   const [error, setError] = useState(null);
   const [eventData, setEventData] = useState([]);
 
-  const getEventDetail = useCallback(async (url = "http://127.0.0.1:8000/events/") => {
+  const getEventDetail = useCallback(async (url = "https://hyrcanianrun.liara.run/api/events/") => {
     setLoading(true);
     try {
       const res = await axios.get(url);

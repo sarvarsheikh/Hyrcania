@@ -7,7 +7,7 @@
     "aboutUs": "درباره ما",
     "contactUs": "تماس با ما"
   },
-  "footer":{
+  "footer": {
     "aboutUs": "درباره ما",
     "termsOfUse": "شرایط استفاده",
     "contactUs": "تماس با ما",
@@ -16,11 +16,10 @@
     "helpCenterFaqs": "مرکز راهنما / سوالات متداول"
   },
   "home": {
-    "title": "سریع بدوید، آزاد بدوید",
-    "subtitle": "مسابقات را کشف کنید",
-    "discoverEvents": "رویدادها را کشف کنید"
+    "title": "برای هیرکانی بدو",
+    "subtitle": "برای هیرکانی بدو",
+    "discoverEvents": "مسابقات جلو رو"
   },
-
   "loginPage": {
     "login": "ورود",
     "phoneNumber": "شماره تلفن",
@@ -136,6 +135,58 @@
         "label": "قیمت",
         "description": "هزینه ورودی رویداد را مشخص کنید، از جمله ارز، تا شرکت‌کنندگان از هزینه ثبت نام مطلع شوند.",
         "placeholder": "قیمت بلیط"
+      },
+      "marathonSignUp": {
+        "titles": {
+          "mainTitle": "Registration Form",
+          "personalInfo": "Personal Information",
+          "emergencyContact": "Emergency Contact",
+          "selectTicket": "Select Ticket *",
+          "successTitle": "Registration Successful!"
+        },
+        "labels": {
+          "firstName": "First Name",
+          "lastName": "Last Name",
+          "age": "Age",
+          "phoneNumber": "Phone Number",
+          "gender": "Gender",
+          "idNumber": "ID Number",
+          "state": "State",
+          "tShirtSize": "T-Shirt Size",
+          "relativeName": "Relative's Name",
+          "relativeLastName": "Relative's Last Name",
+          "relativePhoneNumber": "Relative's Phone Number"
+        },
+        "placeholders": {
+          "genderSelect": "Select",
+          "tShirtSizeSelect": "Select"
+        },
+        "tickets": {
+          "5k": "5K Race - $30",
+          "10k": "10K Race - $45",
+          "half": "Half Marathon - $60",
+          "full": "Full Marathon - $75"
+        },
+        "buttonTexts": {
+          "signUp": "Sign Up",
+          "close": "Close"
+        },
+        "dialog": {
+          "successMessage": "Thank you for signing up! Your registration has been successfully submitted."
+        },
+        "selectItems": {
+          "gender": {
+            "m": "Male",
+            "f": "Female"
+          },
+          "tShirtSizes": {
+            "xs": "XS",
+            "s": "S",
+            "m": "M",
+            "l": "L",
+            "xl": "XL"
+          }
+        }
       }
     }
   },
