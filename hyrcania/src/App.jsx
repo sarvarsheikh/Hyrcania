@@ -11,7 +11,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import { Toaster } from "sonner";
 import MarathonSignUpForm from "./pages/MarathonSignUpForm";
-import PaymentResultPage from "./Pages/Payment";
+import PaymentResultPage from "./pages/Payment";
 import ProfilePage from "./pages/ProfilePage";
 import AboutPage from "./pages/AboutusPage";
 import ContactPage from "./pages/ContactusPage";
