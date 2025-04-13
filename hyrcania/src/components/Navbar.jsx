@@ -42,15 +42,17 @@ const Navbar = () => {
       {/* Avatar positioned at the right end */}
       <div className="ml-auto bg-neutral-700  p-2 space-x-2 my-2 rounded-full flex items-center">
         {token ? (
-          <h1 className="text-sm font-medium px-2 hover:text-[#C2F66E]">
-            Hi, User
-          </h1>
+          <Link
+          to="/profile"
+           className="text-sm font-medium px-2 hover:text-[#C2F66E]">
+            پروفایل
+          </Link>
         ) : (
           <Link
             to="/auth"
             className="text-sm font-medium px-2 hover:text-[#C2F66E]"
           >
-            Login and Sign up
+            ورود
           </Link>
         )}
         {/* <Avatar className="w-[25px] h-[25px]">

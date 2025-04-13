@@ -90,7 +90,7 @@ const LoginPage = () => {
       // Generate OTP
       await handleSignUp({ phone_number: data.phone_number });
      
-      console.log("OTP sent successfully");
+      console.log("با موفقیت کد برای شماره شما ارسال شد");
       
       // Start countdown
       startCountdown();
@@ -101,7 +101,8 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error("Error:", error);
-      setError("root", { message: "Failed to send OTP!" });
+      
+      setError("root", { message: "نشد که کد رو ارسال کنیم" });
     }
   };
 
@@ -110,10 +111,10 @@ const LoginPage = () => {
     
     try {
       await handleSignUp({ phone_number: phoneNumber });
-      console.log("OTP resent successfully");
+      console.log("با موفقیت دوباره ارسال کردیم کد ");
       startCountdown();
     } catch (error) {
-      console.error("Failed to resend OTP:", error);
+      console.error("نشد که کد ارسال بشه دوباره", error);
     }
   };
 
@@ -126,18 +127,16 @@ const LoginPage = () => {
       });
       
       if (response && response.status === 200) {
-        console.log("Welcome to Hyrcania!");
+        toast.success(" به هیرکانی خوش اومدی قهرمان ")
         setIsDialogOpen(false);
         
         // Delay before navigation
         await new Promise((resolve) => setTimeout(resolve, 1000));
         navigate("/");
-      } else {
-        console.error("Invalid OTP. Please try again.");
       }
     } catch (error) {
       console.error("Error:", error);
-      console.error("Verification failed. Please try again.");
+      // Let useAuth handle the toast error
     }
   };
 
@@ -153,7 +152,7 @@ const LoginPage = () => {
       {/* Form Card */}
       <Card className="relative z-10 p-6 w-96 bg-white shadow-lg rounded-lg">
         <h2 className="header text-2xl font-semibold text-center mb-4">
-          {isLogin ? "Login" : "Signup"}
+          {isLogin ? "ورود" : "ورود"}
         </h2>
 
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -162,7 +161,7 @@ const LoginPage = () => {
               id="phone_number"
               type="tel"
               {...register("phone_number")}
-              placeholder="Enter your phone number"
+              placeholder="شماره تلفن خود را وارد کنید "
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
             {errors.phone_number && (
@@ -182,18 +181,18 @@ const LoginPage = () => {
             type="submit" 
             className="w-full bg-[#41FF8D] text-black hover:bg-[#36D074] rounded-md py-2 font-medium"
           >
-            {isLogin ? "Login" : "Signup"}
+            {isLogin ? "ورود" : "ورود"}
           </Button>
           
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger className="hidden" ref={dialogTriggerRef}></DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle className="text-center text-gray-900">Enter the OTP</DialogTitle>
+                <DialogTitle className="text-center text-gray-900">کد یک بار مصرف را وارد کنید</DialogTitle>
                 <DialogDescription>
                   <div className="flex flex-col items-center justify-center mt-4 space-y-5">
                     <p className="text-sm text-center text-gray-900">
-                      We've sent a verification code to <span className="font-medium">{phoneNumber}</span>
+                      با موفقیت کد ارسال شد <span className="font-medium">{phoneNumber}</span>
                     </p>
                     
                     <InputOTP 
@@ -213,14 +212,14 @@ const LoginPage = () => {
                     </InputOTP>
                     
                     <div className="text-sm text-center">
-                      <span className="text-gray-500">Didn't receive code? </span>
+                      <span className="text-gray-500">کد رو نگرفتی </span>
                       <button 
                         type="button"
                         className={`${canResend ? 'text-[#41FF8D] hover:underline' : 'text-gray-400 cursor-not-allowed'}`}
                         onClick={handleResendOtp}
                         disabled={!canResend}
                       >
-                        Resend OTP
+                        ارسال کردن دوباره کد
                       </button>
                     </div>
                     
@@ -238,7 +237,7 @@ const LoginPage = () => {
                       onClick={handleVerifyOtp}
                       
                     >
-                      {"Verify"}
+                      {"تایید کد"}
                     </Button>
                   </div>
                 </DialogDescription>
@@ -253,7 +252,7 @@ const LoginPage = () => {
             className="text-[#299C57] hover:underline cursor-pointer"
             onClick={toggleForm}
           >
-            {isLogin ? "Sign up" : "Login"}
+            {isLogin ? "ورود" : "ورود"}
           </span>
         </p>
       </Card>

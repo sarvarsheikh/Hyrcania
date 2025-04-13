@@ -3,6 +3,7 @@ import Instagram from "@/assets/Instagram";
 import Linkdin from "@/assets/Linkdin";
 import Telegram from "@/assets/Telegram";
 import persianText from "@/farsiHardCodeText";
+import { Link } from "react-router-dom";
 
 const EndSection = () => {
   return (
@@ -24,10 +25,10 @@ const EndSection = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 w-full text-sm text-gray-300">
         <div className="px-4">
           <div className="p-4">
-            <a href="#" className="block py-1 hover:text-white">{persianText.footer.aboutUs}</a>
+            <Link to="/about" className="block py-1 hover:text-white">{persianText.footer.aboutUs}</Link>
           </div>
           <div className="p-4">
-            <a href="#" className="block py-1 hover:text-white">{persianText.footer.termsOfUse}</a>
+          <Link to="/term" className="block py-1 hover:text-white">{persianText.footer.termsOfUse}</Link>
           </div>
           <div className="p-4">
             <a href="#" className="block py-1 hover:text-white">{persianText.footer.charityAndDonations}</a>
@@ -35,7 +36,7 @@ const EndSection = () => {
         </div>
         <div className="px-4">
           <div className="p-4">
-            <a href="#" className="block py-1 hover:text-white">{persianText.footer.contactUs}</a>
+          <Link to="/contact" className="block py-1 hover:text-white">{persianText.footer.contactUs}</Link>
           </div>
           <div className="p-4">
             <a href="#" className="block py-1 hover:text-white">{persianText.footer.becomeASponsor}</a>

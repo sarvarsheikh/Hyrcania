@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://hyrcanianrun.liara.run/api";
 
 export default function usePayment() {
   const navigate = useNavigate();

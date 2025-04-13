@@ -12,6 +12,10 @@ import { useLocation } from "react-router-dom";
 import { Toaster } from "sonner";
 import MarathonSignUpForm from "./pages/MarathonSignUpForm";
 import PaymentResultPage from "./Pages/Payment";
+import ProfilePage from "./pages/ProfilePage";
+import AboutPage from "./pages/AboutusPage";
+import ContactPage from "./pages/ContactusPage";
+import TermsOfUse from "./pages/TermofUsePage";
 
 
 const App = () => {
@@ -32,6 +36,10 @@ const App = () => {
           {/* <Route path="/" element={<MarathonSignUpForm/>} /> */}
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<MarathonDetail />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/term" element={<TermsOfUse />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/marathon" element={<MarathonSignUpForm />} />

@@ -26,7 +26,7 @@ const PaymentResultPage = () => {
                     throw new Error("Missing Authority or Status in URL");
                 }
 
-                const response = await fetch(`http://127.0.0.1:8000/payment/verify/?Authority=${authority}&Status=${status}`, {
+                const response = await fetch(`https://hyrcanianrun.liara.run/api/payment/verify/?Authority=${authority}&Status=${status}`, {
                     headers: {
                         Authorization: `JWT ${parsedToken.access_token}`,
                     },
@@ -82,7 +82,7 @@ const PaymentResultPage = () => {
                     <div className="inline-block h-10 w-10 mb-4">
                         <div className="animate-spin rounded-full h-10 w-10 border-4 border-gray-200 border-t-blue-500"></div>
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-700">Processing payment result...</h2>
+                    <h2 className="text-xl font-semibold text-gray-700">در حال تکمیل پرداخت شما</h2>
                 </div>
             </div>
         );
@@ -113,18 +113,18 @@ const PaymentResultPage = () => {
                 </div>
 
                 <h1 className="text-2xl font-bold mb-4">
-                    {paymentStatus.success ? 'Payment Successful!' : 'Payment Failed'}
+                    {paymentStatus.success ? 'پرداخت با موفقیت انجام' : 'پرداخت به مشکل خورد'}
                 </h1>
 
                 <p className="text-gray-600 mb-6">{paymentStatus.message}</p>
 
                 {paymentStatus.refId && (
                     <div className="bg-gray-50 p-4 rounded-md mb-6 text-left">
-                        <p className="mb-2"><span className="font-medium">Reference ID:</span> {paymentStatus.refId}</p>
+                        <p className="mb-2"><span className="font-medium">شماره پیگیری </span> {paymentStatus.refId}</p>
                         {paymentStatus.amount && (
-                            <p className="mb-2"><span className="font-medium">Amount Paid:</span> ${paymentStatus.amount}</p>
+                            <p className="mb-2"><span className="font-medium">مقدار پرداختی</span> ${paymentStatus.amount}</p>
                         )}
-                        <p><span className="font-medium">Date:</span> {new Date().toLocaleDateString()}</p>
+                        <p><span className="font-medium">تاریخ</span> {new Date().toLocaleDateString()}</p>
                     </div>
                 )}
 
@@ -134,13 +134,13 @@ const PaymentResultPage = () => {
                             <button
                                 className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-md font-medium transition-colors"
                             >
-                                View My Tickets
+                                مشاهده بلیط
                             </button>
                             <button
                                 className="w-full border border-blue-500 text-blue-500 hover:bg-blue-50 py-3 px-4 rounded-md font-medium transition-colors"
 
                             >
-                                Return to Home
+                                پازگشت به خانه
                             </button>
                         </>
                     ) : (
@@ -149,13 +149,13 @@ const PaymentResultPage = () => {
                                 className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-md font-medium transition-colors"
 
                             >
-                                Try Again
+                                دوباره امتحان کنید
                             </button>
                             <button
                                 className="w-full border border-blue-500 text-blue-500 hover:bg-blue-50 py-3 px-4 rounded-md font-medium transition-colors"
 
                             >
-                                Return to Home
+                                بازگشت به خانه
                             </button>
                         </>
                     )}

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import usePayment from "./usePayment";
+import { toast } from "react-hot-toast";
 
 function useEventSignUp() {
   const [loading, setLoading] = useState(false);
@@ -8,17 +9,34 @@ function useEventSignUp() {
   const { handlePayment } = usePayment();
 
   async function eventSignUp(ticket_id, userDetail) {
-    console.log(userDetail);
     setLoading(true);
+    setError(null);
 
     try {
       const token = localStorage.getItem("token");
+      if (!token) {
+        const error = new Error("Please log in to continue");
+        error.code = "AUTH_REQUIRED";
+        throw error;
+      }
+
       const parsedToken = JSON.parse(token);
-      console.log(`JWT ${parsedToken["access_token"]}`);
-      console.log("Into eventSignUp hook");
+      if (!parsedToken.access_token) {
+        const error = new Error("Invalid authentication token");
+        error.code = "INVALID_TOKEN";
+        throw error;
+      }
+
+      // Check token expiration
+      const tokenData = JSON.parse(atob(parsedToken.access_token.split('.')[1]));
+      if (tokenData.exp * 1000 < Date.now()) {
+        const error = new Error("Your session has expired. Please log in again");
+        error.code = "TOKEN_EXPIRED";
+        throw error;
+      }
 
       const response = await axios.post(
-        `http://127.0.0.1:8000/tickets/${ticket_id}/signups/`,
+        `https://hyrcanianrun.liara.run/api/tickets/${ticket_id}/signups/`,
         {
           first_name: userDetail.first_name,
           last_name: userDetail.last_name,
@@ -35,23 +53,38 @@ function useEventSignUp() {
         },
         {
           headers: {
-            Authorization: `JWT ${parsedToken.access_token}`
+            Authorization: `JWT ${parsedToken.access_token}`,
+            'Content-Type': 'application/json'
           }
         }
       );
 
-      console.log("API Test Response:", response.data);
+      if (!response.data || !response.data.id) {
+        throw new Error("Invalid response from signup endpoint");
+      }
 
-      // Now properly call the handlePayment function
       await handlePayment(response.data.id, userDetail.phone_number, true, ticket_id);
-
-      setLoading(false);
       return response.data;
     } catch (error) {
-      console.error("API Test Error:", error.response?.data || error.message);
-      setError(error.response?.data || error.message);
-      setLoading(false);
+      let errorMessage = "An error occurred during signup";
+      
+      if (error.code === "AUTH_REQUIRED") {
+        errorMessage = error.message;
+      } else if (error.code === "INVALID_TOKEN" || error.code === "TOKEN_EXPIRED") {
+        // Clear invalid/expired token
+        localStorage.removeItem("token");
+        errorMessage = error.message;
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      setError(errorMessage);
+      toast.error(errorMessage);
       throw error;
+    } finally {
+      setLoading(false);
     }
   }
 
