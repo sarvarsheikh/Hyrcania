@@ -246,15 +246,7 @@ const LoginPage = () => {
           </Dialog>
         </form>
 
-        <p className="text-center mt-4 text-gray-600 text-sm">
-          {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
-          <span
-            className="text-[#299C57] hover:underline cursor-pointer"
-            onClick={toggleForm}
-          >
-            {isLogin ? "ورود" : "ورود"}
-          </span>
-        </p>
+        
       </Card>
     </div>
   );

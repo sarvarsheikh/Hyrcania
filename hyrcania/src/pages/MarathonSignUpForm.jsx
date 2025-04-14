@@ -21,7 +21,7 @@ import {
   DialogFooter,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, AlertCircle } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import useEventSignUp from "@/hooks/useEventSignUp";
 import { z } from "zod";
@@ -45,13 +45,21 @@ const registrationSchema = z.object({
   is_paid: z.boolean(),
 });
 
+// Define fallback tickets in case they're not provided in location state
+
 export default function MinimalistRegistrationForm() {
   const location = useLocation();
   const obj = location.state || { event: { tickets: fallbackTickets } };
   const event = obj.event;
   const tickets = [...(event?.tickets || fallbackTickets)];
-  const { eventSignUp, loading: signupLoading, error: signupError } = useEventSignUp();
-  const [date, setDate] = useState(new Date())
+  const { eventSignUp, loading: signupLoading, error: signupError, duplicateSignup } = useEventSignUp();
+  
+  // Set default date to 30 years ago instead of current date
+  // This allows users to select dates for people older than 20 years
+  const thirtyYearsAgo = new Date();
+  thirtyYearsAgo.setFullYear(thirtyYearsAgo.getFullYear() - 30);
+  const [date, setDate] = useState(thirtyYearsAgo);
+  
   // Initialize form state
   const [formData, setFormData] = useState({
     firstName: "",
@@ -71,7 +79,8 @@ export default function MinimalistRegistrationForm() {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [errors, setErrors] = useState({});
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  const [showConfirmationDialog, setShowConfirmationDialog] = useState(false); // New state for confirmation dialog
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+  const [showDuplicateSignupDialog, setShowDuplicateSignupDialog] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -124,8 +133,12 @@ export default function MinimalistRegistrationForm() {
       setShowSuccessDialog(true);
     } catch (error) {
       console.error('Signup error:', error);
-      const errorMessage = error.response?.data?.message || error.message;
-      toast.error(errorMessage || 'ثبت نام به مشکل خورد');
+      if (error.response?.data?.detail === "You have already signed up for this ticket.") {
+        setShowDuplicateSignupDialog(true);
+      } else {
+        const errorMessage = error.response?.data?.message || error.message;
+        toast.error(errorMessage || 'ثبت نام به مشکل خورد');
+      }
     }
   };
 
@@ -135,6 +148,10 @@ export default function MinimalistRegistrationForm() {
 
   const closeConfirmationDialog = () => {
     setShowConfirmationDialog(false);
+  };
+  
+  const closeDuplicateSignupDialog = () => {
+    setShowDuplicateSignupDialog(false);
   };
 
   // Format Persian date for display in confirmation dialog
@@ -217,10 +234,15 @@ export default function MinimalistRegistrationForm() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label htmlFor="age" className="flex">
-                    سن <span className="text-red-500 ml-1">*</span>
+                    تاریخ تولد <span className="text-red-500 ml-1">*</span>
                   </Label>
                   
-                  <PersianDatePicker date={date} setDate={setDate} />
+                  <PersianDatePicker 
+                    date={date} 
+                    setDate={setDate}
+                    minDate={new Date(1900, 0, 1)} // Allow dates back to 1900
+                    maxDate={new Date()} // Don't allow future dates
+                  />
                   {errors.age && (
                     <p className="text-red-500 text-xs mt-1">{errors.age}</p>
                   )}
@@ -420,7 +442,7 @@ export default function MinimalistRegistrationForm() {
         </form>
       </Card>
       
-      {/* Confirmation Dialog - NEW */}
+      {/* Confirmation Dialog */}
       <Dialog open={showConfirmationDialog} onOpenChange={setShowConfirmationDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -559,6 +581,31 @@ export default function MinimalistRegistrationForm() {
             <Button
               onClick={closeSuccessDialog}
               className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              بستن
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Duplicate Signup Dialog - NEW */}
+      <Dialog open={showDuplicateSignupDialog} onOpenChange={setShowDuplicateSignupDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center text-xl">
+              ثبت نام قبلا انجام شده
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col items-center justify-center py-4">
+            <AlertCircle className="w-16 h-16 text-amber-500 mb-4" />
+            <p className="text-center">
+              شما قبلا برای این بلیت ثبت‌نام کرده‌اید. امکان ثبت‌نام مجدد برای یک بلیت وجود ندارد.
+            </p>
+          </div>
+          <DialogFooter className="sm:justify-center">
+            <Button
+              onClick={closeDuplicateSignupDialog}
+              className="bg-amber-600 hover:bg-amber-700 text-white"
             >
               بستن
             </Button>

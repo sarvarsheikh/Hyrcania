@@ -6,78 +6,83 @@ import { toast } from "react-hot-toast";
 function useEventSignUp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [duplicateSignup, setDuplicateSignup] = useState(false);
   const { handlePayment } = usePayment();
+  
+  const API_URL = "https://hyrcanianrun.liara.run/api";
+
+  async function refreshAccessToken(refreshToken) {
+    try {
+      const response = await axios.post(
+        `${API_URL}/token/refresh/`,
+        { refresh: refreshToken },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      
+      return response.data;
+    } catch (error) {
+      throw new Error("Failed to refresh authentication token");
+    }
+  }
 
   async function eventSignUp(ticket_id, userDetail) {
     setLoading(true);
     setError(null);
+    setDuplicateSignup(false);
 
     try {
+      // Get and validate token
       const token = localStorage.getItem("token");
-      if (!token) {
-        const error = new Error("Please log in to continue");
-        error.code = "AUTH_REQUIRED";
-        throw error;
-      }
-
+      console.log(token)
+      
       const parsedToken = JSON.parse(token);
-      if (!parsedToken.access_token) {
-        const error = new Error("Invalid authentication token");
-        error.code = "INVALID_TOKEN";
-        throw error;
+      if (!parsedToken.refresh_token) {
+        throw new Error("Invalid authentication token");
       }
 
-      // Check token expiration
-      const tokenData = JSON.parse(atob(parsedToken.access_token.split('.')[1]));
-      if (tokenData.exp * 1000 < Date.now()) {
-        const error = new Error("Your session has expired. Please log in again");
-        error.code = "TOKEN_EXPIRED";
-        throw error;
-      }
-
+      // Refresh token
+      const tokenData = await refreshAccessToken(parsedToken.refresh_token);
+      
+      // Submit signup
       const response = await axios.post(
-        `https://hyrcanianrun.liara.run/api/tickets/${ticket_id}/signups/`,
-        {
-          first_name: userDetail.first_name,
-          last_name: userDetail.last_name,
-          age: userDetail.age,
-          phone_number: userDetail.phone_number,
-          gender: userDetail.gender,
-          id_number: userDetail.id_number,
-          state: userDetail.state,
-          T_Shirt_size: userDetail.T_Shirt_size,
-          relativ_name: userDetail.relativ_name,
-          relativ_last_name: userDetail.relativ_last_name,
-          relativ_phone_number: userDetail.relativ_phone_number,
-          is_paid: userDetail.is_paid
-        },
+        `${API_URL}/tickets/${ticket_id}/signups/`,
+        userDetail,
         {
           headers: {
-            Authorization: `JWT ${parsedToken.access_token}`,
+            Authorization: `JWT ${tokenData.access}`,
             'Content-Type': 'application/json'
           }
         }
       );
 
-      if (!response.data || !response.data.id) {
-        throw new Error("Invalid response from signup endpoint");
-      }
+      // Save new tokens
+      localStorage.setItem(
+        "token", 
+        JSON.stringify({
+          access_token: tokenData.access,
+          refresh_token: parsedToken.refresh_token
+        })
+      );
 
+      // Process payment
       await handlePayment(response.data.id, userDetail.phone_number, true, ticket_id);
       return response.data;
     } catch (error) {
+      // Simplified error handling
       let errorMessage = "An error occurred during signup";
       
-      if (error.code === "AUTH_REQUIRED") {
-        errorMessage = error.message;
-      } else if (error.code === "INVALID_TOKEN" || error.code === "TOKEN_EXPIRED") {
-        // Clear invalid/expired token
-        localStorage.removeItem("token");
-        errorMessage = error.message;
+      if (error.response?.data?.detail === "You have already signed up for this ticket.") {
+        errorMessage = "شما قبلا برای این بلیت ثبت‌نام کرده‌اید";
+        setDuplicateSignup(true);
       } else if (error.response?.data?.detail) {
         errorMessage = error.response.data.detail;
       } else if (error.message) {
         errorMessage = error.message;
+        
+        // Clear token if authentication issues
+        if (errorMessage.includes("log in") || errorMessage.includes("token")) {
+          localStorage.removeItem("token");
+        }
       }
 
       setError(errorMessage);
@@ -88,7 +93,7 @@ function useEventSignUp() {
     }
   }
 
-  return { eventSignUp, loading, error };
+  return { eventSignUp, loading, error, duplicateSignup };
 }
 
 export default useEventSignUp;

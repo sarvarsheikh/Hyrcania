@@ -74,6 +74,10 @@ const PaymentResultPage = () => {
         navigate('/tickets'); // Navigate to tickets page
     };
 
+    const handleTryAgain = () => {
+        navigate('/marathon'); // Navigate back to marathon signup page
+    };
+
     // Display loading state
     if (paymentStatus.loading) {
         return (
@@ -132,28 +136,29 @@ const PaymentResultPage = () => {
                     {paymentStatus.success ? (
                         <>
                             <button
+                                onClick={handleViewTickets}
                                 className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-md font-medium transition-colors"
                             >
                                 مشاهده بلیط
                             </button>
                             <button
+                                onClick={handleReturnHome}
                                 className="w-full border border-blue-500 text-blue-500 hover:bg-blue-50 py-3 px-4 rounded-md font-medium transition-colors"
-
                             >
-                                پازگشت به خانه
+                                بازگشت به خانه
                             </button>
                         </>
                     ) : (
                         <>
                             <button
+                                onClick={handleTryAgain}
                                 className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-md font-medium transition-colors"
-
                             >
                                 دوباره امتحان کنید
                             </button>
                             <button
+                                onClick={handleReturnHome}
                                 className="w-full border border-blue-500 text-blue-500 hover:bg-blue-50 py-3 px-4 rounded-md font-medium transition-colors"
-
                             >
                                 بازگشت به خانه
                             </button>

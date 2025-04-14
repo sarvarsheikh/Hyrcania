@@ -49,7 +49,7 @@ const App = () => {
       </div>
       <Toaster richColors closeButton />
     </QueryClientProvider>
-    // <LoginPage/>
+    
   );
 };
 

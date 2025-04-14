@@ -17,6 +17,7 @@ const Home = () => {
 
     setRandom_Number(getRandomInt(0, quoteList.length - 1));
 
+    
     //localStorage.clear();
 
     getEventDetail();
