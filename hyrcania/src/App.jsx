@@ -16,6 +16,7 @@ import ProfilePage from "./pages/ProfilePage";
 import AboutPage from "./pages/AboutusPage";
 import ContactPage from "./pages/ContactusPage";
 import TermsOfUse from "./pages/TermofUsePage";
+import ValidatePage from "./pages/ValidatePage";
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/23818109.txt" element={<ValidatePage />} />
           <Route path="/marathon" element={<MarathonSignUpForm />} />
           <Route path="/payment" element={<PaymentResultPage />} />
         </Routes>

@@ -86,7 +86,7 @@ function useEventSignUp() {
       }
 
       setError(errorMessage);
-      toast.error(errorMessage);
+      toast.error("خروج از حساب کاربری");
       throw error;
     } finally {
       setLoading(false);
