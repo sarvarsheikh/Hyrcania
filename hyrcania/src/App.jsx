@@ -37,7 +37,7 @@ const App = () => {
           {/* <Route path="/" element={<MarathonSignUpForm/>} /> */}
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<MarathonDetail />} />
-          <Route path="/about" element={<AboutPage />} />
+          {/* <Route path="/about" element={<AboutPage />} /> */}
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/term" element={<TermsOfUse />} />
           <Route path="/profile" element={<ProfilePage />} />
