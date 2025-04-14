@@ -40,11 +40,11 @@ const Navbar = () => {
 
        
       {/* Avatar positioned at the right end */}
-      <div className="ml-auto bg-neutral-700  p-2 space-x-2 my-2 rounded-full flex items-center">
+      <div className="ml-auto bg-neutral-700 text-black  bg-[#C2F66E] p-2 space-x-2 my-2 rounded-full flex items-center  outline-[#C2F66E]">
         {token ? (
           <Link
           to="/profile"
-           className="text-sm font-medium px-2 hover:text-[#C2F66E]">
+           className="text-sm  font-medium px-2">
             پروفایل
           </Link>
         ) : (

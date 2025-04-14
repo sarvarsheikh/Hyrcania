@@ -131,12 +131,12 @@ export default function ProfilePage() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-right">پروفایل شما</h1>
           <Button
-            variant="outline"
+            variant="destructive"
             className="flex items-center gap-2"
             onClick={handleLogout}
           >
            
-            خروج
+           خروج از حساب کاربری
           </Button>
         </div>
 

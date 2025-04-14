@@ -398,7 +398,7 @@ export default function MinimalistRegistrationForm() {
                 )}
               </div>
             </div>
-            {/* Event Tickets Section */}
+            {/* Event Tickets Section - IMPROVED */}
             <div className="space-y-4 pt-4">
               <h2 className="text-lg font-medium">
                 انتخاب بلیط <span className="text-red-500 ml-1">*</span>
@@ -410,11 +410,45 @@ export default function MinimalistRegistrationForm() {
                   const ticket = tickets.find(t => t.id === value);
                   setSelectedTicket(ticket);
                 }}
+                className="space-y-3"
               >
                 {tickets.map((ticket) => (
-                  <div key={ticket.id} className="flex items-center space-x-2">
-                    <RadioGroupItem value={ticket.id} id={ticket.id} />
-                    <MarathonTicket ticket={ticket}/>
+                  <div 
+                    key={ticket.id} 
+                    className={`relative border rounded-lg p-2 transition-all ${
+                      selectedTicket && selectedTicket.id === ticket.id 
+                        ? "border-blue-600 bg-blue-50 ring-2 ring-blue-500" 
+                        : "border-gray-200 hover:border-blue-400"
+                    }`}
+                    onClick={() => {
+                      // When clicking anywhere on the ticket container, select this ticket
+                      setSelectedTicket(ticket);
+                    }}
+                  >
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0 pt-1">
+                        <RadioGroupItem 
+                          value={ticket.id} 
+                          id={ticket.id} 
+                          className="h-5 w-5" // Make radio button larger
+                        />
+                      </div>
+                      <div className="flex-grow">
+                        <label 
+                          htmlFor={ticket.id} 
+                          className="block w-full cursor-pointer"
+                        >
+                          <MarathonTicket ticket={ticket}/>
+                        </label>
+                      </div>
+                    </div>
+                    
+                    {/* Visual indicator for selected ticket */}
+                    {selectedTicket && selectedTicket.id === ticket.id && (
+                      <div className="absolute top-2 right-2 rounded-full bg-blue-600 text-white p-1">
+                        <CheckCircle className="h-4 w-4" />
+                      </div>
+                    )}
                   </div>
                 ))}
               </RadioGroup>
@@ -588,7 +622,7 @@ export default function MinimalistRegistrationForm() {
         </DialogContent>
       </Dialog>
       
-      {/* Duplicate Signup Dialog - NEW */}
+      {/* Duplicate Signup Dialog */}
       <Dialog open={showDuplicateSignupDialog} onOpenChange={setShowDuplicateSignupDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
