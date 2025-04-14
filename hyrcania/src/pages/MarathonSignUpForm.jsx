@@ -45,7 +45,12 @@ const registrationSchema = z.object({
   is_paid: z.boolean(),
 });
 
-// Define fallback tickets in case they're not provided in location state
+// Fallback tickets in case they're not provided in location state
+const fallbackTickets = [
+  { id: "1", title: "Marathon 5K", price: 150000 },
+  { id: "2", title: "Marathon 10K", price: 250000 },
+  { id: "3", title: "Marathon 21K", price: 350000 }
+];
 
 export default function MinimalistRegistrationForm() {
   const location = useLocation();
@@ -55,7 +60,6 @@ export default function MinimalistRegistrationForm() {
   const { eventSignUp, loading: signupLoading, error: signupError, duplicateSignup } = useEventSignUp();
   
   // Set default date to 30 years ago instead of current date
-  // This allows users to select dates for people older than 20 years
   const thirtyYearsAgo = new Date();
   thirtyYearsAgo.setFullYear(thirtyYearsAgo.getFullYear() - 30);
   const [date, setDate] = useState(thirtyYearsAgo);
@@ -76,11 +80,15 @@ export default function MinimalistRegistrationForm() {
     is_paid: false,
   });
   
-  const [selectedTicket, setSelectedTicket] = useState(null);
+  // Change from selectedTicket object to selectedTicketId
+  const [selectedTicketId, setSelectedTicketId] = useState(null);
   const [errors, setErrors] = useState({});
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
   const [showDuplicateSignupDialog, setShowDuplicateSignupDialog] = useState(false);
+
+  // Get the selected ticket object using the ID
+  const selectedTicket = selectedTicketId ? tickets.find(t => t.id === selectedTicketId) : null;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -100,7 +108,7 @@ export default function MinimalistRegistrationForm() {
   const validateForm = () => {
     try {
       registrationSchema.parse(formData);
-      if (!selectedTicket || !selectedTicket.id) {
+      if (!selectedTicketId) {
         setErrors((prev) => ({ ...prev, ticket: "لطفا یک بلیط برای ثبت نام انتخاب کنید " }));
         return false;
       }
@@ -129,7 +137,7 @@ export default function MinimalistRegistrationForm() {
     setShowConfirmationDialog(false);
     try {
       const backendPayload = mapToBackendFormat(formData);
-      await eventSignUp(selectedTicket.id, backendPayload);
+      await eventSignUp(selectedTicketId, backendPayload);
       setShowSuccessDialog(true);
     } catch (error) {
       console.error('Signup error:', error);
@@ -398,53 +406,45 @@ export default function MinimalistRegistrationForm() {
                 )}
               </div>
             </div>
-            {/* Event Tickets Section - IMPROVED */}
+            {/* Event Tickets Section - FIXED */}
             <div className="space-y-4 pt-4">
               <h2 className="text-lg font-medium">
                 انتخاب بلیط <span className="text-red-500 ml-1">*</span>
               </h2>
               <RadioGroup
-                value={selectedTicket ? selectedTicket.id : null}
-                onValueChange={(value) => {
-                  // Find the ticket object by ID and set it
-                  const ticket = tickets.find(t => t.id === value);
-                  setSelectedTicket(ticket);
-                }}
+                value={selectedTicketId}
+                onValueChange={setSelectedTicketId}
                 className="space-y-3"
               >
                 {tickets.map((ticket) => (
                   <div 
                     key={ticket.id} 
                     className={`relative border rounded-lg p-2 transition-all ${
-                      selectedTicket && selectedTicket.id === ticket.id 
+                      selectedTicketId === ticket.id 
                         ? "border-blue-600 bg-blue-50 ring-2 ring-blue-500" 
                         : "border-gray-200 hover:border-blue-400"
                     }`}
-                    onClick={() => {
-                      // When clicking anywhere on the ticket container, select this ticket
-                      setSelectedTicket(ticket);
-                    }}
                   >
-                    <div className="flex items-start space-x-3">
+                    <div className="flex items-start space-x-3 rtl:space-x-reverse">
                       <div className="flex-shrink-0 pt-1">
                         <RadioGroupItem 
                           value={ticket.id} 
-                          id={ticket.id} 
-                          className="h-5 w-5" // Make radio button larger
+                          id={`ticket-${ticket.id}`} 
+                          className="h-5 w-5"
                         />
                       </div>
                       <div className="flex-grow">
-                        <label 
-                          htmlFor={ticket.id} 
+                        <Label 
+                          htmlFor={`ticket-${ticket.id}`} 
                           className="block w-full cursor-pointer"
                         >
                           <MarathonTicket ticket={ticket}/>
-                        </label>
+                        </Label>
                       </div>
                     </div>
                     
                     {/* Visual indicator for selected ticket */}
-                    {selectedTicket && selectedTicket.id === ticket.id && (
+                    {selectedTicketId === ticket.id && (
                       <div className="absolute top-2 right-2 rounded-full bg-blue-600 text-white p-1">
                         <CheckCircle className="h-4 w-4" />
                       </div>

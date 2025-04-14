@@ -101,7 +101,7 @@ const MarathonDetail = () => {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">زمان</span>
+                    <span className="text-sm font-medium">تاریخ</span>
                     <CalendarClock size={16} className="text-gray-500" />
                   </div>
                   <span className="text-sm text-gray-700">
@@ -138,11 +138,11 @@ const MarathonDetail = () => {
           <div className="flex flex-col self-center md:self-end">
             <div>
               
-            <span className="form-label"> :آدرس شروع</span><span className="toggle-option">{event.start_address}</span>
+            <span className="form-label"> آدرس شروع :</span><span className="toggle-option">{event.start_address}</span>
             </div>
             <div>
               
-            <span className="form-label"> :آدرس پایان </span><span className="toggle-option">{event.finish_address}</span>
+            <span className="form-label">آدرس پایان :</span><span className="toggle-option">{event.finish_address}</span>
             </div>
           </div>
 
