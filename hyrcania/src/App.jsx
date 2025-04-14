@@ -19,6 +19,7 @@ import TermsOfUse from "./pages/TermofUsePage";
 import ValidatePage from "./pages/ValidatePage";
 
 
+
 const App = () => {
   const queryClient = new QueryClient();
   const location = useLocation();
@@ -27,12 +28,11 @@ const App = () => {
     location.pathname === '/auth' ||
 
     location.pathname === '/marathon';
+    location.pathname === '/23818109.txt';
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex flex-col">
-        {
-          location.pathname !== '/auth' && <Navbar />
-        }
+      {location.pathname !== '/auth' && location.pathname !== '/23818109.txt' && <Navbar />}
         <Routes>
           {/* <Route path="/" element={<MarathonSignUpForm/>} /> */}
           <Route path="/" element={<Home />} />

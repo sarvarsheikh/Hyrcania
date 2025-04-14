@@ -1,7 +1,7 @@
 import routemap from "@/components/images/routemap.png";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import TicketCard from "@/assets/TicketCard";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -24,17 +24,23 @@ import MarathonSignUpForm from "./MarathonSignUpForm";
 
 const MarathonDetail = () => {
   const location = useLocation();
+   const navigate = useNavigate();
   const obj = location.state;
   const event = obj.event;
   const [showNoTicketsDialog, setShowNoTicketsDialog] = useState(false);
   
   // Check if tickets are available
   const hasTickets = event?.tickets && event.tickets.length > 0;
+  const token = localStorage.getItem("token");
+  
   
   // Show no tickets dialog on component mount if no tickets
   useEffect(() => {
     if (!hasTickets) {
       setShowNoTicketsDialog(true);
+    }
+    if(!token){
+      navigate("/auth")
     }
   }, [hasTickets]);
 
@@ -132,11 +138,11 @@ const MarathonDetail = () => {
           <div className="flex flex-col self-center md:self-end">
             <div>
               
-              <span className="toggle-option">{event.start_address}</span><span className="form-label"> :آدرس شروع</span>
+            <span className="form-label"> :آدرس شروع</span><span className="toggle-option">{event.start_address}</span>
             </div>
             <div>
               
-              <span className="toggle-option">{event.finish_address}</span><span className="form-label"> :آدرس پایان </span>
+            <span className="form-label"> :آدرس پایان </span><span className="toggle-option">{event.finish_address}</span>
             </div>
           </div>
 

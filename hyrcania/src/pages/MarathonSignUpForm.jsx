@@ -133,7 +133,7 @@ export default function MinimalistRegistrationForm() {
       setShowSuccessDialog(true);
     } catch (error) {
       console.error('Signup error:', error);
-      if (error.response?.data?.detail === "You have already signed up for this ticket.") {
+      if (error.response?.data?.detail === "قبلا برای این بلیط ثبت نام کردی") {
         setShowDuplicateSignupDialog(true);
       } else {
         const errorMessage = error.response?.data?.message || error.message;
