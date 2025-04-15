@@ -24,7 +24,7 @@ export default function MarathonTicket({ ticket }) {
 
         {/* Distance */}
         <p className="text-gray-600 text-xs sm:text-base mt-1 sm:mt-1 mb-3 sm:mb-3">
-        {`Distance: ${ticket.distanc} km`}
+        {` ${ticket.distanc}km :مسافت`}
         </p>
 
         {/* Price - Slightly smaller on mobile */}

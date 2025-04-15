@@ -7,12 +7,7 @@ export default {
   theme: {
 	
   	extend: {
-  		fontFamily: {
-  			reenie: [
-  				'Reenie Beanie',
-  				'cursive'
-  			]
-  		},
+  		
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -48,7 +43,7 @@ export default {
   plugins: [
     require('daisyui'),
     require("tailwindcss-animate"),
-    require("fluid-tailwind")
+    
   ],
 }
 

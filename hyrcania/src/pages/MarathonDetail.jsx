@@ -130,9 +130,9 @@ const MarathonDetail = () => {
             اطلاعات مسیر
           </h1>
           <img
-            className="h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] rounded-sm object-cover w-full"
+            className=" rounded-sm object-cover w-full"
             style={{ objectPosition: "60% 35%" }}
-            src={routemap}
+            src={event.route_image}
             alt="route"
           />
           <div className="flex flex-col self-center md:self-end">

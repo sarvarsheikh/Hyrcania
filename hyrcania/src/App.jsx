@@ -17,6 +17,7 @@ import AboutPage from "./pages/AboutusPage";
 import ContactPage from "./pages/ContactusPage";
 import TermsOfUse from "./pages/TermofUsePage";
 import ValidatePage from "./pages/ValidatePage";
+import ScrollToTop from "./components/ScrollToTop";
 
 
 
@@ -28,13 +29,14 @@ const App = () => {
     location.pathname === '/auth' ||
 
     location.pathname === '/marathon';
-    location.pathname === '/23818109.txt';
+  location.pathname === '/23818109.txt';
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex flex-col">
-      {location.pathname !== '/auth' && location.pathname !== '/23818109.txt' && <Navbar />}
+        {location.pathname !== '/auth' && location.pathname !== '/23818109.txt' && <Navbar />}
         <Routes>
           {/* <Route path="/" element={<MarathonSignUpForm/>} /> */}
+         
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<MarathonDetail />} />
           {/* <Route path="/about" element={<AboutPage />} /> */}
@@ -43,7 +45,7 @@ const App = () => {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/auth" element={<AuthPage />} />
-          <Route path="/23818109.txt" element={<ValidatePage />} />
+
           <Route path="/marathon" element={<MarathonSignUpForm />} />
           <Route path="/payment" element={<PaymentResultPage />} />
         </Routes>
@@ -51,7 +53,7 @@ const App = () => {
       </div>
       <Toaster richColors closeButton />
     </QueryClientProvider>
-    
+
   );
 };
 

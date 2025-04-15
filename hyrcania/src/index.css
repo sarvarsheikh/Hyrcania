@@ -2,8 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Reenie+Beanie&display=swap');
+@font-face {
+  font-family: "ZawyaPro";
+  src: local("ZawyaPro"),
+    url("/fonts/ZawyaPro-CondensedNormal.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 
 :root {
   
@@ -29,16 +36,14 @@ a:hover {
   color: #535bf2;
 }
 
-body {
+body {  
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
   background-color: #F6F5F2;
- 
+  font-family: 'ZawyaPro', sans-serif; /* Add semicolon */
 }
-
 
 
 button {
