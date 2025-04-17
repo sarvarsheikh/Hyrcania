@@ -6,7 +6,7 @@ import Parcipants from "@/components/Participants/Participants.jsx"
 const Dashboard = () => {
   const handleClick = (e, link) => {
     e.preventDefault();
-    console.log(link);
+
   };
   return (
     <div className="flex flex-col bg-gray-200">
@@ -80,15 +80,15 @@ const Dashboard = () => {
               },
               {
                 key: "2",
-                href: {Parcipants},
+                href: { Parcipants },
                 title: "Participants",
               },
-             
+
             ]}
           />
         </div>
         <div className="basis-full  bg-gray-500">
-         <Overview/>
+          <Overview />
         </div>
       </div>
     </div>

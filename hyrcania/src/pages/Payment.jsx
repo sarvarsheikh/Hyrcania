@@ -33,7 +33,7 @@ const PaymentResultPage = () => {
                 });
 
                 const result = await response.json();
-                console.log(result)
+
                 if (result.status) {
                     setPaymentStatus({
                         loading: false,
@@ -52,7 +52,7 @@ const PaymentResultPage = () => {
                     });
                 }
             } catch (error) {
-                console.error("Verification error:", error);
+
                 setPaymentStatus({
                     loading: false,
                     success: false,

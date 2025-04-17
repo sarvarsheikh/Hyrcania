@@ -10,7 +10,7 @@ export default function useEvent() {
     setLoading(true);
     try {
       const res = await axios.get(url);
-      console.log("Events fetched:", res.data);
+
 
       if (Array.isArray(res.data)) {
         setEventData(res.data);

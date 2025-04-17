@@ -19,15 +19,15 @@ export default function ProfilePage() {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        
+
         if (!token) {
-          console.error("No token found");
+
           setLoading(false);
           return;
         }
-  
+
         const parsedToken = JSON.parse(token);
-        
+
         // First, refresh the token
         const tokenResponse = await fetch(
           "https://hyrcanianrun.liara.run/api/token/refresh/",
@@ -41,7 +41,7 @@ export default function ProfilePage() {
             }),
           }
         );
-  
+
         if (!tokenResponse.ok) {
           throw new Error(`Token refresh failed: ${tokenResponse.status}`);
         }
@@ -49,9 +49,8 @@ export default function ProfilePage() {
 
         const data = await tokenResponse.data;
         const tokenData = await tokenResponse.json();
-        console.log("New tokens:", tokenData.access);
-        console.log("New tokens:", data);
-        
+
+
         // Then use the new token to fetch user data
         const userResponse = await fetch(
           "https://hyrcanianrun.liara.run/api/user/",
@@ -61,30 +60,30 @@ export default function ProfilePage() {
             },
           }
         );
-  
+
         if (!userResponse.ok) {
           throw new Error(`API error: ${userResponse.status}`);
         }
-  
+
         const userData = await userResponse.json();
         setUserData(userData);
-        
+
         // Optionally, save the new tokens to localStorage
         localStorage.setItem(
-          "token", 
+          "token",
           JSON.stringify({
             access_token: tokenData.access,
             refresh_token: parsedToken.refresh_token
           })
         );
-        
+
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
         setLoading(false);
       }
     };
-  
+
     // Call the fetch function
     fetchUserData();
   }, []);
@@ -93,7 +92,7 @@ export default function ProfilePage() {
     // Clear the token from localStorage
     localStorage.removeItem("token");
     navigate("/auth");
-    
+
     // Redirect to the home or login page
   };
 
@@ -121,7 +120,7 @@ export default function ProfilePage() {
 
   const paymentInfos =
     userData.successful_payment_ref_id &&
-    userData.successful_payment_ref_id.length > 0
+      userData.successful_payment_ref_id.length > 0
       ? userData.successful_payment_ref_id
       : [];
 
@@ -135,8 +134,8 @@ export default function ProfilePage() {
             className="flex items-center gap-2"
             onClick={handleLogout}
           >
-           
-           خروج از حساب کاربری
+
+            خروج از حساب کاربری
           </Button>
         </div>
 

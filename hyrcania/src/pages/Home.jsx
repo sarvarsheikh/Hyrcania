@@ -17,11 +17,11 @@ const Home = () => {
 
   // Fetch event details on component mount
   useEffect(() => {
-    console.log(localStorage.getItem("token"));
+
 
     setRandom_Number(getRandomInt(0, quoteList.length - 1));
 
-    
+
     //localStorage.clear();
 
     getEventDetail();
@@ -41,7 +41,7 @@ const Home = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-l from-[#333333] via-[#1a1a1a] via-50% to-[#000000] opacity-75"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4 text-white text-center z-10">
-          <h1  className="zawya-font text-3xl md:text-4xl lg:text-8xl font-bold w-full max-w-4xl mx-auto">
+          <h1 className="zawya-font text-3xl md:text-4xl lg:text-8xl font-bold w-full max-w-4xl mx-auto">
             {persianText.home.title}
           </h1>
           <div className="flex flex-col space-x-3 mt-8">
@@ -90,21 +90,21 @@ const Home = () => {
           {/* Render Event Cards Dynamically */}
           {!loading && !error && eventData.length > 0
             ? eventData.map((event, index) => (
-                <Link
-                  key={index}
-                  to="/blog"
-                  state={{ event }}
-                  className="transition-transform hover:scale-105 duration-300"
-                >
-                  <EventCard event={event} />
-                </Link>
-              ))
+              <Link
+                key={index}
+                to="/blog"
+                state={{ event }}
+                className="transition-transform hover:scale-105 duration-300"
+              >
+                <EventCard event={event} />
+              </Link>
+            ))
             : !loading &&
-              !error && (
-                <div className="col-span-full text-center py-8">
-                  <p className="text-lg">هیچ مسابقه ای نیست که نشون بدیم </p>
-                </div>
-              )}
+            !error && (
+              <div className="col-span-full text-center py-8">
+                <p className="text-lg">هیچ مسابقه ای نیست که نشون بدیم </p>
+              </div>
+            )}
         </div>
       </div>
     </div>

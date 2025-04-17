@@ -19,11 +19,10 @@ export default function useAuth() {
         }
       );
 
-      console.log("API Test Response:", response.data);
 
       // You can add this to automatically fill the phone number field for testing
     } catch (error) {
-      console.error("API Test Error:", error.response?.data || error.message);
+
       toast.error(
         "API test failed: " + (error.response?.data?.message || error.message)
       );
@@ -60,7 +59,7 @@ export default function useAuth() {
       setError(error.response?.data || error.message);
 
       setLoading(false);
-      
+
       throw error;
     }
   }

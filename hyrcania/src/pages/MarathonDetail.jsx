@@ -24,22 +24,22 @@ import MarathonSignUpForm from "./MarathonSignUpForm";
 
 const MarathonDetail = () => {
   const location = useLocation();
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const obj = location.state;
   const event = obj.event;
   const [showNoTicketsDialog, setShowNoTicketsDialog] = useState(false);
-  
+
   // Check if tickets are available
   const hasTickets = event?.tickets && event.tickets.length > 0;
   const token = localStorage.getItem("token");
-  
-  
+
+
   // Show no tickets dialog on component mount if no tickets
   useEffect(() => {
     if (!hasTickets) {
       setShowNoTicketsDialog(true);
     }
-    if(!token){
+    if (!token) {
       navigate("/auth")
     }
   }, [hasTickets]);
@@ -118,6 +118,24 @@ const MarathonDetail = () => {
                     {event.category.title}
                   </span>
                 </div>
+
+                {/* Added Social Media Link */}
+                {event.link_to_social_media && (
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium">شبکه اجتماعی</span>
+                      <ExternalLink size={16} className="text-gray-500" />
+                    </div>
+                    <a
+                      href={event.link_to_social_media}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-blue-600 hover:text-blue-800"
+                    >
+                      مشاهده
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -137,18 +155,18 @@ const MarathonDetail = () => {
           />
           <div className="flex flex-col self-center md:self-end">
             <div>
-              
-            <span className="form-label"> آدرس شروع :</span><span className="toggle-option">{event.start_address}</span>
+
+              <span className="form-label"> آدرس شروع :</span><span className="toggle-option">{event.start_address}</span>
             </div>
             <div>
-              
-            <span className="form-label">آدرس پایان :</span><span className="toggle-option">{event.finish_address}</span>
+
+              <span className="form-label">آدرس پایان :</span><span className="toggle-option">{event.finish_address}</span>
             </div>
           </div>
 
           {/* Divider */}
           <div className="h-[0.5px] bg-gray-400 my-2 w-full"></div>
-          
+
           {/* Team Members Section */}
           {event.team && event.team.length > 0 && (
             <>
@@ -162,9 +180,9 @@ const MarathonDetail = () => {
                     className="bg-white shadow-md rounded-lg p-4 border border-gray-200 flex flex-col items-center "
                   >
                     {member.image ? (
-                      <img 
-                        src={member.image} 
-                        alt={member.full_name} 
+                      <img
+                        src={member.image}
+                        alt={member.full_name}
                         className="w-20 h-20 rounded-full object-cover mb-3"
                       />
                     ) : (
@@ -181,7 +199,7 @@ const MarathonDetail = () => {
                   </div>
                 ))}
               </div>
-              
+
               {/* Divider after Team Members */}
               <div className="h-[0.5px] bg-gray-400 my-2 w-full"></div>
             </>
@@ -217,7 +235,7 @@ const MarathonDetail = () => {
                   </div>
                 ))}
               </div>
-              
+
               {/* Divider after Sponsors */}
               <div className="h-[0.5px] bg-gray-400 my-2 w-full"></div>
             </>
@@ -239,7 +257,7 @@ const MarathonDetail = () => {
                 </button>
               </Link>
             ) : (
-              <button 
+              <button
                 onClick={() => setShowNoTicketsDialog(true)}
                 className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-full mt-8 mb-10"
               >
