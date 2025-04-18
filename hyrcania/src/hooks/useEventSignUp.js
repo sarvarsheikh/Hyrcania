@@ -33,7 +33,7 @@ function useEventSignUp() {
     try {
       // Get and validate token
       const token = localStorage.getItem("token");
-      console.log(token)
+
       
       const parsedToken = JSON.parse(token);
       if (!parsedToken.refresh_token) {

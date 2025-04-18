@@ -20,7 +20,7 @@ export default function usePayment() {
         { headers: { Authorization: `JWT ${parsedToken.access_token}` } }
       );
 
-      console.log("Payment Response:", response.data);
+
 
       if (response.data?.payment_url) {
         window.location.href = response.data.payment_url;
