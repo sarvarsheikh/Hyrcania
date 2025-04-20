@@ -8,7 +8,7 @@ function useEventSignUp() {
   const [error, setError] = useState(null);
   const [duplicateSignup, setDuplicateSignup] = useState(false);
   const { handlePayment } = usePayment();
-  
+
   const API_URL = "https://hyrcanianrun.liara.run/api";
 
   async function refreshAccessToken(refreshToken) {
@@ -18,7 +18,7 @@ function useEventSignUp() {
         { refresh: refreshToken },
         { headers: { 'Content-Type': 'application/json' } }
       );
-      
+
       return response.data;
     } catch (error) {
       throw new Error("Failed to refresh authentication token");
@@ -34,7 +34,7 @@ function useEventSignUp() {
       // Get and validate token
       const token = localStorage.getItem("token");
 
-      
+
       const parsedToken = JSON.parse(token);
       if (!parsedToken.refresh_token) {
         throw new Error("Invalid authentication token");
@@ -42,7 +42,7 @@ function useEventSignUp() {
 
       // Refresh token
       const tokenData = await refreshAccessToken(parsedToken.refresh_token);
-      
+
       // Submit signup
       const response = await axios.post(
         `${API_URL}/tickets/${ticket_id}/signups/`,
@@ -57,7 +57,7 @@ function useEventSignUp() {
 
       // Save new tokens
       localStorage.setItem(
-        "token", 
+        "token",
         JSON.stringify({
           access_token: tokenData.access,
           refresh_token: parsedToken.refresh_token
@@ -65,12 +65,12 @@ function useEventSignUp() {
       );
 
       // Process payment
-      await handlePayment(response.data.id, userDetail.phone_number, true, ticket_id);
+      await handlePayment(response.data.id, userDetail.phone_number, ticket_id);
       return response.data;
     } catch (error) {
       // Simplified error handling
       let errorMessage = "An error occurred during signup";
-      
+
       if (error.response?.data?.detail === "You have already signed up for this ticket.") {
         errorMessage = "شما قبلا برای این بلیت ثبت‌نام کرده‌اید";
         setDuplicateSignup(true);
@@ -78,7 +78,7 @@ function useEventSignUp() {
         errorMessage = error.response.data.detail;
       } else if (error.message) {
         errorMessage = error.message;
-        
+
         // Clear token if authentication issues
         if (errorMessage.includes("log in") || errorMessage.includes("token")) {
           localStorage.removeItem("token");

@@ -6,7 +6,7 @@ const BASE_URL = "https://hyrcanianrun.liara.run/api";
 export default function usePayment() {
   const navigate = useNavigate();
 
-  async function handlePayment(event_signup_id, phone_number, sandbox, ticket_id) {
+  async function handlePayment(event_signup_id, phone_number, ticket_id) {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No token found");
@@ -16,7 +16,7 @@ export default function usePayment() {
 
       const response = await axios.post(
         `${BASE_URL}/payment/request/${ticket_id}/`,
-        { event_signup_id, phone_number, sandbox },
+        { event_signup_id, phone_number },
         { headers: { Authorization: `JWT ${parsedToken.access_token}` } }
       );
 
