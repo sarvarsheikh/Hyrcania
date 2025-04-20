@@ -3,12 +3,10 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
 import { Separator } from "@/components/ui/separator";
 import { Calendar, MapPin, User, CreditCard, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-
 import { toast } from "react-hot-toast";
 
 export default function ProfilePage() {
@@ -20,15 +18,23 @@ export default function ProfilePage() {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const token = localStorage.getItem("token");
+        const tokenString = localStorage.getItem("token");
 
-        if (!token) {
-
+        if (!tokenString) {
           setLoading(false);
+          navigate("/auth");
           return;
         }
 
-        const parsedToken = JSON.parse(token);
+        const parsedToken = JSON.parse(tokenString);
+
+        // Check if the token has the expected structure
+        if (!parsedToken.refresh_token) {
+          toast.error("فرمت توکن نامعتبر است");
+          localStorage.removeItem("token");
+          navigate("/auth");
+          return;
+        }
 
         // First, refresh the token
         const tokenResponse = await fetch(
@@ -39,22 +45,20 @@ export default function ProfilePage() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              refresh: parsedToken.access_token,
+              refresh: parsedToken.refresh_token,
             }),
           }
         );
 
         if (!tokenResponse.ok) {
-         toast.error("خطایی رخ داده است");
+          toast.error("خطا در بازیابی توکن");
+          localStorage.removeItem("token");
           setLoading(false);
           navigate("/auth");
           return;
         }
 
-
-        const data = await tokenResponse.data;
         const tokenData = await tokenResponse.json();
-
 
         // Then use the new token to fetch user data
         const userResponse = await fetch(
@@ -67,13 +71,16 @@ export default function ProfilePage() {
         );
 
         if (!userResponse.ok) {
-          throw new Error(`API error: ${userResponse.status}`);
+          toast.error("خطا در دریافت اطلاعات کاربر");
+          setLoading(false);
+          navigate("/auth");
+          return;
         }
 
         const userData = await userResponse.json();
         setUserData(userData);
 
-        // Optionally, save the new tokens to localStorage
+        // Save the new tokens to localStorage
         localStorage.setItem(
           "token",
           JSON.stringify({
@@ -84,6 +91,8 @@ export default function ProfilePage() {
 
       } catch (error) {
         console.error("Error fetching user data:", error);
+        toast.error("خطایی در برقراری ارتباط با سرور رخ داده است");
+        setLoading(false);
       } finally {
         setLoading(false);
       }
@@ -91,14 +100,13 @@ export default function ProfilePage() {
 
     // Call the fetch function
     fetchUserData();
-  }, []);
+  }, [navigate]);
 
   const handleLogout = () => {
     // Clear the token from localStorage
     localStorage.removeItem("token");
+    toast.success("با موفقیت خارج شدید");
     navigate("/auth");
-
-    // Redirect to the home or login page
   };
 
   if (loading) {
@@ -112,7 +120,7 @@ export default function ProfilePage() {
   if (!userData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">به مشکل خورد </p>
+        <p className="text-gray-500">دریافت اطلاعات با مشکل مواجه شد</p>
       </div>
     );
   }
@@ -139,7 +147,6 @@ export default function ProfilePage() {
             className="flex items-center gap-2"
             onClick={handleLogout}
           >
-
             خروج از حساب کاربری
           </Button>
         </div>
@@ -233,7 +240,7 @@ export default function ProfilePage() {
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="font-medium">{paymentInfo.ticket_name}</h3>
                   <div className="flex items-center text-green-600">
-                    <span className="text-sm">پرداختت شده</span>
+                    <span className="text-sm">پرداخت شده</span>
                     <Check className="h-4 w-4 mr-1 ml-1" />
                   </div>
                 </div>
