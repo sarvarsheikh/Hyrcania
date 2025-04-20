@@ -37,7 +37,7 @@ export default function ProfilePage() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              refresh: parsedToken.refresh_token,
+              refresh: parsedToken.access_token,
             }),
           }
         );
