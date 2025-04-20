@@ -9,6 +9,8 @@ import { Calendar, MapPin, User, CreditCard, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
+import { toast } from "react-hot-toast";
+
 export default function ProfilePage() {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,7 +45,10 @@ export default function ProfilePage() {
         );
 
         if (!tokenResponse.ok) {
-          throw new Error(`Token refresh failed: ${tokenResponse.status}`);
+         toast.error("خطایی رخ داده است");
+          setLoading(false);
+          navigate("/auth");
+          return;
         }
 
 
