@@ -53,7 +53,7 @@ const LoginPage = () => {
     setCountdown(30);
     setCanResend(false);
     clearInterval(timerRef.current);
-    
+
     timerRef.current = setInterval(() => {
       setCountdown(prev => {
         if (prev <= 1) {
@@ -89,26 +89,26 @@ const LoginPage = () => {
       setPhoneNumber(data.phone_number);
       // Generate OTP
       await handleSignUp({ phone_number: data.phone_number });
-     
+
       console.log("با موفقیت کد برای شماره شما ارسال شد");
-      
+
       // Start countdown
       startCountdown();
-      
+
       // Open the dialog
       if (dialogTriggerRef.current) {
         dialogTriggerRef.current.click();
       }
     } catch (error) {
       console.error("Error:", error);
-      
+
       setError("root", { message: "نشد که کد رو ارسال کنیم" });
     }
   };
 
   const handleResendOtp = async () => {
     if (!canResend) return;
-    
+
     try {
       await handleSignUp({ phone_number: phoneNumber });
       console.log("با موفقیت دوباره ارسال کردیم کد ");
@@ -121,21 +121,21 @@ const LoginPage = () => {
   const handleVerifyOtp = async () => {
     console.log(otpValue);
     try {
-      const response = await verifyOtp({ 
-        phone_number: phoneNumber, 
-        otp: otpValue 
+      const response = await verifyOtp({
+        phone_number: phoneNumber,
+        otp: otpValue
       });
-      
+
       if (response && response.status === 200) {
         toast.success(" به هیرکانی خوش اومدی قهرمان ")
         setIsDialogOpen(false);
-        
+
         // Delay before navigation
         await new Promise((resolve) => setTimeout(resolve, 1000));
         navigate("/");
       }
     } catch (error) {
-      console.error("Error:", error);
+
       // Let useAuth handle the toast error
     }
   };
@@ -176,14 +176,14 @@ const LoginPage = () => {
               {errors.root.message}
             </p>
           )}
-          
-          <Button 
-            type="submit" 
+
+          <Button
+            type="submit"
             className="w-full bg-[#41FF8D] text-black hover:bg-[#36D074] rounded-md py-2 font-medium"
           >
             {isLogin ? "ورود" : "ورود"}
           </Button>
-          
+
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger className="hidden" ref={dialogTriggerRef}></DialogTrigger>
             <DialogContent>
@@ -194,9 +194,9 @@ const LoginPage = () => {
                     <p className="text-sm text-center text-gray-900">
                       با موفقیت کد ارسال شد <span className="font-medium">{phoneNumber}</span>
                     </p>
-                    
-                    <InputOTP 
-                      maxLength={6} 
+
+                    <InputOTP
+                      maxLength={6}
                       className="flex justify-center text-black"
                       value={otpValue}
                       onChange={setOtpValue}
@@ -210,10 +210,10 @@ const LoginPage = () => {
                         <InputOTPSlot index={5} className="text-black" />
                       </InputOTPGroup>
                     </InputOTP>
-                    
+
                     <div className="text-sm text-center">
                       <span className="text-gray-500">کد رو نگرفتی </span>
-                      <button 
+                      <button
                         type="button"
                         className={`${canResend ? 'text-[#41FF8D] hover:underline' : 'text-gray-400 cursor-not-allowed'}`}
                         onClick={handleResendOtp}
@@ -222,7 +222,7 @@ const LoginPage = () => {
                         ارسال کردن دوباره کد
                       </button>
                     </div>
-                    
+
                     <div className="flex items-center justify-center w-full">
                       <div className="h-[1px] bg-gray-200 w-full"></div>
                       <span className="px-2 text-xs text-gray-400">
@@ -230,12 +230,12 @@ const LoginPage = () => {
                       </span>
                       <div className="h-[1px] bg-gray-200 w-full"></div>
                     </div>
-                    
+
                     <Button
                       className="w-[200px] bg-[#41FF8D] text-black hover:bg-[#36D074] rounded-md py-2 font-medium"
                       type="button"
                       onClick={handleVerifyOtp}
-                      
+
                     >
                       {"تایید کد"}
                     </Button>
@@ -246,7 +246,7 @@ const LoginPage = () => {
           </Dialog>
         </form>
 
-        
+
       </Card>
     </div>
   );

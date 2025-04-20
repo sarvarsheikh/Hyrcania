@@ -20,7 +20,7 @@ const EndSection = () => {
           <Linkdin className="w-6 h-6 text-gray-300 hover:text-white cursor-pointer" />
         </div>
       </div>
-      
+
       {/* Footer links - match the 2x2 grid in the image */}
       <div className="grid grid-cols-1 sm:grid-cols-2 w-full text-sm text-gray-300">
         <div className="px-4">
@@ -28,15 +28,15 @@ const EndSection = () => {
             <Link to="/about" className="block py-1 hover:text-white">{persianText.footer.aboutUs}</Link>
           </div>
           <div className="p-4">
-          <Link to="/term" className="block py-1 hover:text-white">{persianText.footer.termsOfUse}</Link>
+            <Link to="/term" className="block py-1 hover:text-white">{persianText.footer.termsOfUse}</Link>
           </div>
           <div className="p-4">
-            <a href="#" className="block py-1 hover:text-white">{persianText.footer.charityAndDonations}</a>
+            <a href="https://zarinp.al/hyrcaniarun.ir" className="block py-1 hover:text-white">کمک‌های مالی</a>
           </div>
         </div>
         <div className="px-4">
           <div className="p-4">
-          <Link to="/contact" className="block py-1 hover:text-white">{persianText.footer.contactUs}</Link>
+            <Link to="/contact" className="block py-1 hover:text-white">{persianText.footer.contactUs}</Link>
           </div>
           <div className="p-4">
             <a href="#" className="block py-1 hover:text-white">{persianText.footer.becomeASponsor}</a>
@@ -46,7 +46,7 @@ const EndSection = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Copyright section - optional */}
       <div className="text-center text-xs text-gray-400 py-4">
         © {new Date().getFullYear()} {persianText.name}. {persianText.footer.allRightsReserved}
