@@ -29,7 +29,7 @@ import paper from '/images/paper.jpg';
 import { Calendar, Clock, MapPin, PersonStanding } from "lucide-react";
 import MinimalistRegistrationForm from "./MarathonSignUpForm";
 import { gregorianToJalali } from "@/lib/jalali-utils";
-import { toJalaali } from 'jalaali-js';
+
 
 const MarathonDetail = () => {
   const location = useLocation();
@@ -39,7 +39,8 @@ const MarathonDetail = () => {
   console.log(event.event_date);
   const [gy, gm, gd] = event.event_date.split("-").map(Number);
 
-  const eventDate = toJalaali(Number(gy),Number(gm), Number(gd));
+  const eventDate = gregorianToJalali(gy,gm, gd);
+  console.log(eventDate)
 
 
   // Check if tickets are available
@@ -99,7 +100,7 @@ const MarathonDetail = () => {
             <div className="w-16 h-16 rounded-full border-2 border-[#c0ff00] flex items-center justify-center mb-4">
               <Calendar className="w-8 h-8 text-[#c0ff00]" />
             </div>
-            <h3 className="text-2xl font-bold uppercase tracking-wider">{`${eventDate.jy}-${eventDate.jm}-${eventDate.jd}`}</h3>
+            <h3 className="text-2xl font-bold uppercase tracking-wider">{`${eventDate.year}-${eventDate.month}-${eventDate.day}`}</h3>
           </div>
 
           {/* Time */}
