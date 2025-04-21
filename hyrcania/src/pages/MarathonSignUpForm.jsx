@@ -28,6 +28,8 @@ import { z } from "zod";
 import PersianDatePicker from "@/components/ui/persian-date-picker";
 import { toast } from "sonner";
 import MarathonTicket from "@/components/marathon-ticket";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Define the validation schema with Zod
 const registrationSchema = z.object({
@@ -54,6 +56,7 @@ const fallbackTickets = [
 
 export default function MinimalistRegistrationForm() {
   const location = useLocation();
+  const navigate = useNavigate();
   const obj = location.state || { event: { tickets: fallbackTickets } };
   const event = obj.event;
   const tickets = [...(event?.tickets || fallbackTickets)];
@@ -86,7 +89,21 @@ export default function MinimalistRegistrationForm() {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
   const [showDuplicateSignupDialog, setShowDuplicateSignupDialog] = useState(false);
+  const token = localStorage.getItem("token");
+  const tokenExpiry = localStorage.getItem("tokenExpiry");
 
+  useEffect(() => {
+    if (!token) {
+      navigate("/auth")
+    }
+
+    if (new Date(tokenExpiry) < new Date()) {
+      // Token expired, clean up
+      localStorage.removeItem("token");
+      localStorage.removeItem("tokenExpiry");
+      navigate("/auth")
+    }
+  }, [token]);
   // Get the selected ticket object using the ID
   const selectedTicket = selectedTicketId ? tickets.find(t => t.id === selectedTicketId) : null;
 
@@ -419,8 +436,8 @@ export default function MinimalistRegistrationForm() {
                   <div
                     key={ticket.id}
                     className={`relative border rounded-lg p-2 transition-all ${selectedTicketId === ticket.id
-                        ? "border-blue-600 bg-blue-50 ring-2 ring-blue-500"
-                        : "border-gray-200 hover:border-blue-400"
+                      ? "border-blue-600 bg-blue-50 ring-2 ring-blue-500"
+                      : "border-gray-200 hover:border-blue-400"
                       }`}
                   >
                     <div className="flex items-start space-x-3 rtl:space-x-reverse">

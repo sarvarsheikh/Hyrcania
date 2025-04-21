@@ -31,7 +31,6 @@ const MarathonDetail = () => {
 
   // Check if tickets are available
   const hasTickets = event?.tickets && event.tickets.length > 0;
-  const token = localStorage.getItem("token");
 
 
   // Show no tickets dialog on component mount if no tickets
@@ -39,9 +38,7 @@ const MarathonDetail = () => {
     if (!hasTickets) {
       setShowNoTicketsDialog(true);
     }
-    if (!token) {
-      navigate("/auth")
-    }
+
   }, [hasTickets]);
 
   return (

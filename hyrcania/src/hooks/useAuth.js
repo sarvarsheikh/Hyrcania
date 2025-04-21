@@ -42,8 +42,12 @@ export default function useAuth() {
       );
 
       if (response.status === 200) {
+        const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + 7);
+
         // Store token in localStorage
         localStorage.setItem("token", JSON.stringify(response.data));
+        localStorage.setItem("tokenExpiry", expiryDate.toISOString());
         toast.success("Welcome to Hyrcania!");
         // Set user state
         setUser(response.data.user || { phone_number });
