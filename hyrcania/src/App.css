@@ -1,14 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@layer base {
-  :root {
-    --radius: 0.5rem
-  }
-}
-.root{
-  
-}
+
 .footer {
   position: relative; /* Ensures it stays at the bottom when content is short */
   width: 100%;

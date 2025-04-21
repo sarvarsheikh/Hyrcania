@@ -18,6 +18,7 @@ import ContactPage from "./pages/ContactusPage";
 import TermsOfUse from "./pages/TermofUsePage";
 import ValidatePage from "./pages/ValidatePage";
 import ScrollToTop from "./components/ScrollToTop";
+import MinimalistRegistrationForm from "./pages/MarathonSignUpForm";
 
 
 

@@ -1,25 +1,33 @@
 @font-face {
-    font-family: "ZawyaPro";
-    src: local("ZawyaPro"),
-      
-      url("/fonts/ZawyaPro-NormalBold.otf") format("opentype");
-    font-weight: normal;
-  }
-  
-  /* Global styles */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: "ZawyaPro", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  /* Utility classes */
-  .zawya-font {
-    font-family: "ZawyaPro", sans-serif;
-  }
+  font-family: "ZawyaPro";
+  src: local("ZawyaPro"),
+    /* Update the URL to point to an existing font file */
+    url("/fonts/ZawyaPro-CondensedNormal.woff") format("woff");
+  /* You might also want to adjust font-weight if 'NormalBlack' implies a different weight */
+  font-weight: normal;
+  /* Or perhaps 900 or 'black' depending on the font */
+}
+
+@font-face {
+  font-family: "Dubai";
+  src: local("Dubai"),
+    /* Update the URL to point to an existing font file */
+    url("/fonts/Dubai.ttf") format("truetype");
+  /* You might also want to adjust font-weight if 'NormalBlack' implies a different weight */
+  font-weight: normal;
+  /* Or perhaps 900 or 'black' depending on the font */
+}
+
+.dubai {
+  font-family: "Dubai";
+}
+body{
+  font-family: "Dubai";
+}
+/* Global styles */
+
+
+/* Utility classes */
+.zawya-font {
+  font-family: "ZawyaPro";
+}

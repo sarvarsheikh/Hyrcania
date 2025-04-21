@@ -1,112 +1,65 @@
 import EventCard from "@/components/EventCard/EventCard";
 import DiscoveryIcon from "@/assets/DiscoveryIcon";
-import Runner from "@/components/images/headerBg.png";
-import persianText from "@/farsiHardCodeText";
+
 import useEventDetail from "@/hooks/useEventDetail";
 import { useState, useEffect } from "react";
-import Link from "antd/es/typography/Link";
-import { getRandomInt } from "@/lib/getRandomNumber";
-import quoteList from "@/lib/quote-list";
+
 import '@/styles/global.css';
+import React from "react";
 
-
+import run from '/images/runner.png';
+import SkeletonHomePage from "./SkeletonHomePage";
 
 const Home = () => {
   const { eventData, loading, error, getEventDetail } = useEventDetail();
-  const [random_Number, setRandom_Number] = useState(0);
 
   // Fetch event details on component mount
   useEffect(() => {
-
-
-    setRandom_Number(getRandomInt(0, quoteList.length - 1));
-
-
     //localStorage.clear();
-
     getEventDetail();
   }, [getEventDetail]);
 
   return (
-    <div
-      style={{ background: "#F6F5F2" }}
-      className="relative overflow-auto min-h-screen"
-    >
-      {/* Hero Section - Responsive with fluid design */}
-      <div className="relative h-screen w-full">
-        <img
-          src={Runner}
-          alt="a man running"
-          className="w-full h-full object-cover absolute inset-0 "
-        />
-        <div className="absolute inset-0 bg-gradient-to-l from-[#333333] via-[#1a1a1a] via-50% to-[#000000] opacity-75"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/4 text-white text-center z-10">
-          <h1 className="zawya-font text-3xl md:text-4xl lg:text-8xl font-bold w-full max-w-4xl mx-auto">
-            {persianText.home.title}
-          </h1>
-          <div className="flex flex-col space-x-3 mt-8">
-            <p className="text-xs md:text-xs  lg:text-lg">
-              {quoteList[random_Number]["quote"]}
-            </p>
-            <p className="text-xs md:text-xs lg:text-lg text-right">
-              {quoteList[random_Number]["author"]}
-            </p>
+    <div className="min-h-screen">
+      {loading ? (<SkeletonHomePage />) : (
+        <div className="relative flex flex-col w-full min-h-screen">
+          <div className="absolute inset-0 -z-10 w-full min-h-screen bg-white bg-[linear-gradient(to_right,#E2E2E2_1px,transparent_1px),linear-gradient(to_bottom,#E2E2E2_1px,transparent_1px)] bg-[size:6rem_4rem]"></div>
+          <h1 className="zawya-font text-black text-[70px] sm:text-[120px] md:text-[150px] lg:text-[200px] xl:text-[300px] uppercase mr-2 mt-12 text-right">برای هیرکانی بدو</h1>
+
+          <img
+            src={run}
+            alt="Running graphic"
+            className="w-full h-auto px-2 md:px-2 lg:px-3 xl:px-4   "
+          />
+
+          <div className="w-full px-3 py-3 space-y-5">
+            <div className="flex flex-row justify-end mr-2 space-x-3">
+              <h1 className="dubai text-2xl md:text-3xl text-gray-800">
+              مسابقات جلو رو
+              </h1>
+              <DiscoveryIcon />
+            </div>
+            
+            <div className="flex flex-col sm:flex-row justify-end mb-12  w-full">
+              {eventData && eventData.length > 0 ? (
+                <div className="flex flex-col sm:flex-row-reverse flex-wrap justify-start w-full">
+                  {eventData.map((event, index) => (
+                    <div key={index} className="sm:ml-0 sm:mr-4 mb-4">
+                      <EventCard event={event} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-right w-full">
+                  <h1 className="text-2xl md:text-3xl text-black-800">
+                    متأسفیم، رویدادی موجود نیست.
+                  </h1>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Discover Events Section - Responsive layout */}
-      <div className="flex flex-col items-center w-full max-w-7xl mx-auto px-4">
-        <div className="flex flex-row justify-center md:justify-end w-full mt-8 md:mt-10 items-center space-x-2 md:space-x-4 md:pr-6">
-          <h1
-            className="text-2xl md:text-3xl text-black-800"
-            style={{
-              color: "#212121",
-              fontStyle: "normal",
-              fontWeight: "600",
-            }}
-          >
-            {persianText.home.discoverEvents}
-          </h1>
-          <DiscoveryIcon />
-        </div>
-
-        {/* Event Cards Grid - Responsive with automatic columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 p-4 w-full">
-          {/* Handle Loading State */}
-          {loading && (
-            <div className="col-span-full flex justify-center py-12">
-              <p className="text-lg">لطفا صبر کنید</p>
-            </div>
-          )}
-
-          {/* Handle Error State */}
-          {error && (
-            <div className="col-span-full text-red-500 py-8">
-              <p>به مشکل خوردیم {error.message}</p>
-            </div>
-          )}
-
-          {/* Render Event Cards Dynamically */}
-          {!loading && !error && eventData.length > 0
-            ? eventData.map((event, index) => (
-              <Link
-                key={index}
-                to="/blog"
-                state={{ event }}
-                className="transition-transform hover:scale-105 duration-300"
-              >
-                <EventCard event={event} />
-              </Link>
-            ))
-            : !loading &&
-            !error && (
-              <div className="col-span-full text-center py-8">
-                <p className="text-lg">هیچ مسابقه ای نیست که نشون بدیم </p>
-              </div>
-            )}
-        </div>
-      </div>
+      )}
     </div>
   );
 };

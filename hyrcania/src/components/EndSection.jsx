@@ -7,10 +7,10 @@ import { Link } from "react-router-dom";
 
 const EndSection = () => {
   return (
-    <div className="footer text-white  w-full h-full">
+    <div className="footer text-white w-full h-full pt-5">
       {/* Top section with logo and social icons */}
-      <div className="px-4 py-6 flex flex-col sm:flex-row items-center sm:items-start justify-between">
-        <div className="mb-4 sm:mb-0">
+      <div className="px-4 py-6 flex flex-row space-x-7 items-center justify-between">
+        <div>
           <h1 className="text-xl font-bold">{persianText.name}</h1>
         </div>
         <div className="flex items-center space-x-4">
@@ -38,10 +38,10 @@ const EndSection = () => {
           <div className="p-4">
             <Link to="/contact" className="block py-1 hover:text-white">{persianText.footer.contactUs}</Link>
           </div>
-          <div className="p-4">
+          <div className="p-2">
             <a href="#" className="block py-1 hover:text-white">{persianText.footer.becomeASponsor}</a>
           </div>
-          <div className="p-4">
+          <div className="p-2">
             <a href="#" className="block py-1 hover:text-white">{persianText.footer.helpCenterFaqs}</a>
           </div>
         </div>

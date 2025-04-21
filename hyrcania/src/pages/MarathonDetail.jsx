@@ -18,16 +18,29 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { LocateFixed, CalendarClock, PersonStanding, Users, ExternalLink, AlertTriangle } from "lucide-react";
+import { LocateFixed, CalendarClock, Users, ExternalLink, AlertTriangle } from "lucide-react";
 import { useState, useEffect } from "react";
 import MarathonSignUpForm from "./MarathonSignUpForm";
+import banner from '/images/banner.png';
+import strip1 from '/images/strip1.png';
+import strip2 from '/images/strip2.png';
+import mapy from '/images/map.png';
+import paper from '/images/paper.jpg';
+import { Calendar, Clock, MapPin, PersonStanding } from "lucide-react";
+import MinimalistRegistrationForm from "./MarathonSignUpForm";
+import { gregorianToJalali } from "@/lib/jalali-utils";
+import { toJalaali } from 'jalaali-js';
 
 const MarathonDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const obj = location.state;
   const event = obj.event;
-  const [showNoTicketsDialog, setShowNoTicketsDialog] = useState(false);
+  console.log(event.event_date);
+  const [gy, gm, gd] = event.event_date.split("-").map(Number);
+
+  const eventDate = toJalaali(Number(gy),Number(gm), Number(gd));
+
 
   // Check if tickets are available
   const hasTickets = event?.tickets && event.tickets.length > 0;
@@ -41,258 +54,167 @@ const MarathonDetail = () => {
 
   }, [hasTickets]);
 
+
+
   return (
-    <div
-      data-oid="vj90wec"
-      className="relative bg-white min-h-screen overflow-auto"
-    >
-      {/* Background Image */}
-      <AspectRatio
-        className="absolute top-0 left-0 w-full h-[250px] md:h-[350px] lg:h-[400px] overflow-hidden opacity-30"
-        ratio={50 / 9}
-      >
-        <img
-          className="w-full h-full object-cover"
-          src={event.banner_image}
-          alt="image"
-        />
-      </AspectRatio>
+    <main className="flex min-h-screen flex-col bg-neutral-800 text-white">
+      {/* Hero Section */}
+      <section className="relative">
+        <div className="relative w-full ">
+          <img src={banner} alt="Race Shaft Trail 2025" fill priority className="object-cover" />
+        </div>
 
-      {/* Main Content */}
-      <div className="relative w-full flex flex-col items-center px-4 pt-4">
-        <div className="w-full max-w-5xl flex flex-col gap-4 md:text-right">
-          {/* Main Image */}
-          <img
-            className="h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] rounded-sm object-cover w-full"
-            style={{ objectPosition: "60% 35%" }}
-            src={event.banner_image}
-            alt="image"
-          />
+        {/* Green Strip */}
+        <div className="w-full  relative overflow-hidden">
+          <img src={strip1} alt="Hyrcania" fill className="object-cover" />
+        </div>
+      </section>
+      <section className="relative w-full bg-[url('/images/paper.jpg')] bg-contain bg-center md:bg-contain ">
+        {/* Blue border top */}
+        <div className="relative z-10 py-12 px-4 md:px-8 max-w-4xl mx-auto">
+          {/* Green Description Header */}
+          <div className="bg-[#c0ff00]  text-black text-center py-3 mb-8 max-w-xs mx-auto">
+            <h2 className="text-xl font-bold">اطلاعات مسابقه</h2>
+          </div>
 
-          {/* Event Title & Description */}
-          <div className="flex flex-col md:items-end ">
-            <h1 className="event-title font-bold text-2xl sm:text-3xl md:text-4xl text-center md:text-right">
-              {event.title}
-            </h1>
-            <p className="event-description text-wrap text-center mt-5 md:text-right">
+          {/* Persian Text - Right-to-left */}
+          <div className="text-white text-right" dir="rtl" lang="fa">
+
+            <p className="leading-relaxed text-lg mt-4">
               {event.description}
             </p>
           </div>
+        </div>
 
-          {/* Marathon Details */}
-          <div
-            className="w-full max-w-sm rounded-lg overflow-hidden shadow-md bg-white ml-auto"
-            dir="rtl"
-          >
-            <div className="p-4">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">مکان</span>
-                    <LocateFixed size={16} className="text-gray-500" />
-                  </div>
-                  <span className="text-sm text-gray-700">
-                    {event.location}
-                  </span>
-                </div>
+        {/* Blue border bottom */}
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">تاریخ</span>
-                    <CalendarClock size={16} className="text-gray-500" />
-                  </div>
-                  <span className="text-sm text-gray-700">
-                    {event.event_date}
-                  </span>
-                </div>
+      </section>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">دسته‌بندی</span>
-                    <PersonStanding size={16} className="text-gray-500" />
-                  </div>
-                  <span className="text-sm text-gray-700">
-                    {event.category.title}
-                  </span>
-                </div>
 
-                {/* Added Social Media Link */}
-                {event.link_to_social_media && (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium">شبکه اجتماعی</span>
-                      <ExternalLink size={16} className="text-gray-500" />
-                    </div>
-                    <a
-                      href={event.link_to_social_media}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-blue-600 hover:text-blue-800"
-                    >
-                      مشاهده
-                    </a>
-                  </div>
-                )}
-              </div>
+      {/* Event Details Section */}
+      <section className="py-12 px-4 md:px-8 bg-transparent z-20">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Date */}
+          <div className="flex flex-col items-center text-center">
+            <div className="w-16 h-16 rounded-full border-2 border-[#c0ff00] flex items-center justify-center mb-4">
+              <Calendar className="w-8 h-8 text-[#c0ff00]" />
             </div>
+            <h3 className="text-2xl font-bold uppercase tracking-wider">{`${eventDate.jy}-${eventDate.jm}-${eventDate.jd}`}</h3>
           </div>
 
-          {/* Divider */}
-          <div className="h-[0.5px] bg-gray-400 my-2 w-full"></div>
-
-          {/* Route Details */}
-          <h1 className="event-title text-center md:text-right md:ml-auto">
-            اطلاعات مسیر
-          </h1>
-          <img
-            className=" rounded-sm object-cover w-full"
-            style={{ objectPosition: "60% 35%" }}
-            src={event.route_image}
-            alt="route"
-          />
-          <div className="flex flex-col self-center md:self-end">
-            <div>
-
-              <span className="form-label"> آدرس شروع :</span><span className="toggle-option">{event.start_address}</span>
+          {/* Time */}
+          <div className="flex flex-col items-center text-center">
+            <div className="w-16 h-16 rounded-full border-2 border-[#c0ff00] flex items-center justify-center mb-4">
+              <PersonStanding className="w-8 h-8 text-[#c0ff00]" />
             </div>
-            <div>
-
-              <span className="form-label">آدرس پایان :</span><span className="toggle-option">{event.finish_address}</span>
-            </div>
+            <h3 className="text-2xl font-bold uppercase tracking-wider">{event.category.title}</h3>
           </div>
 
-          {/* Divider */}
-          <div className="h-[0.5px] bg-gray-400 my-2 w-full"></div>
+          {/* Race Type */}
+          <div className="flex flex-col items-center text-center">
+            <div className="w-16 h-16 rounded-full border-2 border-[#c0ff00] flex items-center justify-center mb-4">
+              <MapPin className="w-8 h-8 text-[#c0ff00]" />
+            </div>
+            <h3 className="text-2xl font-bold uppercase tracking-wider">{event.location}</h3>
 
-          {/* Team Members Section */}
-          {event.team && event.team.length > 0 && (
-            <>
-              <h1 className="event-title text-center md:text-right md:ml-auto">
-                اعضای تیم اجرایی
-              </h1>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full m-auto" dir="rtl">
-                {event.team.map((member, index) => (
-                  <div
-                    key={index}
-                    className="bg-white shadow-md rounded-lg p-4 border border-gray-200 flex flex-col items-center "
-                  >
-                    {member.image ? (
-                      <img
-                        src={member.image}
-                        alt={member.full_name}
-                        className="w-20 h-20 rounded-full object-cover mb-3"
-                      />
-                    ) : (
-                      <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center mb-3">
-                        <Users size={32} className="text-gray-400" />
-                      </div>
-                    )}
-                    <h2 className="text-lg font-bold text-gray-800 text-center">
-                      {member.full_name}
-                    </h2>
-                    <p className="text-sm text-gray-600 text-center">
-                      {member.position}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Divider after Team Members */}
-              <div className="h-[0.5px] bg-gray-400 my-2 w-full"></div>
-            </>
-          )}
-
-          {/* Sponsors Section */}
-          {event.sponsers && event.sponsers.length > 0 && (
-            <>
-              <h1 className="event-title text-center md:text-right md:ml-auto">
-                اسپانسر ها
-              </h1>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full" dir="rtl">
-                {event.sponsers.map((sponsor, index) => (
-                  <div
-                    key={index}
-                    className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 transition-all hover:shadow-lg"
-                  >
-                    <div className="p-5">
-                      <h3 className="text-xl font-bold text-gray-800 mb-2">{sponsor.name}</h3>
-                      <p className="text-gray-600 mb-4 text-right">{sponsor.description}</p>
-                      {sponsor.social_link && (
-                        <a
-                          href={sponsor.social_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-start text-blue-600 hover:text-blue-800 transition-colors"
-                        >
-                          <ExternalLink size={16} />
-                          <span className="mr-2">مشاهده پروفایل</span>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Divider after Sponsors */}
-              <div className="h-[0.5px] bg-gray-400 my-2 w-full"></div>
-            </>
-          )}
-
-          {/* Sign Up Section */}
-          <div className="flex flex-col items-center w-full my-20">
-            <p className="text-lg font-semibold text-center text-neutral-700">
-              ثبت نام برای مسابقه و انتخاب بلیط
-            </p>
-            {hasTickets ? (
-              <Link
-                to="/marathon"
-                state={{ event }}
-                className="transition duration-300 ease-in-out mt-8 mb-10"
-              >
-                <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full">
-                  ثبت نام
-                </button>
-              </Link>
-            ) : (
-              <button
-                onClick={() => setShowNoTicketsDialog(true)}
-                className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-full mt-8 mb-10"
-              >
-                ثبت نام
-              </button>
-            )}
           </div>
         </div>
+      </section>
+
+      {/* Purple Strip */}
+      <div className="w-full relative overflow-hidden">
+        <img src={strip2} alt="Hyrcania" fill className="object-cover" />
       </div>
 
-      {/* No Tickets Available Dialog */}
-      <Dialog open={showNoTicketsDialog} onOpenChange={setShowNoTicketsDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-center text-xl">
-              بلیط در دسترس نیست
-            </DialogTitle>
-          </DialogHeader>
-          <div className="flex flex-col items-center justify-center py-6">
-            <AlertTriangle className="w-16 h-16 text-amber-500 mb-4" />
-            <p className="text-center text-lg">
-              متاسفانه در حال حاضر بلیطی برای این رویداد در دسترس نیست.
-            </p>
-            <p className="text-center text-gray-600 mt-2">
-              لطفا بعدا مجددا تلاش کنید یا با برگزارکننده تماس بگیرید.
-            </p>
+
+      {/* Map Section */}
+      <section className="relative w-full ">
+        <img src={event.route_image} alt="Race route map"  className="object-fill" />
+      </section>
+
+      {/* Purple Strip Footer */}
+      <div className="w-full  relative overflow-hidden">
+        <img src={strip2} alt="Hyrcania" fill className="object-cover" />
+      </div>
+      <section className="py-12 px-4 md:px-8 bg-transparent z-20">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-8 zawya-font text-[#c0ff00]">اعضای اجرایی</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            {/* Example teammate card, replace with your TeamMateCard component */}
+
+            {event.team.map((teammate, index) => {
+              return (<div
+                key={index}
+                className="flex flex-col items-center text-center  rounded-lg p-6">
+                <img
+                  src={teammate.image}
+                  alt={teammate.full_name}
+                  className="w-20 h-20 rounded-full object-cover mb-3"
+                />
+                <div className="text-xl font-semibold">{teammate.full_name}</div>
+                <div className="text-sm text-gray-400">{teammate.position}</div>
+              </div>)
+            })}
+
+
           </div>
-          <DialogFooter className="sm:justify-center">
-            <Button
-              onClick={() => setShowNoTicketsDialog(false)}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+        </div>
+      </section>
+      <div className="w-full  relative overflow-hidden">
+        <img src={strip2} alt="Hyrcania" fill className="object-cover" />
+      </div>
+      <section className="py-12 px-4 md:px-8 bg-transparent z-20">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-8 zawya-font text-[#c0ff00]">اسپانسر های مسابقه</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {/* Example sponsor card */}
+            {
+              event.sponsers.map((sponsor, index) => (
+                <a
+                href={sponsor.social_link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                >
+                  <div
+                  key={index}
+                  className="flex flex-col items-center text-center rounded-lg p-6"
+                >
+                  <div className="text-xl font-semibold hover:text-[#c0ff00]">{sponsor.name}</div>
+                  <div className="text-sm text-gray-400 mt-2">{sponsor.description}</div>
+                </div>
+                </a>
+              ))
+            }
+
+
+          </div>
+        </div>
+      </section>
+      <div className="w-full  relative overflow-hidden">
+        <img src={strip2} alt="Hyrcania" fill className="object-cover" />
+      </div>
+      <section className="py-16 px-4 md:px-8 bg-black">
+        <div className="max-w-3xl mx-auto ">
+          <h2 className="text-4xl md:text-5xl font-bold mb-10 text-center">ثبت نام برای مسابقه</h2>
+          <div className="flex justify-center">
+            <Link
+              to="/marathon"
+              state={{ event }}
+              className="transition duration-300 ease-in-out mt-8 mb-10"
             >
-              باشه
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+              <button className="bg-[#D2FF72] hover:bg-[#1e1e1e] hover:text-[#D2FF72] text-[#1e1e1e] font-bold py-2 px-6 rounded-full">
+                ثبت نام
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+
+      {/* Registration CTA */}
+
+    </main>
+
   );
 };
 

@@ -1,97 +1,55 @@
-import { Card } from "@/components/ui/card";
-import { LocateFixed } from "lucide-react";
-import { Avatar } from "@/components/ui/avatar";
-import Arrow from "@/assets/Arrow";
-import { useNavigate } from "react-router-dom";
-import formateDate from "@/helper/formateDate";
 
-const EventCard = (props) => {
+import formateDate from "@/helper/formateDate";
+import { useNavigate } from "react-router-dom";
+
+export default function EventCard(props) {
   const navigate = useNavigate();
 
   return (
-    <Card
-      onClick={() => {
-        navigate("/blog", {
-          state: {
-            event: props.event,
-          },
-        });
-      }}
-      className="bg-clip-border p-4 sm:p-6 rounded-2xl w-full max-w-[402px] h-auto aspect-[16/10] relative bg-violet-500 overflow-hidden mx-auto sm:mx-4 my-4 sm:my-6 cursor-pointer transition-transform hover:scale-[1.02]"
+    <div
+      className="w-full max-w-md mx-auto"
+      dir="rtl"
+
     >
-      {/* Noise filter */}
-      <svg
-        className="absolute top-0 left-0 z-5"
-        viewBox="0 0 200 200"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <filter id="noiseFilter">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="2"
-            numOctaves="2"
-            stitchTiles="stitch"
+      <div className="relative overflow-hidden bg-white border border-black cursor-pointer transition-transform hover:scale-[1.02]">
+        {/* Image section - reduced in size for minimalism */}
+        <div className="relative h-[160px] w-full">
+          <img
+            src={props.event.banner_image}
+            alt={props.event.title}
+            className="object-cover  w-full h-full"
           />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#noiseFilter)" />
-      </svg>
+        </div>
 
-      {/* Dark overlay */}
-      <div className="absolute top-0 left-0 w-full h-full z-10 bg-gray-950 opacity-50"></div>
+        {/* Content section with Swiss typography principles */}
+        <div className="p-6 bg-white">
+          <div className="grid grid-cols-12 gap-4">
+            {/* Title area - spans 12 columns */}
+            <div className="col-span-12 mb-4">
+              <h2 className="text-2xl font-normal tracking-tight text-black">{props.event.title}</h2>
+            </div>
 
-      {/* Banner image */}
-      <img
-        src={props.event.banner_image}
-        className="absolute top-0 left-0 w-full h-full object-cover"
-        alt={props.event.title}
-      />
+            {/* Location - spans 8 columns */}
+            <div className="col-span-8">
+              <p className="text-sm font-light text-black">{props.event.location}</p>
+              <p className="text-sm font-light mt-1 text-black">{formateDate(props.event.datetime_created)}</p>
+            </div>
 
-      {/* Event details at the bottom */}
-      <div className="absolute bottom-0 left-0 z-30 w-full">
-        <div className="flex flex-col m-3 sm:m-5 space-y-1">
-          <h1
-            className="text-base text-white sm:text-2xl md:text-3xl text-white line-clamp-2"
-            style={{
-              fontStyle: "normal",
-              fontSize:28,
-              fontWeight: "700",
-              color:"#ffffff"
-            }}
-          >
-            {props.event.title}
-          </h1>
-
-          <div className="flex flex-row items-center space-x-2">
-            <LocateFixed className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
-            <h6
-              style={{
-                fontStyle: "normal",
-                fontWeight: "400",
-              }}
-              className="text-xs sm:text-sm text-white truncate"
-            >
-              {props.event.location}
-            </h6>
+            {/* Button area - spans 4 columns */}
+            <div className="col-span-4 flex items-start justify-end">
+              <button onClick={() => {
+                navigate("/blog", {
+                  state: {
+                    event: props.event,
+                  },
+                });
+              }} className="border border-black px-4 py-1 text-sm hover:bg-black hover:text-white transition-colors text-black">
+                نمایش
+              </button>
+            </div>
           </div>
-
-          <h6
-            style={{
-              fontStyle: "normal",
-              fontWeight: "400",
-            }}
-            className="text-xs sm:text-sm text-white"
-          >
-            {formateDate(props.event.datetime_created)}
-          </h6>
         </div>
       </div>
-
-      {/* Arrow icon at the top right */}
-      <div className="absolute top-2 right-2 sm:top-4 sm:right-4 z-30">
-        <Arrow className="h-4 w-4 sm:h-5 sm:w-5" />
-      </div>
-    </Card>
-  );
-};
-
-export default EventCard;
+    </div>
+  )
+}
