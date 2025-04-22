@@ -15,29 +15,57 @@ function PersianDatePicker({ date, setDate, className, disabled = false }) {
   // Convert to Persian date for display
   const formattedDate = date ? formatPersianDate(date) : null
 
-  // Convert date to Gregorian for internal use
-  const gregorianDate = date ? new Date(date) : null;
+  // Debug function to help identify issues
+  const debugDate = (label, dateObj) => {
+    if (!dateObj) return;
+    console.log(
+      `${label}: ${dateObj.toISOString()} | Local: ${dateObj.getFullYear()}-${dateObj.getMonth() + 1}-${dateObj.getDate()}`
+    );
+  };
+
+  // Handle date selection
+  const handleDateSelect = (selectedDate) => {
+    if (!selectedDate) {
+      setDate(null);
+      setOpen(false);
+      return;
+    }
+
+    // Add one day to correct the off-by-one error if that's consistently happening
+    const correctedDate = new Date(selectedDate);
+    correctedDate.setDate(correctedDate.getDate() + 1);
+
+    // Reset the time to noon to avoid time zone issues
+    correctedDate.setHours(12, 0, 0, 0);
+
+    debugDate("Original selected", selectedDate);
+    debugDate("Corrected", correctedDate);
+
+    setDate(correctedDate);
+    setOpen(false);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground", className)}
+          className={cn(
+            "w-full justify-start text-left font-normal",
+            !date && "text-muted-foreground",
+            className
+          )}
           disabled={disabled}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {formattedDate ? <span dir="rtl">{formattedDate}</span> : <span>انتخاب تاریخ</span>}
+          {formattedDate ? formattedDate : "انتخاب تاریخ"}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <PersianCalendar
           mode="single"
-          selected={gregorianDate}
-          onSelect={(date) => {
-            setDate(date)
-            setOpen(false)
-          }}
+          selected={date ? new Date(date) : null}
+          onSelect={handleDateSelect}
           initialFocus
         />
       </PopoverContent>
@@ -47,7 +75,14 @@ function PersianDatePicker({ date, setDate, className, disabled = false }) {
 
 // Format date to Persian format
 function formatPersianDate(date) {
-  const { year, month, day } = gregorianToJalali(date.getFullYear(), date.getMonth() + 1, date.getDate())
+  if (!date) return null;
+
+  // Use the UTC methods to avoid time zone issues
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  const persianDate = gregorianToJalali(year, month, day);
 
   const persianMonths = [
     "فروردین",
@@ -62,9 +97,9 @@ function formatPersianDate(date) {
     "دی",
     "بهمن",
     "اسفند",
-  ]
+  ];
 
-  return `${day} ${persianMonths[month - 1]} ${year}`
+  return `${persianDate.day} ${persianMonths[persianDate.month - 1]} ${persianDate.year}`;
 }
 
 export default PersianDatePicker
