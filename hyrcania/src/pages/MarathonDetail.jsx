@@ -36,11 +36,10 @@ const MarathonDetail = () => {
   const navigate = useNavigate();
   const obj = location.state;
   const event = obj.event;
-  console.log(event.event_date);
+
   const [gy, gm, gd] = event.event_date.split("-").map(Number);
 
-  const eventDate = gregorianToJalali(gy,gm, gd);
-  console.log(eventDate)
+  const eventDate = gregorianToJalali(gy, gm, gd);
 
 
   // Check if tickets are available
@@ -130,7 +129,7 @@ const MarathonDetail = () => {
 
       {/* Map Section */}
       <section className="relative w-full ">
-        <img src={event.route_image} alt="Race route map"  className="object-fill" />
+        <img src={event.route_image} alt="Race route map" className="object-fill" />
       </section>
 
       {/* Purple Strip Footer */}
@@ -172,17 +171,17 @@ const MarathonDetail = () => {
             {
               event.sponsers.map((sponsor, index) => (
                 <a
-                href={sponsor.social_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                  href={sponsor.social_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <div
-                  key={index}
-                  className="flex flex-col items-center text-center rounded-lg p-6"
-                >
-                  <div className="text-xl font-semibold hover:text-[#c0ff00]">{sponsor.name}</div>
-                  <div className="text-sm text-gray-400 mt-2">{sponsor.description}</div>
-                </div>
+                    key={index}
+                    className="flex flex-col items-center text-center rounded-lg p-6"
+                  >
+                    <div className="text-xl font-semibold hover:text-[#c0ff00]">{sponsor.name}</div>
+                    <div className="text-sm text-gray-400 mt-2">{sponsor.description}</div>
+                  </div>
                 </a>
               ))
             }

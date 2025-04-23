@@ -24,7 +24,7 @@ export default function useAuth() {
     } catch (error) {
 
       toast.error(
-        "API test failed: " + (error.response?.data?.message || error.message)
+        "شماره تماس شما اشتباه بود \\nمطمئن باشید که به انگلیسی و به شکل 09 باشد" + (error.response?.data?.message || error.message)
       );
     }
   }
@@ -56,8 +56,8 @@ export default function useAuth() {
       setLoading(false);
       return response;
     } catch (error) {
-      console.error(
-        "Verification Error:",
+      toast.error(
+        "کد یک بار مصرف اشتباه است",
         error.response?.data || error.message
       );
       setError(error.response?.data || error.message);
