@@ -94,7 +94,9 @@ function PersianCalendar({
   }
 
   // Generate years for select (20 years before and after current year)
-  const years = Array.from({ length: 41 }, (_, i) => viewDate.year - 20 + i)
+  const startYear = 1300
+  const endYear = persianToday.year + 6
+  const years = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i)
 
   return (
     <div className={cn("p-3", className)}>
