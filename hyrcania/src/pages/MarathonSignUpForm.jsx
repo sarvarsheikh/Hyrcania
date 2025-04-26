@@ -161,7 +161,9 @@ export default function MinimalistRegistrationForm() {
         setShowDuplicateSignupDialog(true);
       } else {
         const errorMessage = error.response?.data?.message || error.message;
-        toast.error(errorMessage || 'ثبت نام به مشکل خورد');
+        console.log(error.response)
+
+        toast.error('ثبت نام به مشکل خورد');
       }
     }
   };
@@ -182,8 +184,8 @@ export default function MinimalistRegistrationForm() {
   const formatPersianDate = () => {
     // Create a new date object to avoid timezone issues
     const dateToFormat = new Date(date);
-    // Add 1 day to fix the "one day previous" issue
-    dateToFormat.setDate(dateToFormat.getDate() + 1);
+
+    dateToFormat.setDate(dateToFormat.getDate());
 
     const { year, month, day } = gregorianToJalali(
       dateToFormat.getFullYear(),

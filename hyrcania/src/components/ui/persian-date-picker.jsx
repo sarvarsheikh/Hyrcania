@@ -11,6 +11,7 @@ import { gregorianToJalali } from "@/lib/jalali-utils"
 
 function PersianDatePicker({ date, setDate, className, disabled = false }) {
   const [open, setOpen] = React.useState(false)
+  const [tempDate, setTempDate] = React.useState(null)
 
   // Convert to Persian date for display
   const formattedDate = date ? formatPersianDate(date) : null
@@ -23,11 +24,17 @@ function PersianDatePicker({ date, setDate, className, disabled = false }) {
     );
   };
 
-  // Handle date selection
+  // Initialize temporary date when opening the popover
+  React.useEffect(() => {
+    if (open) {
+      setTempDate(date);
+    }
+  }, [open, date]);
+
+  // Handle temporary date selection
   const handleDateSelect = (selectedDate) => {
     if (!selectedDate) {
-      setDate(null);
-      setOpen(false);
+      setTempDate(null);
       return;
     }
 
@@ -41,7 +48,12 @@ function PersianDatePicker({ date, setDate, className, disabled = false }) {
     debugDate("Original selected", selectedDate);
     debugDate("Corrected", correctedDate);
 
-    setDate(correctedDate);
+    setTempDate(correctedDate);
+  };
+
+  // Handle submit button click
+  const handleSubmit = () => {
+    setDate(tempDate);
     setOpen(false);
   };
 
@@ -62,12 +74,19 @@ function PersianDatePicker({ date, setDate, className, disabled = false }) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
-        <PersianCalendar
-          mode="single"
-          selected={date ? new Date(date) : null}
-          onSelect={handleDateSelect}
-          initialFocus
-        />
+        <div className="space-y-4">
+          <PersianCalendar
+            mode="single"
+            selected={tempDate ? new Date(tempDate) : null}
+            onSelect={handleDateSelect}
+            initialFocus
+          />
+          <div className="flex justify-end p-2 border-t">
+            <Button onClick={handleSubmit} size="sm">
+              تایید
+            </Button>
+          </div>
+        </div>
       </PopoverContent>
     </Popover>
   )
