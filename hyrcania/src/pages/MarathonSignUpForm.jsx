@@ -32,19 +32,32 @@ import { useNavigate } from "react-router-dom";
 
 // Define the validation schema with Zod
 const registrationSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
+  firstName: z.string().min(1, "نام الزامی است"),
+  lastName: z.string().min(1, "نام خانوادگی الزامی است"),
   age: z.any(), // Changed from z.string().nonempty to accept Date object
-  phoneNumber: z.string().min(1, "Phone number is required"),
-  gender: z.enum(["m", "f"], { message: "Gender is required" }),
-  idNumber: z.string().min(1, "ID number is required"),
-  state: z.string().min(1, "State is required"),
-  tShirtSize: z.string().min(1, "T-shirt size is required"),
-  relativeName: z.string().min(1, "Relative's name is required"),
-  relativeLastName: z.string().min(1, "Relative's last name is required"),
-  relativePhoneNumber: z.string().min(1, "Relative's phone number is required"),
+  phoneNumber: z.string()
+    .min(1, "شماره تماس الزامی است")
+    .max(11, "شماره همراه نباید بیشتر از ۱۱ رقم باشد")
+    .refine(
+      (value) => /^09\d{9}$/.test(value),
+      { message: "شماره همراه باید با ۰۹ شروع شده و دقیقا ۱۱ رقم باشد" }
+    ),
+  gender: z.enum(["m", "f"], { message: "جنسیت الزامی است" }),
+  idNumber: z.string().min(1, "کد ملی الزامی است"),
+  state: z.string().min(1, "استان الزامی است"),
+  tShirtSize: z.string().min(1, "سایز تی شرت الزامی است"),
+  relativeName: z.string().min(1, "نام آشنا الزامی است"),
+  relativeLastName: z.string().min(1, "نام خانوادگی آشنا الزامی است"),
+  relativePhoneNumber: z.string()
+    .min(1, "شماره تماس آشنا الزامی است")
+    .max(11, "شماره همراه آشنا نباید بیشتر از ۱۱ رقم باشد")
+    .refine(
+      (value) => /^09\d{9}$/.test(value),
+      { message: "شماره همراه آشنا باید با ۰۹ شروع شده و دقیقا ۱۱ رقم باشد" }
+    ),
   is_paid: z.boolean(),
 });
+
 
 // Fallback tickets in case they're not provided in location state
 const fallbackTickets = [
@@ -162,8 +175,18 @@ export default function MinimalistRegistrationForm() {
       } else {
         const errorMessage = error.response?.data?.message || error.message;
         console.log(error.response)
+        if (error.response?.data) {
+          // For phone number error specifically
+          if (error.response.data.phone_number ||
+            (Array.isArray(error.response.data) &&
+              error.response.data.some(err => err.includes('phone number')))) {
+            toast.error('شماره تلفن وارد شده معتبر نیست. شماره باید با ۰۹ شروع شده و ۱۱ رقم باشد.');
+          } else {
+            toast.error('ثبت نام به مشکل خورد');
+          }
+        }
 
-        toast.error('ثبت نام به مشکل خورد');
+
       }
     }
   };
