@@ -323,6 +323,7 @@ export default function MinimalistRegistrationForm() {
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
+                    placeholder="ex: 09123456700"
                     className={errors.phoneNumber ? "border-red-500" : ""}
                   />
                   {errors.phoneNumber && (
@@ -426,6 +427,7 @@ export default function MinimalistRegistrationForm() {
                     name="relativeName"
                     value={formData.relativeName}
                     onChange={handleInputChange}
+
                     className={errors.relativeName ? "border-red-500" : ""}
                   />
                   {errors.relativeName && (
@@ -457,6 +459,7 @@ export default function MinimalistRegistrationForm() {
                   name="relativePhoneNumber"
                   value={formData.relativePhoneNumber}
                   onChange={handleInputChange}
+                  placeholder="ex: 09123456700"
                   className={errors.relativePhoneNumber ? "border-red-500" : ""}
                 />
                 {errors.relativePhoneNumber && (
