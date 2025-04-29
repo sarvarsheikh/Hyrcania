@@ -168,7 +168,7 @@ export default function MinimalistRegistrationForm() {
     try {
       const backendPayload = mapToBackendFormat(formData);
       await eventSignUp(selectedTicketId, backendPayload);
-      setShowSuccessDialog(true);
+      
     } catch (error) {
       if (error.response?.data?.detail === "قبلا برای این بلیط ثبت نام کردی") {
         setShowDuplicateSignupDialog(true);
@@ -656,29 +656,7 @@ export default function MinimalistRegistrationForm() {
       </Dialog>
 
       {/* Success Dialog */}
-      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-center text-xl">
-              ثبت نام با موفقیت انجام شد
-            </DialogTitle>
-          </DialogHeader>
-          <div className="flex flex-col items-center justify-center py-4">
-            <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
-            <p className="text-center">
-              برای ثبت نامت خیلی ممنونم قهرمان
-            </p>
-          </div>
-          <DialogFooter className="sm:justify-center">
-            <Button
-              onClick={closeSuccessDialog}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              بستن
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      
 
       {/* Duplicate Signup Dialog */}
       <Dialog open={showDuplicateSignupDialog} onOpenChange={setShowDuplicateSignupDialog}>
