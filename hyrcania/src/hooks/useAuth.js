@@ -8,11 +8,11 @@ export default function useAuth() {
   const [error, setError] = useState(null);
 
   async function handleSignUp({ phone_number }) {
-    setLoading(true);
+    
     try {
-      const testPhoneNumber = "09919510956"; // Use the number from your screenshot
+      
 
-      const response = await axios.post(
+      await axios.post(
         "https://hyrcanianrun.liara.run/api/generate-otp/",
         {
           phone_number: phone_number,
@@ -30,8 +30,9 @@ export default function useAuth() {
   }
 
   async function verifyOtp({ phone_number, otp }) {
-    setLoading(true);
+    
     try {
+      
       // Make sure otp is being sent as a string, not an object or array
       const response = await axios.post(
         "https://hyrcanianrun.liara.run/api/verify-otp/",
@@ -42,6 +43,7 @@ export default function useAuth() {
       );
 
       if (response.status === 200) {
+        setLoading(true)
         const expiryDate = new Date();
         expiryDate.setDate(expiryDate.getDate() + 7);
 
