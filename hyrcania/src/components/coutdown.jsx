@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
 import moment from "jalali-moment";
-import { jalaliToGregorian } from "@/lib/jalali-utils";
 
 const CountdownTimer = ({ targetJalaliDate }) => {
   const calculateTimeLeft = () => {
-   
     const gregorianTarget = moment
       .from(targetJalaliDate, "fa", "YYYY/MM/DD HH:mm:ss")
       .locale("en")
       .format("YYYY-MM-DDTHH:mm:ss");
-   
-
+      
     const difference = +new Date(gregorianTarget) - +new Date();
-
+    
     if (difference > 0) {
       return {
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -23,28 +20,53 @@ const CountdownTimer = ({ targetJalaliDate }) => {
     }
     return {};
   };
-
+  
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
+  
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
-
+    
     return () => clearInterval(timer);
   }, []);
-
+  
   return (
-    <div className="text-5xl font-extrabold text-center text-gray-50 rtl">
+    <div className="rtl flex flex-col items-center justify-center w-full">
       {Object.keys(timeLeft).length > 0 ? (
-        <>
-          <span className="mx-4"> ثانیه {timeLeft.seconds}</span>
-          <span className="mx-4"> دقیقه {timeLeft.minutes}</span>
-          <span className="mx-4"> ساعت {timeLeft.hours} </span>
-          <span className="mx-4"> روز {timeLeft.days}</span>
-        </>
+        <div className="flex flex-col md:flex-row justify-center items-center gap-2 md:gap-6 text-gray-50">
+          <div className="flex flex-col items-center">
+            <div className=" rounded-lg p-3 md:p-4 w-24 md:w-32">
+              <span className="text-2xl md:text-4xl lg:text-5xl font-extrabold block text-center">{timeLeft.days}</span>
+            </div>
+            <span className="text-sm md:text-base mt-1 text-gray-300">روز</span>
+          </div>
+          
+          <div className="flex flex-col items-center">
+            <div className="rounded-lg p-3 md:p-4 w-24 md:w-32">
+              <span className="text-2xl md:text-4xl lg:text-5xl font-extrabold block text-center">{timeLeft.hours}</span>
+            </div>
+            <span className="text-sm md:text-base mt-1 text-gray-300">ساعت</span>
+          </div>
+          
+          <div className="flex flex-col items-center">
+            <div className="rounded-lg p-3 md:p-4 w-24 md:w-32">
+              <span className="text-2xl md:text-4xl lg:text-5xl font-extrabold block text-center">{timeLeft.minutes}</span>
+            </div>
+            <span className="text-sm md:text-base mt-1 text-gray-300">دقیقه</span>
+          </div>
+          
+          <div className="flex flex-col items-center">
+            <div className=" rounded-lg p-3 md:p-4 w-24 md:w-32">
+              <span className="text-2xl md:text-4xl lg:text-5xl font-extrabold block text-center">{timeLeft.seconds}</span>
+            </div>
+            <span className="text-sm md:text-base mt-1 text-gray-300">ثانیه</span>
+          </div>
+        </div>
       ) : (
-        <span>🏁 ماراتن شروع شده است!</span>
+        <div className=" p-5 rounded-lg">
+          <span className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-50">🏁 ماراتن شروع شده است!</span>
+        </div>
       )}
     </div>
   );
