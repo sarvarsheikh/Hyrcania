@@ -534,7 +534,6 @@ export default function MinimalistRegistrationForm() {
         </form>
       </Card>
 
-      {/* Confirmation Dialog */}
       <Dialog open={showConfirmationDialog} onOpenChange={setShowConfirmationDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -650,31 +649,6 @@ export default function MinimalistRegistrationForm() {
               ) : (
                 'تایید و ثبت نام'
               )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Success Dialog */}
-      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-center text-xl">
-              ثبت نام با موفقیت انجام شد
-            </DialogTitle>
-          </DialogHeader>
-          <div className="flex flex-col items-center justify-center py-4">
-            <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
-            <p className="text-center">
-              برای ثبت نامت خیلی ممنونم قهرمان
-            </p>
-          </div>
-          <DialogFooter className="sm:justify-center">
-            <Button
-              onClick={closeSuccessDialog}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              بستن
             </Button>
           </DialogFooter>
         </DialogContent>

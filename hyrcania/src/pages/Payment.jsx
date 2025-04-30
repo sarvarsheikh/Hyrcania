@@ -71,7 +71,7 @@ const PaymentResultPage = () => {
     };
 
     const handleViewTickets = () => {
-        navigate('/tickets'); // Navigate to tickets page
+        navigate('/profile'); // Navigate to tickets page
     };
 
     const handleTryAgain = () => {
