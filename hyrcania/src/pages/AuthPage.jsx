@@ -24,7 +24,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 
 // Define Zod validation schema
 const loginSchema = z.object({
@@ -55,7 +55,7 @@ const LoginPage = () => {
     clearInterval(timerRef.current);
 
     timerRef.current = setInterval(() => {
-      setCountdown(prev => {
+      setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timerRef.current);
           setCanResend(true);
@@ -119,24 +119,24 @@ const LoginPage = () => {
   };
 
   const handleVerifyOtp = async () => {
-    console.log(otpValue);
     try {
       const response = await verifyOtp({
         phone_number: phoneNumber,
-        otp: otpValue
+        otp: otpValue,
       });
 
-      if (response && response.status === 200) {
-        toast.success(" به هیرکانی خوش اومدی قهرمان ")
+      if (response.status === 200) {
+        toast.success(" به هیرکانی خوش اومدی قهرمان ");
         setIsDialogOpen(false);
 
-        // Delay before navigation
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         navigate("/");
       }
+     
     } catch (error) {
-
       // Let useAuth handle the toast error
+      toast.error(`رمز یک‌بار مصرف نامعتبر یا منقضی شده است`);
+      
+      
     }
   };
 
@@ -185,14 +185,20 @@ const LoginPage = () => {
           </Button>
 
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger className="hidden" ref={dialogTriggerRef}></DialogTrigger>
+            <DialogTrigger
+              className="hidden"
+              ref={dialogTriggerRef}
+            ></DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle className="text-center text-gray-900">کد یک بار مصرف را وارد کنید</DialogTitle>
+                <DialogTitle className="text-center text-gray-900">
+                  کد یک بار مصرف را وارد کنید
+                </DialogTitle>
                 <DialogDescription>
                   <div className="flex flex-col items-center justify-center mt-4 space-y-5">
                     <p className="text-sm text-center text-gray-900">
-                      با موفقیت کد ارسال شد <span className="font-medium">{phoneNumber}</span>
+                      با موفقیت کد ارسال شد{" "}
+                      <span className="font-medium">{phoneNumber}</span>
                     </p>
 
                     <InputOTP
@@ -215,7 +221,11 @@ const LoginPage = () => {
                       <span className="text-gray-500">کد رو نگرفتی </span>
                       <button
                         type="button"
-                        className={`${canResend ? 'text-[#41FF8D] hover:underline' : 'text-gray-400 cursor-not-allowed'}`}
+                        className={`${
+                          canResend
+                            ? "text-[#41FF8D] hover:underline"
+                            : "text-gray-400 cursor-not-allowed"
+                        }`}
                         onClick={handleResendOtp}
                         disabled={!canResend}
                       >
@@ -226,7 +236,9 @@ const LoginPage = () => {
                     <div className="flex items-center justify-center w-full">
                       <div className="h-[1px] bg-gray-200 w-full"></div>
                       <span className="px-2 text-xs text-gray-400">
-                        {countdown > 0 ? `00:${countdown.toString().padStart(2, '0')}` : "00:00"}
+                        {countdown > 0
+                          ? `00:${countdown.toString().padStart(2, "0")}`
+                          : "00:00"}
                       </span>
                       <div className="h-[1px] bg-gray-200 w-full"></div>
                     </div>
@@ -235,9 +247,12 @@ const LoginPage = () => {
                       className="w-[200px] bg-[#41FF8D] text-black hover:bg-[#36D074] rounded-md py-2 font-medium"
                       type="button"
                       onClick={handleVerifyOtp}
-
                     >
-                      {"تایید کد"}
+                      {loading ? (
+                        <div class="h-5 w-5 border-2 border-gray-800 border-t-green-500 rounded-full animate-spin-custom mx-auto"></div>
+                      ) : (
+                        "تایید کد"
+                      )}
                     </Button>
                   </div>
                 </DialogDescription>
@@ -245,8 +260,6 @@ const LoginPage = () => {
             </DialogContent>
           </Dialog>
         </form>
-
-
       </Card>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { gregorianToJalali } from "@/lib/jalali-utils"
+import { gregorianToJalali } from "@/lib/jalali-utils";
 
 import { Label } from "@/components/ui/label";
 import { useLocation } from "react-router-dom";
@@ -35,35 +35,34 @@ const registrationSchema = z.object({
   firstName: z.string().min(1, "نام الزامی است"),
   lastName: z.string().min(1, "نام خانوادگی الزامی است"),
   age: z.any(), // Changed from z.string().nonempty to accept Date object
-  phoneNumber: z.string()
+  phoneNumber: z
+    .string()
     .min(1, "شماره تماس الزامی است")
     .max(11, "شماره همراه نباید بیشتر از ۱۱ رقم باشد")
-    .refine(
-      (value) => /^09\d{9}$/.test(value),
-      { message: "شماره همراه باید با ۰۹ شروع شده و دقیقا ۱۱ رقم باشد" }
-    ),
+    .refine((value) => /^09\d{9}$/.test(value), {
+      message: "شماره همراه باید با ۰۹ شروع شده و دقیقا ۱۱ رقم باشد",
+    }),
   gender: z.enum(["m", "f"], { message: "جنسیت الزامی است" }),
   idNumber: z.string().min(1, "کد ملی الزامی است"),
   state: z.string().min(1, "استان الزامی است"),
   tShirtSize: z.string().min(1, "سایز تی شرت الزامی است"),
   relativeName: z.string().min(1, "نام آشنا الزامی است"),
   relativeLastName: z.string().min(1, "نام خانوادگی آشنا الزامی است"),
-  relativePhoneNumber: z.string()
+  relativePhoneNumber: z
+    .string()
     .min(1, "شماره تماس آشنا الزامی است")
     .max(11, "شماره همراه آشنا نباید بیشتر از ۱۱ رقم باشد")
-    .refine(
-      (value) => /^09\d{9}$/.test(value),
-      { message: "شماره همراه آشنا باید با ۰۹ شروع شده و دقیقا ۱۱ رقم باشد" }
-    ),
+    .refine((value) => /^09\d{9}$/.test(value), {
+      message: "شماره همراه آشنا باید با ۰۹ شروع شده و دقیقا ۱۱ رقم باشد",
+    }),
   is_paid: z.boolean(),
 });
-
 
 // Fallback tickets in case they're not provided in location state
 const fallbackTickets = [
   { id: "1", title: "Marathon 5K", price: 150000 },
   { id: "2", title: "Marathon 10K", price: 250000 },
-  { id: "3", title: "Marathon 21K", price: 350000 }
+  { id: "3", title: "Marathon 21K", price: 350000 },
 ];
 
 export default function MinimalistRegistrationForm() {
@@ -72,7 +71,12 @@ export default function MinimalistRegistrationForm() {
   const obj = location.state || { event: { tickets: fallbackTickets } };
   const event = obj.event;
   const tickets = [...(event?.tickets || fallbackTickets)];
-  const { eventSignUp, loading: signupLoading, error: signupError, duplicateSignup } = useEventSignUp();
+  const {
+    eventSignUp,
+    loading: signupLoading,
+    error: signupError,
+    duplicateSignup,
+  } = useEventSignUp();
 
   // Set default date to 30 years ago instead of current date
   const thirtyYearsAgo = new Date();
@@ -100,25 +104,28 @@ export default function MinimalistRegistrationForm() {
   const [errors, setErrors] = useState({});
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-  const [showDuplicateSignupDialog, setShowDuplicateSignupDialog] = useState(false);
+  const [showDuplicateSignupDialog, setShowDuplicateSignupDialog] =
+    useState(false);
   const token = localStorage.getItem("token");
   const tokenExpiry = localStorage.getItem("tokenExpiry");
 
   useEffect(() => {
     if (!token) {
-      navigate("/auth")
+      navigate("/auth");
     }
 
     if (new Date(tokenExpiry) < new Date()) {
       // Token expired, clean up
       localStorage.removeItem("token");
       localStorage.removeItem("tokenExpiry");
-      navigate("/auth")
+      navigate("/auth");
     }
   }, [token, tokenExpiry, navigate]);
 
   // Get the selected ticket object using the ID
-  const selectedTicket = selectedTicketId ? tickets.find(t => t.id === selectedTicketId) : null;
+  const selectedTicket = selectedTicketId
+    ? tickets.find((t) => t.id === selectedTicketId)
+    : null;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -139,7 +146,10 @@ export default function MinimalistRegistrationForm() {
     try {
       registrationSchema.parse(formData);
       if (!selectedTicketId) {
-        setErrors((prev) => ({ ...prev, ticket: "لطفا یک بلیط برای ثبت نام انتخاب کنید " }));
+        setErrors((prev) => ({
+          ...prev,
+          ticket: "لطفا یک بلیط برای ثبت نام انتخاب کنید ",
+        }));
         return false;
       }
       return true;
@@ -191,6 +201,7 @@ export default function MinimalistRegistrationForm() {
     }
   };
 
+
   const closeSuccessDialog = () => {
     setShowSuccessDialog(false);
   };
@@ -215,7 +226,10 @@ export default function MinimalistRegistrationForm() {
       dateToFormat.getMonth() + 1,
       dateToFormat.getDate()
     );
-    return `${year}/${String(month).padStart(2, '0')}/${String(day).padStart(2, '0')}`;
+    return `${year}/${String(month).padStart(2, "0")}/${String(day).padStart(
+      2,
+      "0"
+    )}`;
   };
 
   // Map frontend fields to backend fields
@@ -230,12 +244,14 @@ export default function MinimalistRegistrationForm() {
       dateToFormat.getMonth() + 1,
       dateToFormat.getDate()
     );
-    const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
 
     return {
       first_name: userDetail.firstName,
       last_name: userDetail.lastName,
-      age: formattedDate,  // Using formatted Persian date
+      age: formattedDate, // Using formatted Persian date
       phone_number: userDetail.phoneNumber,
       gender: userDetail.gender,
       id_number: userDetail.idNumber,
@@ -250,7 +266,7 @@ export default function MinimalistRegistrationForm() {
 
   // Get gender display text
   const getGenderText = (gender) => {
-    return gender === 'm' ? 'مرد' : 'زن';
+    return gender === "m" ? "مرد" : "زن";
   };
 
   // Get T-shirt size display text
@@ -263,7 +279,10 @@ export default function MinimalistRegistrationForm() {
       <Card className="w-full max-w-lg mx-auto mt-8 bg-white">
         <form onSubmit={handlePreSubmit}>
           <CardContent className="p-6 space-y-6">
-            <h1 className="text-2xl font-bold text-center mb-6"> فرم ثبت نام</h1>
+            <h1 className="text-2xl font-bold text-center mb-6">
+              {" "}
+              فرم ثبت نام
+            </h1>
             {/* Personal Information */}
             <div className="space-y-4">
               <h2 className="text-lg font-medium">اطلاعات شخصی</h2>
@@ -280,7 +299,9 @@ export default function MinimalistRegistrationForm() {
                     className={errors.firstName ? "border-red-500" : ""}
                   />
                   {errors.firstName && (
-                    <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.firstName}
+                    </p>
                   )}
                 </div>
                 <div className="space-y-1">
@@ -295,7 +316,9 @@ export default function MinimalistRegistrationForm() {
                     className={errors.lastName ? "border-red-500" : ""}
                   />
                   {errors.lastName && (
-                    <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.lastName}
+                    </p>
                   )}
                 </div>
               </div>
@@ -327,7 +350,9 @@ export default function MinimalistRegistrationForm() {
                     className={errors.phoneNumber ? "border-red-500" : ""}
                   />
                   {errors.phoneNumber && (
-                    <p className="text-red-500 text-xs mt-1">{errors.phoneNumber}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.phoneNumber}
+                    </p>
                   )}
                 </div>
               </div>
@@ -338,7 +363,9 @@ export default function MinimalistRegistrationForm() {
                   </Label>
                   <Select
                     value={formData.gender}
-                    onValueChange={(value) => handleSelectChange("gender", value)}
+                    onValueChange={(value) =>
+                      handleSelectChange("gender", value)
+                    }
                   >
                     <SelectTrigger
                       id="gender"
@@ -367,7 +394,9 @@ export default function MinimalistRegistrationForm() {
                     className={errors.idNumber ? "border-red-500" : ""}
                   />
                   {errors.idNumber && (
-                    <p className="text-red-500 text-xs mt-1">{errors.idNumber}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.idNumber}
+                    </p>
                   )}
                 </div>
               </div>
@@ -393,7 +422,9 @@ export default function MinimalistRegistrationForm() {
                   </Label>
                   <Select
                     value={formData.tShirtSize}
-                    onValueChange={(value) => handleSelectChange("tShirtSize", value)}
+                    onValueChange={(value) =>
+                      handleSelectChange("tShirtSize", value)
+                    }
                   >
                     <SelectTrigger
                       id="tShirtSize"
@@ -409,7 +440,9 @@ export default function MinimalistRegistrationForm() {
                     </SelectContent>
                   </Select>
                   {errors.tShirtSize && (
-                    <p className="text-red-500 text-xs mt-1">{errors.tShirtSize}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.tShirtSize}
+                    </p>
                   )}
                 </div>
               </div>
@@ -427,16 +460,18 @@ export default function MinimalistRegistrationForm() {
                     name="relativeName"
                     value={formData.relativeName}
                     onChange={handleInputChange}
-
                     className={errors.relativeName ? "border-red-500" : ""}
                   />
                   {errors.relativeName && (
-                    <p className="text-red-500 text-xs mt-1">{errors.relativeName}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.relativeName}
+                    </p>
                   )}
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="relativeLastName" className="flex">
-                    نام خانوداگی آشنا <span className="text-red-500 ml-1">*</span>
+                    نام خانوداگی آشنا{" "}
+                    <span className="text-red-500 ml-1">*</span>
                   </Label>
                   <Input
                     id="relativeLastName"
@@ -446,7 +481,9 @@ export default function MinimalistRegistrationForm() {
                     className={errors.relativeLastName ? "border-red-500" : ""}
                   />
                   {errors.relativeLastName && (
-                    <p className="text-red-500 text-xs mt-1">{errors.relativeLastName}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.relativeLastName}
+                    </p>
                   )}
                 </div>
               </div>
@@ -463,7 +500,9 @@ export default function MinimalistRegistrationForm() {
                   className={errors.relativePhoneNumber ? "border-red-500" : ""}
                 />
                 {errors.relativePhoneNumber && (
-                  <p className="text-red-500 text-xs mt-1">{errors.relativePhoneNumber}</p>
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.relativePhoneNumber}
+                  </p>
                 )}
               </div>
             </div>
@@ -481,8 +520,8 @@ export default function MinimalistRegistrationForm() {
                   <div
                     key={ticket.id}
                     className={`relative border rounded-lg p-2 transition-all ${selectedTicketId === ticket.id
-                      ? "border-blue-600 bg-blue-50 ring-2 ring-blue-500"
-                      : "border-gray-200 hover:border-blue-400"
+                        ? "border-blue-600 bg-blue-50 ring-2 ring-blue-500"
+                        : "border-gray-200 hover:border-blue-400"
                       }`}
                   >
                     <div className="flex items-start space-x-3 rtl:space-x-reverse">
@@ -493,9 +532,7 @@ export default function MinimalistRegistrationForm() {
                         />
                       </div>
                       <div className="flex-grow">
-                        <Label
-                          htmlFor={`ticket-${ticket.id}`}
-                        >
+                        <Label htmlFor={`ticket-${ticket.id}`}>
                           <MarathonTicket ticket={ticket} />
                         </Label>
                       </div>
@@ -527,13 +564,14 @@ export default function MinimalistRegistrationForm() {
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
                 </>
               ) : (
-                'بررسی اطلاعات'
+                "بررسی اطلاعات"
               )}
             </Button>
           </CardFooter>
         </form>
       </Card>
 
+      {/* Confirmation Dialog */}
       <Dialog open={showConfirmationDialog} onOpenChange={setShowConfirmationDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -618,9 +656,15 @@ export default function MinimalistRegistrationForm() {
               <div className="text-sm">
                 {selectedTicket ? (
                   <div className="p-2 border rounded-md">
-                    <p><span className="font-semibold">عنوان:</span> {selectedTicket.title}</p>
+                    <p>
+                      <span className="font-semibold">عنوان:</span>{" "}
+                      {selectedTicket.title}
+                    </p>
                     {selectedTicket.price && (
-                      <p><span className="font-semibold">قیمت:</span> {selectedTicket.price.toLocaleString()} تومان</p>
+                      <p>
+                        <span className="font-semibold">قیمت:</span>{" "}
+                        {selectedTicket.price.toLocaleString()} تومان
+                      </p>
                     )}
                   </div>
                 ) : (
@@ -630,10 +674,7 @@ export default function MinimalistRegistrationForm() {
             </div>
           </div>
           <DialogFooter className="flex justify-between">
-            <Button
-              variant="outline"
-              onClick={closeConfirmationDialog}
-            >
+            <Button variant="outline" onClick={closeConfirmationDialog}>
               ویرایش اطلاعات
             </Button>
             <Button
@@ -647,15 +688,43 @@ export default function MinimalistRegistrationForm() {
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
                 </>
               ) : (
-                'تایید و ثبت نام'
+                "تایید و ثبت نام"
               )}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
+      {/* Success Dialog */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center text-xl">
+              ثبت نام با موفقیت انجام شد
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col items-center justify-center py-4">
+            <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
+            <p className="text-center">
+              برای ثبت نامت خیلی ممنونم قهرمان
+            </p>
+          </div>
+          <DialogFooter className="sm:justify-center">
+            <Button
+              onClick={closeSuccessDialog}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              بستن
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Duplicate Signup Dialog */}
-      <Dialog open={showDuplicateSignupDialog} onOpenChange={setShowDuplicateSignupDialog}>
+      <Dialog
+        open={showDuplicateSignupDialog}
+        onOpenChange={setShowDuplicateSignupDialog}
+      >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-center text-xl">
@@ -665,7 +734,8 @@ export default function MinimalistRegistrationForm() {
           <div className="flex flex-col items-center justify-center py-4">
             <AlertCircle className="w-16 h-16 text-amber-500 mb-4" />
             <p className="text-center">
-              شما قبلا برای این بلیت ثبت‌نام کرده‌اید. امکان ثبت‌نام مجدد برای یک بلیت وجود ندارد.
+              شما قبلا برای این بلیت ثبت‌نام کرده‌اید. امکان ثبت‌نام مجدد برای
+              یک بلیت وجود ندارد.
             </p>
           </div>
           <DialogFooter className="sm:justify-center">
