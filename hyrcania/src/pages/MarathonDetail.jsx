@@ -29,6 +29,7 @@ import paper from '/images/paper.jpg';
 import { Calendar, Clock, MapPin, PersonStanding } from "lucide-react";
 import MinimalistRegistrationForm from "./MarathonSignUpForm";
 import { gregorianToJalali } from "@/lib/jalali-utils";
+import CountdownTimer from "@/components/coutdown";
 
 // Social Media Link Card Component
 const SocialMediaCard = ({ link, title, description, icon }) => {
@@ -120,6 +121,7 @@ const MarathonDetail = () => {
 
   // Check if tickets are available
   const hasTickets = event?.tickets && event.tickets.length > 0;
+  const date = `${eventDate.year}/${eventDate.month}/${eventDate.day} 08:00:00`
 
   // Show no tickets dialog on component mount if no tickets
   useEffect(() => {
@@ -290,6 +292,7 @@ const MarathonDetail = () => {
             </Link>
           </div>
         </div>
+        <CountdownTimer targetJalaliDate={date} />
       </section>
     </main>
   );
