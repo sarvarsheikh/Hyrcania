@@ -18,7 +18,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { LocateFixed, CalendarClock, Users, ExternalLink, AlertTriangle } from "lucide-react";
+import { LocateFixed, CalendarClock, Users, ExternalLink, AlertTriangle, Share2, Share, MessageCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import MarathonSignUpForm from "./MarathonSignUpForm";
 import banner from '/images/banner.png';
@@ -30,31 +30,103 @@ import { Calendar, Clock, MapPin, PersonStanding } from "lucide-react";
 import MinimalistRegistrationForm from "./MarathonSignUpForm";
 import { gregorianToJalali } from "@/lib/jalali-utils";
 
+// Social Media Link Card Component
+const SocialMediaCard = ({ link, title, description, icon }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Choose icon based on prop or default to Share2
+  const IconComponent = icon || Share2;
+
+  return (
+    <a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block w-full"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className={`bg-neutral-900 border-2 ${isHovered ? 'border-[#c0ff00]' : 'border-neutral-700'} 
+        rounded-lg p-4 transition-all duration-300 h-full flex flex-col`}>
+        <div className="flex items-start justify-between mb-3">
+          <h3 className={`text-xl font-bold ${isHovered ? 'text-[#c0ff00]' : 'text-white'} transition-colors duration-300`}>
+            {title || "پیوند مجازی"}
+          </h3>
+          <div className={`p-2 rounded-full ${isHovered ? 'bg-[#c0ff00] text-black' : 'bg-neutral-800 text-gray-400'} transition-all duration-300`}>
+            <IconComponent size={20} />
+          </div>
+        </div>
+
+        {description && (
+          <p className="text-gray-400 mb-3 text-sm">{description}</p>
+        )}
+
+        <div className="mt-auto flex items-center text-sm">
+          <ExternalLink size={16} className={`${isHovered ? 'text-[#c0ff00]' : 'text-gray-400'} mr-1`} />
+          <span className={`${isHovered ? 'text-[#c0ff00]' : 'text-gray-400'} transition-colors duration-300`}>
+            مشاهده لینک
+          </span>
+        </div>
+      </div>
+    </a>
+  );
+};
+
+// Sponsor Card Component
+const SponsorCard = ({ sponsor }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <a
+      href={sponsor.social_link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block w-full"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className={`bg-neutral-900 border-2 ${isHovered ? 'border-[#c0ff00]' : 'border-neutral-700'} 
+        rounded-lg p-6 transition-all duration-300 h-full flex flex-col`}>
+        <div className="text-center mb-4">
+          <h3 className={`text-xl font-bold ${isHovered ? 'text-[#c0ff00]' : 'text-white'} transition-colors duration-300`}>
+            {sponsor.name}
+          </h3>
+        </div>
+
+        <p className="text-gray-400 text-sm mb-4 text-center">
+          {sponsor.description}
+        </p>
+
+        <div className="mt-auto flex items-center justify-center text-sm">
+          <ExternalLink size={16} className={`${isHovered ? 'text-[#c0ff00]' : 'text-gray-400'} mr-1`} />
+          <span className={`${isHovered ? 'text-[#c0ff00]' : 'text-gray-400'} transition-colors duration-300`}>
+            مشاهده اسپانسر
+          </span>
+        </div>
+      </div>
+    </a>
+  );
+};
 
 const MarathonDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const obj = location.state;
   const event = obj.event;
-
+  console.log(event)
   const [gy, gm, gd] = event.event_date.split("-").map(Number);
 
   const eventDate = gregorianToJalali(gy, gm, gd);
 
-
   // Check if tickets are available
   const hasTickets = event?.tickets && event.tickets.length > 0;
-
 
   // Show no tickets dialog on component mount if no tickets
   useEffect(() => {
     if (!hasTickets) {
       setShowNoTicketsDialog(true);
     }
-
   }, [hasTickets]);
-
-
 
   return (
     <main className="flex min-h-screen flex-col bg-neutral-800 text-white">
@@ -79,7 +151,6 @@ const MarathonDetail = () => {
 
           {/* Persian Text - Right-to-left */}
           <div className="text-white text-right" dir="rtl" lang="fa">
-
             <p className="leading-relaxed text-lg mt-4">
               {event.description}
             </p>
@@ -87,9 +158,7 @@ const MarathonDetail = () => {
         </div>
 
         {/* Blue border bottom */}
-
       </section>
-
 
       {/* Event Details Section */}
       <section className="py-12 px-4 md:px-8 bg-transparent z-20">
@@ -116,7 +185,6 @@ const MarathonDetail = () => {
               <MapPin className="w-8 h-8 text-[#c0ff00]" />
             </div>
             <h3 className="text-2xl font-bold uppercase tracking-wider">{event.location}</h3>
-
           </div>
         </div>
       </section>
@@ -125,7 +193,6 @@ const MarathonDetail = () => {
       <div className="w-full relative overflow-hidden">
         <img src={strip2} alt="Hyrcania" fill className="object-cover" />
       </div>
-
 
       {/* Map Section */}
       <section className="relative w-full ">
@@ -136,12 +203,12 @@ const MarathonDetail = () => {
       <div className="w-full  relative overflow-hidden">
         <img src={strip2} alt="Hyrcania" fill className="object-cover" />
       </div>
+
+      {/* Team Section */}
       <section className="py-12 px-4 md:px-8 bg-transparent z-20">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-8 zawya-font text-[#c0ff00]">اعضای اجرایی</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-            {/* Example teammate card, replace with your TeamMateCard component */}
-
             {event.team.map((teammate, index) => {
               return (<div
                 key={index}
@@ -155,44 +222,59 @@ const MarathonDetail = () => {
                 <div className="text-sm text-gray-400">{teammate.position}</div>
               </div>)
             })}
-
-
           </div>
         </div>
       </section>
+
       <div className="w-full  relative overflow-hidden">
         <img src={strip2} alt="Hyrcania" fill className="object-cover" />
       </div>
+
+      {/* Social Media Link Section */}
+      <section className="py-12 px-4 md:px-8 bg-transparent z-20">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-8 zawya-font text-[#c0ff00]">شبکه‌های اجتماعی</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+            {/* Telegram Social Media Card */}
+            <SocialMediaCard
+              link={event.link_to_social_media}
+              title="کانال تلگرام"
+              description="برای اطلاع از آخرین اخبار مسابقه به کانال تلگرام ما بپیوندید"
+              icon={MessageCircle}
+            />
+
+            {/* Instagram Social Media Card (example) */}
+            <SocialMediaCard
+              link="https://www.instagram.com/hyrcanian_run"
+              title="اینستاگرام"
+              description="تصاویر و ویدیوهای مسابقات را در اینستاگرام ما ببینید"
+              icon={Share}
+            />
+          </div>
+        </div>
+      </section>
+
+      <div className="w-full  relative overflow-hidden">
+        <img src={strip2} alt="Hyrcania" fill className="object-cover" />
+      </div>
+
+      {/* Sponsors Section with Card Components */}
       <section className="py-12 px-4 md:px-8 bg-transparent z-20">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-8 zawya-font text-[#c0ff00]">اسپانسر های مسابقه</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {/* Example sponsor card */}
-            {
-              event.sponsers.map((sponsor, index) => (
-                <a
-                  href={sponsor.social_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <div
-                    key={index}
-                    className="flex flex-col items-center text-center rounded-lg p-6"
-                  >
-                    <div className="text-xl font-semibold hover:text-[#c0ff00]">{sponsor.name}</div>
-                    <div className="text-sm text-gray-400 mt-2">{sponsor.description}</div>
-                  </div>
-                </a>
-              ))
-            }
-
-
+            {event.sponsers.map((sponsor, index) => (
+              <SponsorCard key={index} sponsor={sponsor} />
+            ))}
           </div>
         </div>
       </section>
+
       <div className="w-full  relative overflow-hidden">
         <img src={strip2} alt="Hyrcania" fill className="object-cover" />
       </div>
+
+      {/* Registration CTA */}
       <section className="py-16 px-4 md:px-8 bg-black">
         <div className="max-w-3xl mx-auto ">
           <h2 className="text-4xl md:text-5xl font-bold mb-10 text-center">ثبت نام برای مسابقه</h2>
@@ -209,12 +291,7 @@ const MarathonDetail = () => {
           </div>
         </div>
       </section>
-
-
-      {/* Registration CTA */}
-
     </main>
-
   );
 };
 

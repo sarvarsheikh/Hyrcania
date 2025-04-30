@@ -572,7 +572,10 @@ export default function MinimalistRegistrationForm() {
       </Card>
 
       {/* Confirmation Dialog */}
-      <Dialog open={showConfirmationDialog} onOpenChange={setShowConfirmationDialog}>
+      <Dialog
+        open={showConfirmationDialog}
+        onOpenChange={setShowConfirmationDialog}
+      >
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-center text-xl">
@@ -700,23 +703,17 @@ export default function MinimalistRegistrationForm() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-center text-xl">
-              ثبت نام با موفقیت انجام شد
+              در حال انتقال به صفحه پرداخت
             </DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center justify-center py-4">
-            <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
+            {/* Circular loader */}
+            <div className="h-16 w-16 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin mb-4"></div>
             <p className="text-center">
-              برای ثبت نامت خیلی ممنونم قهرمان
+              لطفا صبر کنید، در حال انتقال به صفحه پرداخت هستیم
             </p>
           </div>
-          <DialogFooter className="sm:justify-center">
-            <Button
-              onClick={closeSuccessDialog}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              بستن
-            </Button>
-          </DialogFooter>
+          {/* No close button as we want user to wait */}
         </DialogContent>
       </Dialog>
 
