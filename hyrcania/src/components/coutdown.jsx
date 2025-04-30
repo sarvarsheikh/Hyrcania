@@ -32,41 +32,16 @@ const CountdownTimer = ({ targetJalaliDate }) => {
   }, []);
   
   return (
-    <div className="rtl flex flex-col items-center justify-center w-full">
+    <div className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-extrabold text-center text-gray-50 rtl flex flex-row flex-wrap justify-center mb-10">
       {Object.keys(timeLeft).length > 0 ? (
-        <div className="flex flex-col md:flex-row justify-center items-center gap-2 md:gap-6 text-gray-50">
-          <div className="flex flex-col items-center">
-            <div className=" rounded-lg p-3 md:p-4 w-24 md:w-32">
-              <span className="text-2xl md:text-4xl lg:text-5xl font-extrabold block text-center">{timeLeft.days}</span>
-            </div>
-            <span className="text-sm md:text-base mt-1 text-gray-300">روز</span>
-          </div>
-          
-          <div className="flex flex-col items-center">
-            <div className="rounded-lg p-3 md:p-4 w-24 md:w-32">
-              <span className="text-2xl md:text-4xl lg:text-5xl font-extrabold block text-center">{timeLeft.hours}</span>
-            </div>
-            <span className="text-sm md:text-base mt-1 text-gray-300">ساعت</span>
-          </div>
-          
-          <div className="flex flex-col items-center">
-            <div className="rounded-lg p-3 md:p-4 w-24 md:w-32">
-              <span className="text-2xl md:text-4xl lg:text-5xl font-extrabold block text-center">{timeLeft.minutes}</span>
-            </div>
-            <span className="text-sm md:text-base mt-1 text-gray-300">دقیقه</span>
-          </div>
-          
-          <div className="flex flex-col items-center">
-            <div className=" rounded-lg p-3 md:p-4 w-24 md:w-32">
-              <span className="text-2xl md:text-4xl lg:text-5xl font-extrabold block text-center">{timeLeft.seconds}</span>
-            </div>
-            <span className="text-sm md:text-base mt-1 text-gray-300">ثانیه</span>
-          </div>
-        </div>
+        <>
+          <span className="mx-1 sm:mx-2 md:mx-4 whitespace-nowrap"> ثانیه {timeLeft.seconds}</span>
+          <span className="mx-1 sm:mx-2 md:mx-4 whitespace-nowrap"> دقیقه {timeLeft.minutes}</span>
+          <span className="mx-1 sm:mx-2 md:mx-4 whitespace-nowrap"> ساعت {timeLeft.hours} </span>
+          <span className="mx-1 sm:mx-2 md:mx-4 whitespace-nowrap"> روز {timeLeft.days}</span>
+        </>
       ) : (
-        <div className=" p-5 rounded-lg">
-          <span className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-50">🏁 ماراتن شروع شده است!</span>
-        </div>
+        <span>🏁 ماراتن شروع شده است!</span>
       )}
     </div>
   );
