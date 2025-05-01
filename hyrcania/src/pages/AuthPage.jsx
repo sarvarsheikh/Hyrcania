@@ -131,12 +131,12 @@ const LoginPage = () => {
 
         navigate("/");
       }
-     
+
     } catch (error) {
       // Let useAuth handle the toast error
       toast.error(`رمز یک‌بار مصرف نامعتبر یا منقضی شده است`);
-      
-      
+
+
     }
   };
 
@@ -221,11 +221,10 @@ const LoginPage = () => {
                       <span className="text-gray-500">کد رو نگرفتی </span>
                       <button
                         type="button"
-                        className={`${
-                          canResend
-                            ? "text-[#41FF8D] hover:underline"
-                            : "text-gray-400 cursor-not-allowed"
-                        }`}
+                        className={`${canResend
+                          ? "text-[#41FF8D] hover:underline"
+                          : "text-gray-400 cursor-not-allowed"
+                          }`}
                         onClick={handleResendOtp}
                         disabled={!canResend}
                       >
@@ -247,13 +246,15 @@ const LoginPage = () => {
                       className="w-[200px] bg-[#41FF8D] text-black hover:bg-[#36D074] rounded-md py-2 font-medium"
                       type="button"
                       onClick={handleVerifyOtp}
+                      disabled={otpValue.length !== 6 || loading}
                     >
                       {loading ? (
-                        <div class="h-5 w-5 border-2 border-gray-800 border-t-green-500 rounded-full animate-spin-custom mx-auto"></div>
+                        <div className="h-5 w-5 border-2 border-gray-800 border-t-green-500 rounded-full animate-spin-custom mx-auto"></div>
                       ) : (
                         "تایید کد"
                       )}
                     </Button>
+
                   </div>
                 </DialogDescription>
               </DialogHeader>
