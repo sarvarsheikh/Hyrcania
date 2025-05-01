@@ -7,9 +7,9 @@ const CountdownTimer = ({ targetJalaliDate }) => {
       .from(targetJalaliDate, "fa", "YYYY/MM/DD HH:mm:ss")
       .locale("en")
       .format("YYYY-MM-DDTHH:mm:ss");
-      
+
     const difference = +new Date(gregorianTarget) - +new Date();
-    
+
     if (difference > 0) {
       return {
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -20,17 +20,17 @@ const CountdownTimer = ({ targetJalaliDate }) => {
     }
     return {};
   };
-  
+
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-  
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
-    
+
     return () => clearInterval(timer);
   }, []);
-  
+
   return (
     <div className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-extrabold text-center text-gray-50 rtl flex flex-row flex-wrap justify-center mb-10">
       {Object.keys(timeLeft).length > 0 ? (
