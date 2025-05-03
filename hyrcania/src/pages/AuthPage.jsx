@@ -26,7 +26,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-// Define Zod validation schema
+const OTP_LENGTH = 6;
+const OTP_TIMER_DURATION = 30;
+
 const loginSchema = z.object({
   phone_number: z
     .string()
@@ -43,17 +45,15 @@ const LoginPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otpValue, setOtpValue] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [countdown, setCountdown] = useState(30);
+  const [countdown, setCountdown] = useState(OTP_TIMER_DURATION);
   const [canResend, setCanResend] = useState(false);
   const dialogTriggerRef = useRef(null);
   const timerRef = useRef(null);
 
-  // Function to start countdown timer
   const startCountdown = () => {
-    setCountdown(30);
+    setCountdown(OTP_TIMER_DURATION);
     setCanResend(false);
     clearInterval(timerRef.current);
-
     timerRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -66,7 +66,6 @@ const LoginPage = () => {
     }, 1000);
   };
 
-  // Clear timer on unmount
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
@@ -87,72 +86,67 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     try {
       setPhoneNumber(data.phone_number);
-      // Generate OTP
       await handleSignUp({ phone_number: data.phone_number });
-
-      console.log("با موفقیت کد برای شماره شما ارسال شد");
-
-      // Start countdown
+      console.log("✅ OTP successfully sent");
       startCountdown();
-
-      // Open the dialog
-      if (dialogTriggerRef.current) {
-        dialogTriggerRef.current.click();
-      }
+      if (dialogTriggerRef.current) dialogTriggerRef.current.click();
     } catch (error) {
-      console.error("Error:", error);
-
+      console.error("❌ Failed to send OTP:", error);
       setError("root", { message: "نشد که کد رو ارسال کنیم" });
     }
   };
 
   const handleResendOtp = async () => {
     if (!canResend) return;
-
     try {
       await handleSignUp({ phone_number: phoneNumber });
-      console.log("با موفقیت دوباره ارسال کردیم کد ");
+      console.log("🔁 OTP resent successfully");
       startCountdown();
     } catch (error) {
-      console.error("نشد که کد ارسال بشه دوباره", error);
+      console.error("❌ Failed to resend OTP:", error);
+      toast.error("ارسال مجدد کد با خطا مواجه شد");
     }
   };
 
   const handleVerifyOtp = async () => {
+    const cleanedOtp = otpValue.replace(/\D/g, "");
+    console.log("🔍 Verifying OTP with:", {
+      phone_number: phoneNumber,
+      otp: cleanedOtp,
+    });
+
     try {
       const response = await verifyOtp({
         phone_number: phoneNumber,
-        otp: otpValue,
+        otp: cleanedOtp,
       });
 
+      console.log("✅ OTP verification response:", response);
+
       if (response.status === 200) {
-        toast.success(" به هیرکانی خوش اومدی قهرمان ");
+        toast.success("به هیرکانی خوش اومدی قهرمان");
         setIsDialogOpen(false);
-
         navigate("/");
+      } else {
+        toast.error("خطا در تأیید کد");
       }
-
     } catch (error) {
-      // Let useAuth handle the toast error
-      toast.error(`رمز یک‌بار مصرف نامعتبر یا منقضی شده است`);
-
-
+      console.error("❌ OTP verification failed:", error);
+      toast.error("رمز یک‌بار مصرف نامعتبر یا منقضی شده است");
     }
   };
 
   return (
     <div className="relative w-screen h-screen flex items-center justify-center">
-      {/* Background Image */}
       <img
         className="absolute top-0 right-0 w-full h-full object-cover opacity-25"
         src={Runner}
         alt="Background Image"
       />
 
-      {/* Form Card */}
       <Card className="relative z-10 p-6 w-96 bg-white shadow-lg rounded-lg">
-        <h2 className="header text-2xl font-semibold text-center mb-4">
-          {isLogin ? "ورود" : "ورود"}
+        <h2 className="text-2xl font-semibold text-center mb-4">
+          {isLogin ? "ورود" : "ثبت‌نام"}
         </h2>
 
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -161,7 +155,7 @@ const LoginPage = () => {
               id="phone_number"
               type="tel"
               {...register("phone_number")}
-              placeholder="شماره تلفن خود را وارد کنید "
+              placeholder="شماره تلفن خود را وارد کنید"
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
             {errors.phone_number && (
@@ -181,14 +175,11 @@ const LoginPage = () => {
             type="submit"
             className="w-full bg-[#41FF8D] text-black hover:bg-[#36D074] rounded-md py-2 font-medium"
           >
-            {isLogin ? "ورود" : "ورود"}
+            {isLogin ? "ورود" : "ثبت‌نام"}
           </Button>
 
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger
-              className="hidden"
-              ref={dialogTriggerRef}
-            ></DialogTrigger>
+            <DialogTrigger ref={dialogTriggerRef} className="hidden" />
             <DialogContent>
               <DialogHeader>
                 <DialogTitle className="text-center text-gray-900">
@@ -202,33 +193,31 @@ const LoginPage = () => {
                     </p>
 
                     <InputOTP
-                      maxLength={6}
+                      maxLength={OTP_LENGTH}
                       className="flex justify-center text-black"
                       value={otpValue}
                       onChange={setOtpValue}
                     >
                       <InputOTPGroup className="mx-auto">
-                        <InputOTPSlot index={0} className="text-black" />
-                        <InputOTPSlot index={1} className="text-black" />
-                        <InputOTPSlot index={2} className="text-black" />
-                        <InputOTPSlot index={3} className="text-black" />
-                        <InputOTPSlot index={4} className="text-black" />
-                        <InputOTPSlot index={5} className="text-black" />
+                        {Array.from({ length: OTP_LENGTH }).map((_, i) => (
+                          <InputOTPSlot key={i} index={i} className="text-black" />
+                        ))}
                       </InputOTPGroup>
                     </InputOTP>
 
                     <div className="text-sm text-center">
-                      <span className="text-gray-500">کد رو نگرفتی </span>
+                      <span className="text-gray-500">کد رو نگرفتی؟ </span>
                       <button
                         type="button"
-                        className={`${canResend
-                          ? "text-[#41FF8D] hover:underline"
-                          : "text-gray-400 cursor-not-allowed"
-                          }`}
+                        className={
+                          canResend
+                            ? "text-[#41FF8D] hover:underline"
+                            : "text-gray-400 cursor-not-allowed"
+                        }
                         onClick={handleResendOtp}
                         disabled={!canResend}
                       >
-                        ارسال کردن دوباره کد
+                        ارسال دوباره کد
                       </button>
                     </div>
 
@@ -246,7 +235,7 @@ const LoginPage = () => {
                       className="w-[200px] bg-[#41FF8D] text-black hover:bg-[#36D074] rounded-md py-2 font-medium"
                       type="button"
                       onClick={handleVerifyOtp}
-                      disabled={otpValue.length !== 6 || loading}
+                      disabled={otpValue.length !== OTP_LENGTH || loading}
                     >
                       {loading ? (
                         <div className="h-5 w-5 border-2 border-gray-800 border-t-green-500 rounded-full animate-spin-custom mx-auto"></div>
@@ -254,7 +243,6 @@ const LoginPage = () => {
                         "تایید کد"
                       )}
                     </Button>
-
                   </div>
                 </DialogDescription>
               </DialogHeader>
