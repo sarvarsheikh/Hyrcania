@@ -9,6 +9,6 @@ root.render(
  
     <BrowserRouter>
      <ScrollToTop />
-        <App data-oid="90g1s5d" /> {/* Main app content */}
+        <App/> {/* Main app content */}
     </BrowserRouter>
 );

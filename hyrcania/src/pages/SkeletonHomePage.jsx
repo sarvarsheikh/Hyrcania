@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const SkeletonHomePage = () => {
     return (
-        <div className="relative flex flex-col bg-white w-screen h-screen mt-20 ">
+        <div className="relative flex flex-col bg-white w-screen h-screen pt-20">
 
             {/* Heading Skeleton */}
             <div className="flex justify-end mr-2">
@@ -12,11 +12,11 @@ const SkeletonHomePage = () => {
             </div>
 
             {/* Banner Image Skeleton */}
-            <Skeleton className="h-40 sm:h-1/3 md:h-1/5 lg:h-1/3 xl:h-1/2 rounded-xl mx-2 mb-9" />
+            <Skeleton className="h-40 sm:h-1/3 md:h-3/4 lg:h-3/4 xl:h-3/4  rounded-4xl mx-2 mb-9" />
 
             {/* Discovery section header */}
             <div className="flex flex-row justify-end mr-2 mb-4">
-                <Skeleton className="h-8 w-24 rounded-md" />
+                <Skeleton className="h-8 w-full rounded-md" />
             </div>
 
             {/* Cards skeleton */}

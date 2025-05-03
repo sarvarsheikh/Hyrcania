@@ -18,14 +18,17 @@
   /* Or perhaps 900 or 'black' depending on the font */
 }
 
+
+
 .dubai {
   font-family: "Dubai";
 }
-body{
+
+body {
   font-family: "Dubai";
 }
-/* Global styles */
 
+/* Global styles */
 
 /* Utility classes */
 .zawya-font {

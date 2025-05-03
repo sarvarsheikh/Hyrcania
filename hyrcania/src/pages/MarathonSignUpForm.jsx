@@ -260,7 +260,7 @@ export default function MinimalistRegistrationForm() {
       relativ_name: userDetail.relativeName,
       relativ_last_name: userDetail.relativeLastName,
       relativ_phone_number: userDetail.relativePhoneNumber,
-      is_paid: false,
+      is_paid: userDetail.is_paid,
     };
   };
 

@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import MarathonSignUpForm from "./MarathonSignUpForm";
-import banner from "/images/banner.png";
+import banner from "/images/banner.jpg";
 import strip1 from "/images/strip1.png";
 import strip2 from "/images/strip2.png";
 import mapy from "/images/map.png";
@@ -39,6 +39,9 @@ import { Calendar, Clock, MapPin, PersonStanding } from "lucide-react";
 import MinimalistRegistrationForm from "./MarathonSignUpForm";
 import { gregorianToJalali } from "@/lib/jalali-utils";
 import CountdownTimer from "@/components/coutdown";
+import StripGreen from "@/components/strip-green";
+import StripPurple from "@/components/strip-purple";
+
 
 // Social Media Link Card Component
 const SocialMediaCard = ({ link, title, description, icon }) => {
@@ -57,25 +60,22 @@ const SocialMediaCard = ({ link, title, description, icon }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`bg-neutral-900 border-2 ${
-          isHovered ? "border-[#c0ff00]" : "border-neutral-700"
-        } 
+        className={`bg-neutral-900 border-2 ${isHovered ? "border-[#c0ff00]" : "border-neutral-700"
+          } 
         rounded-lg p-4 transition-all duration-300 h-full flex flex-col`}
       >
         <div className="flex items-start justify-between mb-3">
           <h3
-            className={`text-xl font-bold ${
-              isHovered ? "text-[#c0ff00]" : "text-white"
-            } transition-colors duration-300`}
+            className={`text-xl font-bold ${isHovered ? "text-[#c0ff00]" : "text-white"
+              } transition-colors duration-300`}
           >
             {title || "پیوند مجازی"}
           </h3>
           <div
-            className={`p-2 rounded-full ${
-              isHovered
-                ? "bg-[#c0ff00] text-black"
-                : "bg-neutral-800 text-gray-400"
-            } transition-all duration-300`}
+            className={`p-2 rounded-full ${isHovered
+              ? "bg-[#c0ff00] text-black"
+              : "bg-neutral-800 text-gray-400"
+              } transition-all duration-300`}
           >
             <IconComponent size={20} />
           </div>
@@ -91,9 +91,8 @@ const SocialMediaCard = ({ link, title, description, icon }) => {
             className={`${isHovered ? "text-[#c0ff00]" : "text-gray-400"} mr-1`}
           />
           <span
-            className={`${
-              isHovered ? "text-[#c0ff00]" : "text-gray-400"
-            } transition-colors duration-300`}
+            className={`${isHovered ? "text-[#c0ff00]" : "text-gray-400"
+              } transition-colors duration-300`}
           >
             مشاهده لینک
           </span>
@@ -117,16 +116,14 @@ const SponsorCard = ({ sponsor }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`bg-neutral-900 border-2 ${
-          isHovered ? "border-[#c0ff00]" : "border-neutral-700"
-        } 
+        className={`bg-neutral-900 border-2 ${isHovered ? "border-[#c0ff00]" : "border-neutral-700"
+          } 
         rounded-lg p-6 transition-all duration-300 h-full flex flex-col`}
       >
         <div className="text-center mb-4">
           <h3
-            className={`text-xl font-bold ${
-              isHovered ? "text-[#c0ff00]" : "text-white"
-            } transition-colors duration-300`}
+            className={`text-xl font-bold ${isHovered ? "text-[#c0ff00]" : "text-white"
+              } transition-colors duration-300`}
           >
             {sponsor.name}
           </h3>
@@ -142,9 +139,8 @@ const SponsorCard = ({ sponsor }) => {
             className={`${isHovered ? "text-[#c0ff00]" : "text-gray-400"} mr-1`}
           />
           <span
-            className={`${
-              isHovered ? "text-[#c0ff00]" : "text-gray-400"
-            } transition-colors duration-300`}
+            className={`${isHovered ? "text-[#c0ff00]" : "text-gray-400"
+              } transition-colors duration-300`}
           >
             مشاهده اسپانسر
           </span>
@@ -153,6 +149,9 @@ const SponsorCard = ({ sponsor }) => {
     </a>
   );
 };
+
+// Register ScrollTrigger plugin
+
 
 const MarathonDetail = () => {
   const location = useLocation();
@@ -168,7 +167,9 @@ const MarathonDetail = () => {
   const hasTickets = event?.tickets && event.tickets.length > 0;
   const date = `${eventDate.year}/${eventDate.month}/${eventDate.day} 08:00:00`;
 
+
   // Show no tickets dialog on component mount if no tickets
+ 
   useEffect(() => {
     if (!hasTickets) {
       setShowNoTicketsDialog(true);
@@ -176,7 +177,7 @@ const MarathonDetail = () => {
   }, [hasTickets]);
 
   return (
-    <main className="flex min-h-screen flex-col bg-neutral-800 text-white">
+    <main className="flex min-h-screen flex-col bg-neutral-800 text-white mt-12">
       {/* Hero Section */}
 
       <section className="relative">
@@ -191,9 +192,8 @@ const MarathonDetail = () => {
         </div>
 
         {/* Green Strip */}
-        <div className="w-full  relative overflow-hidden">
-          <img src={strip1} alt="Hyrcania" fill className="object-cover" />
-        </div>
+        <StripGreen/>
+        
       </section>
       <section className="relative w-full bg-[url('/images/paper.jpg')] bg-contain bg-center md:bg-contain ">
         {/* Blue border top */}
@@ -247,9 +247,7 @@ const MarathonDetail = () => {
       </section>
 
       {/* Purple Strip */}
-      <div className="w-full relative overflow-hidden">
-        <img src={strip2} alt="Hyrcania" fill className="object-cover" />
-      </div>
+     <StripPurple/>
 
       {/* Map Section */}
       <section className="relative w-full ">
@@ -261,9 +259,7 @@ const MarathonDetail = () => {
       </section>
 
       {/* Purple Strip Footer */}
-      <div className="w-full  relative overflow-hidden">
-        <img src={strip2} alt="Hyrcania" fill className="object-cover" />
-      </div>
+      <StripPurple/>
 
       {/* Team Section */}
       <section className="py-12 px-4 md:px-8 bg-transparent z-20">
@@ -296,10 +292,7 @@ const MarathonDetail = () => {
         </div>
       </section>
 
-      <div className="w-full  relative overflow-hidden">
-        <img src={strip2} alt="Hyrcania" fill className="object-cover" />
-      </div>
-
+      <StripPurple/>
       {/* Social Media Link Section */}
       <section className="py-12 px-4 md:px-8 bg-transparent z-20">
         <div className="max-w-6xl mx-auto">
@@ -320,9 +313,7 @@ const MarathonDetail = () => {
         </div>
       </section>
 
-      <div className="w-full  relative overflow-hidden">
-        <img src={strip2} alt="Hyrcania" fill className="object-cover" />
-      </div>
+      <StripPurple/>
 
       {/* Sponsors Section with Card Components */}
       <section className="py-12 px-4 md:px-8 bg-transparent z-20">
@@ -338,9 +329,7 @@ const MarathonDetail = () => {
         </div>
       </section>
 
-      <div className="w-full  relative overflow-hidden">
-        <img src={strip2} alt="Hyrcania" fill className="object-cover" />
-      </div>
+      <StripPurple/>
 
       {/* Registration CTA */}
       <section className="py-16 px-4 md:px-8 bg-black">
