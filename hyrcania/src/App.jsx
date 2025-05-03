@@ -18,6 +18,7 @@ import ContactPage from "./pages/ContactusPage";
 import TermsOfUse from "./pages/TermofUsePage";
 import { Toaster } from "sonner";
 import Preloader from "./pages/pre-loader";
+import AboutPage from "./pages/AboutusPage";
 
 
 const App = () => {
@@ -52,6 +53,7 @@ const App = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/about" element={<AboutPage />} />
             <Route path="/marathon" element={<MarathonSignUpForm />} />
             <Route path="/payment" element={<PaymentResultPage />} />
           </Routes>

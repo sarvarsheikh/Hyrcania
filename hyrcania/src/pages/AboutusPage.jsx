@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { MapPin, Mail, Phone, Instagram, Twitter, Facebook, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import website from "/images/website.png";
+import brainstrom from "/images/brainstrom.png";
+import sarvar from "/images/sarvar.png";
+import amir from "/images/amir.jpeg";
+import hemant from "/images/hemant.jpeg";
+
 function AboutPage() {
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -81,7 +87,7 @@ function AboutPage() {
               whileHover={{ scale: 1.02 }}
             >
               <img
-                src="/placeholder.svg?height=500&width=500"
+                src={brainstrom}
                 alt="Marathon"
                 className="mix-blend-luminosity opacity-80 object-cover w-full h-full"
               />
@@ -115,15 +121,15 @@ function AboutPage() {
               transition={{ delay: 0.4, duration: 0.8 }}
               className="text-lg mt-4 md:mt-0"
             >
-              DEVELOPED BY 3 HUMANS — 1 IRANIAN + 2 INDIAN DEVELOPERS
+              DEVELOPED BY 3 PROGRAMMERS — 1 IRANIAN + 2 INDIAN DEVELOPERS
             </motion.p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { name: "ARMAN KARIMI", role: "LEAD DEVELOPER — IRAN", delay: 0.2 },
-              { name: "PRIYA SHARMA", role: "FRONTEND — INDIA", delay: 0.4 },
-              { name: "VIKRAM PATEL", role: "BACKEND — INDIA", delay: 0.6 },
+              { name: "AMIR SAFARNORALAH", role: "BACKEND DEVELOPER — IRAN", delay: 0.2,src:amir },
+              { name: "SARVAR SHEIKH", role: "FRONTEND — INDIA", delay: 0.4 ,src:sarvar},
+              { name: "HEMANT THAWANI", role: "FRONTEND — INDIA", delay: 0.6 ,src:hemant},
             ].map((member, index) => (
               <motion.div
                 key={index}
@@ -140,9 +146,9 @@ function AboutPage() {
                   transition={{ duration: 0.3 }}
                 >
                   <img
-                    src="/placeholder.svg?height=300&width=300"
+                    src={member.src}
                     alt={member.name}
-                    className="mix-blend-luminosity object-cover transition-all duration-500 hover:scale-110 w-full h-full"
+                    className=" object-cover transition-all duration-500 hover:scale-110 w-full h-full"
                   />
                 </motion.div>
                 <h3 className="text-xl font-bold">{member.name}</h3>
@@ -236,9 +242,9 @@ function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div className="space-y-6">
               {[
-                { icon: <Mail className="h-6 w-6" />, text: "contact@hyrcania-marathons.com", delay: 0.3 },
-                { icon: <Phone className="h-6 w-6" />, text: "+98 21 1234 5678", delay: 0.4 },
-                { icon: <MapPin className="h-6 w-6" />, text: "TEHRAN, IRAN", delay: 0.5 },
+                { icon: <Mail className="h-6 w-6" />, text: "amirsafarnoralah64@gmail.com", delay: 0.3 },
+                { icon: <Phone className="h-6 w-6" />, text: "+98 991 951 0956", delay: 0.4 },
+                { icon: <MapPin className="h-6 w-6" />, text: "Isgah, Shaft, Gilan Province, Iran", delay: 0.5 },
               ].map((item, index) => (
                 <motion.div
                   key={index}
@@ -260,22 +266,7 @@ function AboutPage() {
                 transition={{ delay: 0.6, duration: 0.6 }}
                 className="flex gap-6 pt-4"
               >
-                {[
-                  { icon: <Instagram className="h-6 w-6" />, label: "Instagram" },
-                  { icon: <Twitter className="h-6 w-6" />, label: "Twitter" },
-                  { icon: <Facebook className="h-6 w-6" />, label: "Facebook" },
-                ].map((social, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.1, backgroundColor: "black", color: "white" }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <a href="#" className="border-2 border-black p-2 block">
-                      {social.icon}
-                      <span className="sr-only">{social.label}</span>
-                    </a>
-                  </motion.div>
-                ))}
+                
               </motion.div>
             </div>
 
@@ -288,9 +279,9 @@ function AboutPage() {
               className="bg-black aspect-video relative overflow-hidden"
             >
               <img
-                src="/placeholder.svg?height=400&width=600"
+                src={website}
                 alt="Contact"
-                className="mix-blend-luminosity opacity-70 object-cover transition-transform duration-700 hover:scale-110 w-full h-full"
+                className=" opacity-70 object-cover transition-transform duration-700 hover:scale-110 w-full h-full"
               />
               <motion.div
                 initial={{ opacity: 0 }}
