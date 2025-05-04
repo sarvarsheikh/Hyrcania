@@ -8,10 +8,15 @@ import "@/styles/global.css";
 import React from "react";
 
 import run from "/images/runner.png";
+import invite from "/images/invite.png";
 import SkeletonHomePage from "./SkeletonHomePage";
 import { WordRotate } from "@/components/magicui/word-rotate";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { Button } from "@/components/ui/button";
+
+
+
 gsap.registerPlugin(useGSAP);
 const Home = () => {
   const { eventData, loading, error, getEventDetail } = useEventDetail();
@@ -118,7 +123,27 @@ const Home = () => {
                 </div>
               )}
             </div>
+
           </div>
+          {/* <div>
+            <div className="relative rounded-xl  h-[300px] overflow-hidden mx-8 mb-8">
+
+              <img
+                src={invite}
+                className="absolute top-0 left-0 object-cover object-top-left"
+                alt="Running graphic"
+
+              />
+              <h1 style={{
+                fontSize: "65px",
+              }} className="absolute left-[calc(50%-350px)] top-20 text-white zawya-font">
+              می‌خواهید رویدادتان را در ایران برگزار کنید؟
+              </h1>
+
+              <Button className="absolute bottom-4 right-4 bg-white text-[#1d1d1d] z-10 rounded-full hover:bg-white hover:text-[#1d1d1d] hover:no-underline hover:opacity-100">CONTACT US  </Button>
+            </div>
+          </div> */}
+
         </div>
       )}
     </div>
