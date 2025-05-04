@@ -132,7 +132,7 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error("❌ OTP verification failed:", error);
-      toast.error("رمز یک‌بار مصرف نامعتبر یا منقضی شده است");
+      // toast.error("رمز یک‌بار مصرف نامعتبر یا منقضی شده است");
     }
   };
 
